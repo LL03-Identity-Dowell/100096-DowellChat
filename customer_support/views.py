@@ -281,38 +281,41 @@ def send_msg_api_3(request, pk):
     user_id = None
     portfolio = Portfolio.objects.none()
     print("PK :", pk)
-    room = Room.objects.get(id=int(pk))
-    if request.method == "POST" :
-        message = request.POST.get('message')
-        user_id = request.POST.get('user_id')
-        message_type = request.POST.get('message_type')
-        try:
-            body = request.body.decode('utf8').replace("'", '"')
-            message = json.loads(body)['message']
-            user_id = json.loads(body)['user_id']
-            message_type = json.loads(body)['message_type']
-        except:
-            pass
-
-    print("Session_id :", user_id , ", message : ", message, request.POST)
-    if user_id:
-        if message :
+    try:
+        room = Room.objects.get(id=int(pk))
+        if request.method == "POST" :
+            message = request.POST.get('message')
+            user_id = request.POST.get('user_id')
+            message_type = request.POST.get('message_type')
             try:
-                msg_type = message_type if message_type else "TEXT"
-                portfolio = Portfolio.objects.get(userID=user_id)
-                msg = Message.objects.create(
-                    room=room,
-                    message=message,
-                    author=portfolio,
-                    read=False,
-                    side=portfolio.is_staff,
-                    message_type=msg_type
-                )
-                msg.save()
-            except Portfolio.DoesNotExist:
-                return JsonResponse({'Error': '404', 'messages': 'Wrong user_id, user Not found.'})
-    messages = Message.objects.filter(room=room)
-    return JsonResponse({'messages': [jsonify_message_object(message) for message in messages], 'room_pk': room.id})
+                body = request.body.decode('utf8').replace("'", '"')
+                message = json.loads(body)['message']
+                user_id = json.loads(body)['user_id']
+                message_type = json.loads(body)['message_type']
+            except:
+                pass
+
+        print("Session_id :", user_id , ", message : ", message, request.POST)
+        if user_id:
+            if message :
+                try:
+                    msg_type = message_type if message_type else "TEXT"
+                    portfolio = Portfolio.objects.get(userID=user_id)
+                    msg = Message.objects.create(
+                        room=room,
+                        message=message,
+                        author=portfolio,
+                        read=False,
+                        side=portfolio.is_staff,
+                        message_type=msg_type
+                    )
+                    msg.save()
+                except Portfolio.DoesNotExist:
+                    return JsonResponse({'Error': '404', 'messages': 'Wrong user_id, user Not found.'})
+        messages = Message.objects.filter(room=room)
+        return JsonResponse({'messages': [jsonify_message_object(message) for message in messages], 'room_pk': room.id})
+    except:
+        return JsonResponse({'messages': "no room Id exit"})
 
 
 
