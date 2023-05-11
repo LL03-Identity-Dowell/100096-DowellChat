@@ -17,10 +17,10 @@ const ReplyChat = () => {
     <div>
       <div className="d-flex justify-content-end my-5">
         <div
-          class="border rounded d-flex align-self-end"
+          className="border rounded d-flex align-self-end"
           style={{ minWidth: "10rem", height: "10rem" }}
         >
-          <div class="card-body">
+          <div className="card-body">
             <div className="d-flex align-items-center justify-content-between mx-3">
               <div className="d-flex gap-4  my-3">
                 <img src={user} alt="user-image" className=" image-styles" />
@@ -28,13 +28,13 @@ const ReplyChat = () => {
                   <InputBox />
                 </div>
               </div>
-              <div className="">
+              {/* <div className="">
                 <div className="">
                   <button className="btn">
                     <FaPaperPlane className="fs-4 text-primary" />
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className="d-flex justify-content-end">
               <div className="">
