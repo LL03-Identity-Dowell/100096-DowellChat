@@ -24,9 +24,9 @@ python manage.py runserver
 
 Api_url = `https://100096.pythonanywhere.com/`
 
-### 1. fetch products from database
+### 1. fetch admin product list from database
 
-_Get_ to `Api_url/product_list/`
+_Get_ to `Api_url/admin_product_list/`
 
 - Response 200
 
@@ -36,7 +36,31 @@ _Get_ to `Api_url/product_list/`
 }
 ```
 
-### 2. GET send_message from database
+### 2. fetch client product list from database
+
+_Get_ to `Api_url/client_product_list/`
+
+- Response 200
+
+```json
+{
+  "product_list": ["List of products"]
+}
+```
+
+### 3. fetch list of rooms product from database
+
+_Get_ to `Api_url/room_list/(?P<product>[0-9\w-]+)`
+
+- Response 200
+
+```json
+{
+  "rooms": ["List of rooms"]
+}
+```
+
+### 4. GET send_message from database
 
 _Get_ to `Api_url/send_message/<int:pk>/` (room id)
 
@@ -63,7 +87,7 @@ _Get_ to `Api_url/send_message/<int:pk>/` (room id)
 }
 ```
 
-### 3. Post send_message to database
+### 5. Post send_message to database
 
 _Post_ to `Api_url/send_message/<int:pk>/` (room id)
 
