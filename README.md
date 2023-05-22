@@ -50,7 +50,7 @@ _Get_ to `Api_url/client_product_list/`
 
 ### 3. fetch list of rooms product from database
 
-_Get_ to `Api_url/room_list/(?P<product>[0-9\w-]+)`
+_Get_ to `Api_url/room_list/(?P<product>[0-9\w-]+)/(?P<organization_id>[0-9\w-]+)`
 
 - Response 200
 

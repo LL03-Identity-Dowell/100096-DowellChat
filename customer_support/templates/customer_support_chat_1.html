@@ -421,7 +421,6 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
 
 																				window.onload = () => {
 
-																				    // This is the code for the product item to click for the room to appear
 																					const productBtnItems = document.getElementsByClassName('product-btn-item')
                                                                                     console.log('RT log :');
 																					for(product of productBtnItems){
@@ -429,7 +428,8 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
 																							//  console.log(ev.target.innerHTML)
 																							//  console.log('RT log :', window.location.href);
 																							const prd = ev.target.innerHTML;
-																							fetch(`https://100096.pythonanywhere.com/room_list/${prd}`)
+																							const organization_id = JSON.parse(document.getElementById('organization_id').textContent);
+																							fetch(`https://100096.pythonanywhere.com/room_list/${prd}/${organization_id}`)
 																							.then(response => response.json())
 																							.then((data) => {
 																								//  console.log(data)
@@ -549,7 +549,7 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
 																	</div>
 																</div>
 
-																<!--Jinja2template to generate the room list -->
+
 																<div id="active-room" style="display: none;">
                                                                     {{ firstroom.id }}
                                                                 </div>
@@ -564,8 +564,6 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
                                                                             <div class="chat-room-item elementor-element elementor-element-b242b1e elementor-author-box--layout-image-left elementor-author-box--align-left elementor-author-box--image-valign-middle jltma-glass-effect-no elementor-widget elementor-widget-author-box" data-id="b242b1e" data-element_type="widget" data-widget_type="author-box.default">
 
                                                 						{% endif %}
-
-                                                						<!--<!-To display the chat area content-->
                                                 						        <div class="elementor-widget-container">
                                                 									<div class="elementor-author-box room-listing-container">
                                                 									    <div style="display:none;">
@@ -604,8 +602,6 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
 
                                                                     {% endfor %}
 
-
-                                                                    <!--To define both left and right side messages in the chat area-->
                                                                     <script>
                                                                         function messageToHTML(data){
                                                                             let htmlString  = '';
@@ -649,8 +645,6 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
                                                                             return htmlString;
                                                                         };
 
-
-                                                                        // to update the chat area message to the click room
                                                                         function clearChatArea(){
                                                                             const chatArea = document.getElementById('message-container');
                                                                             const chatAreaItems = [];
@@ -658,12 +652,12 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
                                                                                 if(chatArea.children[0].children[i].classList.contains('chat-message-rt') || chatArea.children[0].children[i].id === 'loading'){
                                                                                     //  chatArea.children[0].children[i].remove();
                                                                                     chatAreaItems.push(chatArea.children[0].children[i])
+                                                                                    // chatArea.remove();
 
-
-                                                                                    console.log("Cleared now bbbb...", chatArea.children[0].children[i])
+                                                                                    console.log("Cleared ...", chatArea.children[0].children[i])
                                                                                 } else {
 
-                                                                                    console.log('Cannot clear now bbbb...', chatArea.children[0].children[i])
+                                                                                    console.log('Cannot clear...', chatArea.children[0].children[i])
                                                                                 }
                                                                             }
                                                                             for(let item of chatAreaItems){
@@ -671,7 +665,6 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
                                                                             }
                                                                         }
 
-                                                                        // to clear old message and update it with the new chat message
                                                                         function handleMessageData(data, chatArea){
                                                                             //  console.log(chatArea);
                                                                             clearChatArea();
@@ -718,16 +711,11 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
                                                                                     loading.innerHTML = 'Loading ...';
                                                                                     chatArea.children[0].append(loading);
 
-
-
-
-
-
                                                                                     fetch(`https://100096.pythonanywhere.com/send/${activeRoom.innerHTML.trim()}/`)
                                                                                         .then(response => response.json())
                                                                                         .then((data) => handleMessageData(data, chatArea));
 
-                                                                                    // This fetch api get the user information from the server to fill the About user section on the right side
+                                                                                    // start here
                                                                                     fetch(`https://100096.pythonanywhere.com/send/${activeRoom.innerHTML.trim()}/`)
                                                                                          .then(res => {
                                                                                          console.log(res)
@@ -739,7 +727,7 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
                                                                                         .then(data => {
                                                                                              const lis = document.querySelectorAll('.elementor-icon-list-items li span:nth-child(2)');
                                                                                              lis.forEach(span => {
-                                                                                                 span.textContent = `${data.title}`;
+                                                                                                 span.textContent = `i am ${data.title}`;
                                                                                               });
                                                                                         })
                                                                                         .catch(error =>{
@@ -761,6 +749,7 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
                                                                                 }
                                                                                 const session_id = JSON.parse(document.getElementById('session_id').textContent);
                                                                                 const user_id = JSON.parse(document.getElementById('user_id').textContent);
+                                                                                const organization = JSON.parse(document.getElementById('organization').textContent);
 
                                                                                 fetch(`https://100096.pythonanywhere.com/send_message/${activeRoom.innerHTML.trim()}/`,
                                                                                     {
@@ -768,6 +757,7 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
                                                                                         body: JSON.stringify({
                                                                                             'message': chatInput.value,
                                                                                             'user_id': user_id,
+                                                                                            'org_id': organization,
                                                                                             'side': true,
                                                                                         }),
 
@@ -786,6 +776,9 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
 
                                                                             function roomToHTML(rooms){
                                                                                 let htmlString  = '';
+                                                                                if (!rooms.length) {
+                                                                                    return "<p id='no-room'>No rooms Available.</p>"
+                                                                                }
                                                                                 for (var rm of rooms){
                                                                                     let temp = '';
                                                                                     if(activeRoom.innerHTML.trim() === rm.id){
@@ -840,16 +833,12 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
                                                                                 const roomListContainer = document.getElementById('room-container');
                                                                                 const olderRoomsItems = [];
                                                                                 for(let i = roomListContainer.children.length - 1; i >= 0 ; --i){
-                                                                                    if(roomListContainer.children[i].classList.contains('chat-room-item') || roomListContainer.children[i].id === 'loading'){
+                                                                                    if(roomListContainer.children[i].classList.contains('chat-room-item') || roomListContainer.children[i].id === 'loading' || roomListContainer.children[i].id === 'no-room'){
                                                                                         olderRoomsItems.push(roomListContainer.children[i])
-
-
-
-                                                                                        console.log("Cleared ...", roomListContainer.children[i])
+                                                                                        // chatArea.remove()
+                                                                                        //  console.log("Cleared ...", roomListContainer.children[i])
                                                                                     } else {
-
-
-                                                                                        console.log('Cannot clear...', roomListContainer.children[i])
+                                                                                        //  console.log('Cannot clear...', roomListContainer.children[i])
                                                                                     }
                                                                                 }
                                                                                 for(let item of olderRoomsItems){
@@ -866,69 +855,39 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
                                                                             for(let productItem of productItems){
                                                                                 productItem.onclick = (ev) => {
                                                                                     clearRoomListArea();
-
+                                                                                    // chatArea.remove();
                                                                                     const roomListContainer = document.getElementById("room-container");
                                                                                     const loading = document.createElement('h1');
                                                                                     loading.id = "loading";
                                                                                     loading.innerHTML = 'Loading ...';
                                                                                     roomListContainer.append(loading);
+                                                                                    // if(loading && loading.innerHTML = 'Loading ...'){
+                                                                                    //     chatArea.remove();
+                                                                                    // }
+                                                                                    // if (loading.innerText === 'Loading ...') {
+                                                                                    //       chatArea.remove();
+                                                                                    //     }
 
-
-
-                                                                                    fetch(`https://100096.pythonanywhere.com/room_list/${ev.target.innerHTML.trim()}/`)
+                                                                                    const organization_id = JSON.parse(document.getElementById('organization_id').textContent);
+                                                                                    fetch(`https://100096.pythonanywhere.com/room_list/${ev.target.innerHTML.trim()}/${organization_id}`)
                                                                                         .then((response) => response.json())
                                                                                         .then((data) => {
                                                                                             console.log("Room list : ", data);
                                                                                             const activeRoom = document.getElementById('active-room');
-                                                                                            activeRoom.innerHTML = data.firstroom.id;
+                                                                                            try {
+                                                                                                activeRoom.innerHTML = data.firstroom.id ;
+                                                                                            } catch(err) {
+                                                                                                activeRoom.innerHTML = undefined ;
+                                                                                            }
                                                                                             clearRoomListArea();
 
-                                                                                            // start here
-
-                                                                                        if (data.rooms && data.rooms.length > 0) {
-                                                                                              handleRoomListData(data.rooms, roomListContainer);
-                                                                                              roomClickEventListener(ev);
-                                                                                              if (roomListContainer.innerText === 'Loading ...') {
-                                                                                            //   chatArea.style.display = 'block';
-                                                                                                //  clearChatArea()
-                                                                                                handleRoomListData(data.rooms, roomListContainer).remove();
-                                                                                                 console.log('working....')
-                                                                                            }
-                                                                                             else {
-                                                                                                 consoloe.log('not working.....')
-
-                                                                                                //   chatArea.style.display = 'none'; // hide the chat area
-                                                                                            }
-                                                                                        } else {
-                                                                                              roomListContainer.innerHTML = "no data";
-                                                                                            //   chatArea.style.display = 'none'; // hide the chat area
-                                                                                          }
-
-                                                                                        //   ends here
-
-
-                                                                                        // if (roomListContainer.innerHTML.trim() === '') {
-                                                                                        //       const loading = document.createElement('h1');
-                                                                                        //       loading.id = 'loading';
-                                                                                        //       loading.innerHTML = 'Loading ...';
-                                                                                        //       roomListContainer.append(loading);
-                                                                                        //     } else {
-                                                                                        //     chatArea.style.display = 'block'; // show the chat area
-                                                                                        //     }
-                                                                                        //   } else {
-                                                                                        //       roomListContainer.innerHTML = 'no data';
-                                                                                        //       chatArea.style.display = 'none'; // hide the chat area
-                                                                                        //      }
-
+                                                                                            handleRoomListData(data.rooms, roomListContainer);
+                                                                                            roomClickEventListener(ev);
 
                                                                                         });
-
                                                                                 };
                                                                             }
                                                                         };
-
-
-
 
                                                                         window.onload = (ev) => {roomClickEventListener(ev)};
                                                                     </script>
@@ -1384,6 +1343,7 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
 														                        <div class="elementor-author-box__bio">
 														                            {{ session_id|json_script:"session_id" }}
 														                            {{ portfolio.userID|json_script:"user_id" }}
+														                            {{ portfolio.organization|json_script:"organization_id" }}
 														                            <input id="chat-box-input" type="text" placeholder="Reply in Chat..." />
 														                        </div>
 														                    </div>
@@ -1685,12 +1645,13 @@ class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-
 			<script>
 				/(trident|msie)/i.test(navigator.userAgent)&&document.getElementById&&window.addEventListener&&window.addEventListener("hashchange",function(){var t,e=location.hash.substring(1);/^[A-z0-9_-]+$/.test(e)&&(t=document.getElementById(e))&&(/^(?:a|select|input|button|textarea)$/i.test(t.tagName)||(t.tabIndex=-1),t.focus())},!1);
 			</script>
-			<!--h1>{{request.session.session_id}}</h1-->
-			<h1>{{ portfolio.userID|json_script:"user_id" }}</h1>
+			<!--p>{{request.session.session_id}}</p>
+			<p>{{ portfolio.userID }}</p>
+			<p>{{ portfolio.organization }}</p-->
 		</body>
 	</html>
 
-																								<!-- Dynamic page generated in 7.716 seconds. -->
+																								<!-- Dynamic page generated in 7.716 seconds. json_script:"user_id" -->
 																								<!-- Cached page generated by WP-Super-Cache on 2023-02-17 11:03:34 -->
 
 <!-- super cache -->

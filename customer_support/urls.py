@@ -10,7 +10,9 @@ urlpatterns = [
     path('test/', views.test, name= 'test'),     #(?:session_id=(?P<session_id>[a-z0-9])/)?$
 
     path('product_list/', views.product_list, name= 'product_list'),
-    re_path(r'^room_list/(?P<product>[0-9\w-]+)', views.room_list, name= 'room_list'),# room_list for provided product
+    path('admin_product_list/', views.admin_product_list, name= 'admin_product_list'),
+    path('client_product_list/', views.client_product_list, name= 'client_product_list'),
+    re_path(r'^room_list/(?P<product>[0-9\w-]+)/(?P<organization_id>[0-9\w-]+)', views.room_list, name= 'room_list'),# room_list for provided product
 
     re_path(r'^dowell-api/create-room/(?P<product>[0-9\w-]+)/(?:session_id=(?P<session_id>[a-z0-9])/)?$', views.create_room_API, name= 'create-room-API'),    #    create room API without login -
     re_path(r'^chat/(?P<product>[0-9\w-]+)/(?:session_id=(?P<session_id>[a-z0-9])/)?$', views.chat_box_view, name='chat-box'),  # login and extension
