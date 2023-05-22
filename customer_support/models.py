@@ -11,17 +11,19 @@ from django.db import models
 #     def __str__(self):
 #         return f'{self.session_id} - {self.is_staff}'
 
+
+
 def p_name():
     from django.contrib.auth.models import User
     return User.objects.make_random_password(length=5)
 
 
 class Portfolio(models.Model):
-    portfolio_name = models.CharField(max_length=200, unique=True, default=p_name())
+    portfolio_name = models.CharField(max_length=200, default=p_name())
     is_staff = models.BooleanField(default=False)
-    session_id = models.CharField(max_length=32, unique=True)
+    session_id = models.CharField(max_length=32)
     organization = models.CharField(max_length=200, blank=False, null=False, default="NO_LOGIN")
-    userID = models.CharField(max_length=200, blank=True, null=True, default="NO_LOGIN")
+    userID = models.CharField(max_length=200, default="NO_LOGIN")
     dowell_logged_in = models.BooleanField(default=False)
 
 
@@ -34,7 +36,7 @@ class Room(models.Model):
     room_name = models.CharField(max_length=200, blank=True, null=True)
     room_id = models.CharField(max_length=200, blank=True, null=True)
     active = models.BooleanField(default=True)
-    authority_portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, blank=True, null=True)
+    sender_portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, blank=True, null=True)
     company = models.CharField(max_length=200, blank=True, null=True)
     product = models.CharField(max_length=200, blank=True, null=True)
     sub_product = models.CharField(max_length=20, blank=True, null=True)
