@@ -8,7 +8,7 @@ app_name = 'customer_support'
 urlpatterns = [
     path('', views.index, name= 'index'),
     path('test/', views.test, name= 'test'),     #(?:session_id=(?P<session_id>[a-z0-9])/)?$
-    path('test/', views.test1, name= 'test'),     #(?:session_id=(?P<session_id>[a-z0-9])/)?$
+    path('test1/', views.test1, name= 'test'),     #(?:session_id=(?P<session_id>[a-z0-9])/)?$
     path('product_list/', views.product_list, name= 'product_list'),
     path('admin_product_list/', views.admin_product_list, name= 'admin_product_list'),
     path('client_product_list/', views.client_product_list, name= 'client_product_list'),
