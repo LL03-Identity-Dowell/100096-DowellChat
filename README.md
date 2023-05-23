@@ -356,3 +356,25 @@ _Post_ to `Api_url/send/<int:pk>/` (room id)
   "room_pk": "room_pk"
 }
 ```
+
+#  Summary of Issues/ Changes Made in this commit
+
+###  Web support page APIs
+
+- All working well apart from Post send_message to database
+- Explained the problem was with parameters and fixed it, 
+- The other problem was trying to calling replace method on variable type which was none,fixed it by first checking if session_id is available, then call the replace method.
+
+### Sales Agent APIs
+
+# 1. fetch products from database
+Encountering Forbidden request, @csrf_exempt fixes it
+
+### 2. fetch rooms in sales-agent from database
+-Encountering Forbidden request, @csrf_exempt fixes it
+-For some reason all send message  return  even when there is an existing room_id and messages in the database
+-{"Error": "404", "messages": "Portfolio not found."}
+
+## custom-support App Apis
+Same problem with all send_mesage APIs
+

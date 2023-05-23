@@ -1,0 +1,72 @@
+Api_url = `https://100096.pythonanywhere.com/`
+
+### 1. fetch admin product list from database
+
+_Get_ to `Api_url/admin_product_list/`
+
+In post man use;
+
+http://localhost:8000/admin_product_list/
+
+
+### 2. fetch client product list from database
+
+_Get_ to `Api_url/client_product_list/`
+
+In postman;
+
+http://localhost:8000/client_product_list/
+
+
+
+ ### 3. fetch list of rooms product from database
+
+_Get_ to `Api_url/room_list/(?P<product>[0-9\w-]+)/(?P<organization_id>[0-9\w-]+)`
+http://localhost:8000/room_list/{product}/{organization_id}/
+e.g
+http://localhost:8000/room_list/Workflow-AI/011/
+
+
+
+### 4. GET send_message from database
+
+_Get_ to `Api_url/send_message/<int:pk>/` (room id)
+
+http://localhost:8000/send_message/1/
+
+
+
+### 5. Post send_message to database
+
+_Post_ to `Api_url/send_message/<int:room_id>/` (room id)
+
+In postman use ;
+http://localhost:8000/send_message/1/
+
+in Request body
+
+
+```json
+{
+  "message": " postmantestmessage",
+  "user_id": "1",
+  "side": true
+}
+```
+
+
+## Sales-Agent App Apis
+
+Api_url = `https://100096.pythonanywhere.com/`
+
+### 1. fetch products from database
+
+_Get_ to `Api_url/product_list/`
+
+Included @csrf_exempt to deal with Forbidden request error
+
+in postman:
+
+http://localhost:8000//product_list/
+
+

@@ -69,7 +69,7 @@ def no_login_portfolio_control(_id, product):
 
 
 
-
+@csrf_exempt
 def create_room_API(request, *args, **kwargs):
     """
     Views that are used for user that are not logged-in
@@ -119,9 +119,10 @@ def chat_box_view(request, *args, **kwargs):
 
 
 
+'''
 
 @csrf_exempt
-def send_message_api(request, pk):
+def send_message_api(request, room_id):
     """
     Views that are used for user that are not logged-in
     GET and POST API method for sending and receiving messages in room
@@ -129,7 +130,7 @@ def send_message_api(request, pk):
     message = str()
     session_id = str()
     message_type = str()
-    room = Room.objects.get(pk=int(pk))
+    room = Room.objects.get(id=int(room_id))
     if request.POST :
         message = request.POST.get('message')
         session_id = request.POST.get('session_id').replace("-", "").replace(":","").replace(".","").replace(" ","")
@@ -163,7 +164,53 @@ def send_message_api(request, pk):
     message_list = [jsonify_message_object(message) for message in messages]
     return JsonResponse({'portfolio': session_id, 'messages': message_list, 'room_pk': room.id})
 
+'''
+@csrf_exempt
+def send_message_api(request, room_id):
+    """
+    Views that are used for users that are not logged in
+    GET and POST API method for sending and receiving messages in a room
+    """
+    message = str()
+    session_id = str()
+    message_type = str()
+    room = Room.objects.get(id=int(room_id))  # Fetch room based on room_id parameter
+    if request.method == 'POST':
+        message = request.POST.get('message')
+        session_id = request.POST.get('session_id')
+        if session_id:
+            session_id = session_id.replace("-", "").replace(":", "").replace(".", "").replace(" ", "")
+        message_type = request.POST.get('message_type')
+    else:
+        try:
+            body = json.loads(request.body.decode('utf8').replace("'", '"'))
+            message = body['message']
+            session_id = body.get('session_id')
+            if session_id:
+                session_id = session_id.replace("-", "").replace(":", "").replace(".", "").replace(" ", "")
+            message_type = body['message_type']
+        except:
+            pass
+        print("Session_id:", session_id, ", message:", message, request.POST)
+    if message:
+        try:
+            msg_type = message_type if message_type else "TEXT"
+            portfolio = Portfolio.objects.get(session_id=session_id)
+            msg = Message.objects.create(
+                room=room,
+                message=message,
+                author=portfolio,
+                read=False,
+                side=False,
+                message_type=msg_type
+            )
+            msg.save()
+        except Portfolio.DoesNotExist:
+            return JsonResponse({'Error': '404', 'messages': 'Portfolio not found.'})
 
+    messages = Message.objects.filter(room=room)
+    message_list = [jsonify_message_object(message) for message in messages]
+    return JsonResponse({'portfolio': session_id, 'messages': message_list, 'room_pk': room.id})
 
 
 
@@ -375,7 +422,7 @@ def create_room_api__dowell_user(request, *args, **kwargs):
 
 
 @csrf_exempt
-def send_msg_api_3(request, pk):
+def send_msg_api_3(request, room_id):
     """
     GET and POST message API handling for dowell logged in user
     """
@@ -433,14 +480,14 @@ ADMIN_PRODUCT = ["Login", "Extension", "Living-Lab-Admin", "Sales-Agent"]
 
 PRODUCT_LIST = ["Workflow-AI", "Wifi-QR-Code", "Legalzard", "User-Experience-Live", "Social-Media-Automation", "Living-Lab-Scales", "Logo-Scan", "Team-Management", "Living-Lab-Monitoring", "Permutation-Calculator", "Secure-Repositories", "Secure-Data", "Customer-Experience", "DoWell-CSC", "Living-Lab-Chat"]
 
-
+@csrf_exempt
 def product_list(request):
     return JsonResponse({"product_list": [*ADMIN_PRODUCT, *PRODUCT_LIST]})
 
-
+@csrf_exempt
 def admin_product_list(request):
     return JsonResponse({"product_list": [*ADMIN_PRODUCT]})
-
+@csrf_exempt
 def client_product_list(request):
     return JsonResponse({"product_list": [*PRODUCT_LIST]})
 
