@@ -220,6 +220,9 @@ def test(request):
     return JsonResponse({"status":"it is working", "session_id": request.session["dowell_user"]["userinfo"]["username"]})
 
 
+def test1(request):
+    return JsonResponse({"status":"it is working"})
+
 
 @xframe_options_exempt
 def index(request):
