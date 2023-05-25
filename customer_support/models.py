@@ -67,3 +67,4 @@ class Message(models.Model):
 
     def __str__(self):
         return f'{self.room.room_name} - {self.author}'
+    
