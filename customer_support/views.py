@@ -302,8 +302,52 @@ def create_portfolio_mobile(request):
     else:
         return JsonResponse({ "error": "Method not allowed." })
 
+'''
+updated  Api for creating portfolio for logged in users
+    currently used in mobile application only
+'''
+
+'''
+@csrf_exempt
+def create_portfolio_mobile(request):
+    """
+    API for creating a portfolio for logged-in users (currently used in mobile application only-
+    Here we first create an instance in the Portfolio model.
+    """
+    if request.method == "POST":
+        try:
+            body = json.loads(request.body.decode('utf8').replace("'", '"'))
+        except:
+            body = {}
+
+        try:
+            p = Portfolio.objects.get(userID=request.POST.get('user_id') or body.get('user_id'), organization=request.POST.get('org_id') or body.get('org_id'))
+        except Portfolio.DoesNotExist:
+            p = Portfolio(
+                portfolio_name=request.POST.get('username') or body.get('username'),
+                session_id=request.POST.get('session_id') or body.get('session_id'),
+                userID=request.POST.get('user_id') or body.get('user_id'),
+                organization=request.POST.get('org_id') or body.get('org_id'),
+                is_staff=True,
+                dowell_logged_in=True
+            )
+            p.save()
+
+        return JsonResponse({
+            "status": 200,
+            "portfolio": {
+                "portfolio_name": p.portfolio_name,
+                "userID": p.userID,
+                "organization": p.organization
+            }
+        })
+    else:
+        return JsonResponse({"error": "Method not allowed."})
 
 
+'''
+
+'''
 
 @csrf_exempt
 def create_portfolio_mobile_API(request):
@@ -346,6 +390,91 @@ def create_portfolio_mobile_API(request):
     else:
         return JsonResponse({ "error": "User not found." })
 
+'''
+
+@csrf_exempt
+def create_portfolio_mobile2(request):
+    """
+    Combining the above to handle both GET and POST
+    """
+    if request.method == "POST":
+        try:
+            body = json.loads(request.body.decode('utf8').replace("'", '"'))
+        except:
+            body = {}
+
+        username = request.POST.get('username') or body.get('username')
+        session_id = request.POST.get('session_id') or body.get('session_id')
+        user_id = request.POST.get('user_id') or body.get('user_id')
+        org_id = request.POST.get('org_id') or body.get('org_id')
+
+
+        try:
+            p = Portfolio.objects.get(userID=user_id, organization=org_id)
+        except Portfolio.DoesNotExist:
+            p = Portfolio(
+                portfolio_name=username,
+                session_id=session_id,
+                userID=user_id,
+                organization=org_id,
+                is_staff=True,
+                dowell_logged_in=True
+            )
+            p.save()
+
+        return JsonResponse({
+            "status": 200,
+            "portfolio": {
+                "portfolio_name": p.portfolio_name,
+                "userID": p.userID,
+                "organization": p.organization
+            }
+        })
+    elif request.method == "GET":
+        session_id = request.GET.get('session_id')
+
+        if session_id:
+            url = 'https://100014.pythonanywhere.com/api/userinfo/'
+            response = requests.post(url, data={'session_id': session_id})
+
+            try:
+                response = response.json()
+            except:
+                return JsonResponse({'error': 'Wrong session_id'})
+
+            if response["userinfo"]["username"]:
+                try:
+                    portfolio = Portfolio.objects.get(
+                        userID=response["userinfo"]["userID"],
+                        organization=response["portfolio_info"][0]["org_id"]
+                    )
+                    portfolio.session_id = session_id
+                    portfolio.save()
+                except Portfolio.DoesNotExist:
+                    p = Portfolio.objects.create(
+                        portfolio_name=response["userinfo"]["username"],
+                        session_id=session_id,
+                        userID=response["userinfo"]["user_id"],
+                        organization=response["portfolio_info"][0]["org_id"],
+                        dowell_logged_in=True
+                    )
+                    p.save()
+
+                return JsonResponse({
+                    "status": 200,
+                    "portfolio": {
+                        "portfolio_name": p.portfolio_name,
+                        "userID": p.userID,
+                        "organization": p.organization
+                    }
+                })
+            else:
+                return JsonResponse({"error": "User not found."})
+        else:
+            return JsonResponse({"error": "Missing session_id."})
+
+    else:
+        return JsonResponse({"error": "Method not allowed."})
 
 
 
