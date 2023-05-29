@@ -487,6 +487,10 @@ def admin_support_page_view(request, *args, **kwargs):
 def main_support_page(request, *args, **kwargs):
     return render(request, 'customer_support_chat_1.html', support_context(request.session["dowell_user"], request.session['session_id'], ADMIN_PRODUCT, False))
 
+def test3(request):
+    var = support_context(dowell_user, request.session['session_id'], ADMIN_PRODUCT, False)
+    
+
 
 @dowell_login_required
 def living_lab_support_view(request, *args, **kwargs):

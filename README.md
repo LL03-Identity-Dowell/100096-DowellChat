@@ -97,7 +97,8 @@ _Post_ to `Api_url/send_message/<int:pk>/` (room id)
 {
   "message": "message",
   "user_id": "user_id",
-  "side": true
+  "message_type": "text/Image",
+  "org_id": "org_id"
 }
 ```
 
