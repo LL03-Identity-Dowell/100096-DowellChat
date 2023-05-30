@@ -264,7 +264,7 @@ def room_control(portfolio, product):
 
 from django.views.decorators.csrf import csrf_exempt
 
-
+'''
 @csrf_exempt
 def create_portfolio_mobile(request):
     """
@@ -302,18 +302,51 @@ def create_portfolio_mobile(request):
     else:
         return JsonResponse({ "error": "Method not allowed." })
 
-'''
+
 updated  Api for creating portfolio for logged in users
     currently used in mobile application only
-'''
+
 
 '''
+import json
+
+@csrf_exempt
+def create_portfolio_mobile_portfolio_control(request):
+    if request.method == "POST":
+        try:
+            body = json.loads(request.body.decode('utf8').replace("'", '"'))
+        except:
+            body = {}
+
+        d_user = {
+            "userinfo": {
+                "username": request.POST.get('username') or body.get('username'),
+                "userID": request.POST.get('user_id') or body.get('user_id'),
+            },
+            "portfolio_info": [
+                {
+                    "org_id": request.POST.get('org_id') or body.get('org_id'),
+                }
+            ]
+        }
+
+        p = portfolio_control(d_user, request.POST.get('session_id') or body.get('session_id'), True)
+
+        return JsonResponse({
+            "status": 200,
+            "portfolio": {
+                "portfolio_name": p.portfolio_name,
+                "userID": p.userID,
+                "organization": p.organization
+            }
+        })
+    else:
+        return JsonResponse({"error": "Method not allowed."})
+
+
 @csrf_exempt
 def create_portfolio_mobile(request):
-    """
-    API for creating a portfolio for logged-in users (currently used in mobile application only-
-    Here we first create an instance in the Portfolio model.
-    """
+   
     if request.method == "POST":
         try:
             body = json.loads(request.body.decode('utf8').replace("'", '"'))
@@ -345,7 +378,7 @@ def create_portfolio_mobile(request):
         return JsonResponse({"error": "Method not allowed."})
 
 
-'''
+
 
 '''
 
@@ -391,6 +424,7 @@ def create_portfolio_mobile_API(request):
         return JsonResponse({ "error": "User not found." })
 
 '''
+
 
 @csrf_exempt
 def create_portfolio_mobile2(request):
@@ -499,8 +533,6 @@ def create_room_api__dowell_user(request, *args, **kwargs):
         'room_pk': room.id,
         'user_id': portfolio.userID
     })
-
-
 
 
 
