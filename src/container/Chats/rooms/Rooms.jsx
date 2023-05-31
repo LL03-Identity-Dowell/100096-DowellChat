@@ -17,7 +17,7 @@ const Rooms = ({ results }) => {
   const setIds = (room_id) => {
     // setRoomId(room_id);
     setRoom_Id(room_id);
-    getRooms(room_Id);
+    // getRooms(room_Id);
   };
   // useEffect(() => {
   //   getMessage();

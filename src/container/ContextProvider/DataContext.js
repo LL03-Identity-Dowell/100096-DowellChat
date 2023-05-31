@@ -35,20 +35,23 @@ export const AppProvider = ({ children }) => {
   //   }
   // };
 
-  const getRooms = async (title) => {
-    try {
-      const BASE_URL = `https://100096.pythonanywhere.com/room_list/${chatHeader}/644f9d104baba28710c128e3/`;
-      const res = await axios.get(BASE_URL);
+  useEffect(() => {
+    const getRooms = async (title) => {
+      try {
+        const BASE_URL = `https://100096.pythonanywhere.com/room_list/${chatHeader}/644f9d104baba28710c128e3/`;
+        const res = await axios.get(BASE_URL);
 
-      // console.log(`res.data from messages${chatHeader}`, res?.data?.messages);
-      console.log(`res.data from messages${chatHeader}`, res?.data);
-      setRooms(res?.data);
-      // setMessages(res)
-      // setRoom(res?.data);
-    } catch (error) {
-      console.error("error", error);
-    }
-  };
+        // console.log(`res.data from messages${chatHeader}`, res?.data?.messages);
+        console.log(`res.data from messages${chatHeader}`, res?.data);
+        setRooms(res?.data);
+        // setMessages(res)
+        // setRoom(res?.data);
+      } catch (error) {
+        console.error("error", error);
+      }
+    };
+    getRooms();
+  }, [chatHeader]);
   // const getMessage = async (room_Id) => {
   //   try {
   //     const BASE_URL = `https://100096.pythonanywhere.com/room_list/${chatHeader}/644f9d104baba28710c128e3/`;
@@ -61,14 +64,14 @@ export const AppProvider = ({ children }) => {
   //     console.error("error", error);
   //   }
   // };
-  useEffect(() => {
-    const BASE_URL = `https://100096.pythonanywhere.com/room_list/Login/644f9d104baba28710c128e3`;
-    const getRooms = async () => {
-      const res = await axios.get(BASE_URL);
-      console.log(res);
-    };
-    getRooms();
-  }, []);
+  // useEffect(() => {
+  //   const BASE_URL = `https://100096.pythonanywhere.com/room_list/Login/644f9d104baba28710c128e3`;
+  //   const getRooms = async () => {
+  //     const res = await axios.get(BASE_URL);
+  //     console.log(res);
+  //   };
+  //   getRooms();
+  // }, []);
 
   // USER INFO COMPONENT
   const url = "https://100093.pythonanywhere.com/api/userinfo/";
@@ -196,7 +199,7 @@ export const AppProvider = ({ children }) => {
         handleSendMessage,
         getMessages,
         setData,
-        getRooms,
+        // getRooms,
       }}
     >
       {children}

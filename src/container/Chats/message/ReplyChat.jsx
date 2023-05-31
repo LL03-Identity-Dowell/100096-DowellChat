@@ -53,21 +53,21 @@ const ReplyChat = () => {
       });
   };
   return (
-    <div className="mt-4">
-      <div className="d-flex justify-content-end pb-2">
+    <div className="">
+      <div className="">
         <div class="border d-flex replyBody">
           <div class="card-body">
             <form action="" onSubmit={handleSubmit}>
-              <div className="d-flex align-items-center justify-content-between mx-3">
-                <div className="d-flex gap-4  my-3">
+              <div className="d-flex align-items-center justify-content-between container-lg">
+                <div className="d-flex gap-2  my-3">
                   <img src={user} alt="user-image" className=" image-styles" />
                   <div className="form">
                     <InputBox input={input} setInput={setInput} />
                   </div>
                 </div>
-                <div className="">
+                <div className="send_btn">
                   <div className="">
-                    <button className="btn" type="submit">
+                    <button className="btn " type="submit">
                       <FaPaperPlane className="fs-4 text-primary" />
                     </button>
                   </div>
@@ -121,3 +121,68 @@ const ReplyChat = () => {
 };
 
 export default ReplyChat;
+
+//  <div className="mt-4">
+//    <div className="d-flex justify-content-end pb-2">
+//      <div class="border d-flex replyBody">
+//        <div class="card-body">
+//          <form action="" onSubmit={handleSubmit}>
+//            <div className="d-flex align-items-center justify-content-between mx-3">
+//              <div className="d-flex gap-4  my-3">
+//                <img src={user} alt="user-image" className=" image-styles" />
+//                <div className="form">
+//                  <InputBox input={input} setInput={setInput} />
+//                </div>
+//              </div>
+//              <div className="">
+//                <div className="">
+//                  <button className="btn" type="submit">
+//                    <FaPaperPlane className="fs-4 text-primary" />
+//                  </button>
+//                </div>
+//              </div>
+//            </div>
+//          </form>
+//          <div className="d-flex justify-content-end">
+//            <div className="">
+//              <ul className="">
+//                <button
+//                  className="btn text-primary"
+//                  data-tooltip-id="my-tooltip"
+//                  data-tooltip-content="Attach a file"
+//                >
+//                  <FaLink className="" />
+//                  <Tooltip id="my-tooltip" />
+//                </button>
+//                <button
+//                  className="btn text-primary"
+//                  data-tooltip-id="my-tooltip"
+//                  data-tooltip-content="Reply"
+//                >
+//                  {" "}
+//                  <FaReply className="" />
+//                  <Tooltip id="my-tooltip" />
+//                </button>
+//                <button
+//                  className="btn text-primary"
+//                  data-tooltip-id="my-tooltip"
+//                  data-tooltip-content="emoji"
+//                >
+//                  <HiOutlineEmojiHappy className="" />
+//                  <Tooltip id="my-tooltip" />
+//                </button>
+//                <button
+//                  className="btn text-primary"
+//                  data-tooltip-id="my-tooltip"
+//                  data-tooltip-content="Like"
+//                >
+//                  <FaThumbsUp className="" />
+//                  <Tooltip id="my-tooltip" />
+//                </button>
+//              </ul>
+//            </div>
+//          </div>
+//        </div>
+//      </div>
+//    </div>
+//  </div>;

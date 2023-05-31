@@ -20,13 +20,15 @@ function App() {
   // ]);
   return (
     <AppProvider>
-      <div className="">
+      <div className="app-container">
         {/* <ScrollBar /> */}
         {/* <Navbar /> */}
         {/* <div className="container-fluid"> */}
         <Container />
         {/* </div> */}
+        {/* <div className=""> */}
         <Footer />
+        {/* </div> */}
       </div>
     </AppProvider>
   );

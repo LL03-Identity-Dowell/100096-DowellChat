@@ -2,12 +2,13 @@ import { useEffect, useContext, useState } from "react";
 import "./button.css";
 import { AppProvider } from "../ContextProvider/DataContext";
 import ProductContext from "../ContextProvider/DataContext";
+import { NavLink } from "react-router-dom";
 const Buttons = ({ onSetChatHeader }) => {
-  const { productList, click, setClick, setChatHeader, getRooms } =
+  const { productList, click, setClick, setChatHeader } =
     useContext(ProductContext);
   console.log(productList);
-  // const [chatHeaders, setChatHeaders] = useState("");
-  // setChatHeader(chatHeaders);
+  const [isActive, setIsActive] = useState("");
+  const [active, setActive] = useState();
   const buttonStyles = (title) => {
     switch (title) {
       case "Login":
@@ -16,6 +17,7 @@ const Buttons = ({ onSetChatHeader }) => {
           color: "black",
           outline: "none",
           border: "none",
+          opacity: "0.8",
         };
       case "Extension":
         return {
@@ -23,6 +25,7 @@ const Buttons = ({ onSetChatHeader }) => {
           color: "black",
           outline: "none",
           border: "none",
+          opacity: "0.8",
         };
       case "Living-Lab-Admin":
         return {
@@ -30,37 +33,111 @@ const Buttons = ({ onSetChatHeader }) => {
           color: "black",
           outline: "none",
           border: "none",
+          opacity: "0.8",
         };
       case "Sales-Agent":
         return {
           border: "2px solid #fca5a5",
           color: "black",
           backgroundColor: "transparent",
+          opacity: "0.8",
         };
 
       default:
         return null;
     }
   };
-  const handleClick = (title) => {
-    setChatHeader(title);
-    getRooms();
+  const buttonClick = (title) => {
+    switch (title) {
+      case "Login":
+        return {
+          // backgroundColor: "#90e7b5",
+          opacity: "0.8",
+        };
+      case "Extension":
+        return {
+          opacity: "0.8",
+        };
+      case "Living-Lab-Admin":
+        return {
+          opacity: "0.8",
+        };
+      case "Sales-Agent":
+        return {
+          opacity: "0.8",
+        };
+
+      default:
+        return null;
+    }
   };
+  const handleClick = async (title) => {
+    setChatHeader(title);
+    setIsActive(!isActive, title);
+    // style(title);
+    // await getRooms();
+  };
+  const style = (title) => {
+    switch (title) {
+      case "Login":
+        return {
+          // backgroundColor: "#90e7b5",
+          // backgroundColor: "white",
+          opacity: "0.8",
+        };
+      case "Extension":
+        return {
+          opacity: "0.8",
+        };
+      case "Living-Lab-Admin":
+        return {
+          opacity: "0.8",
+        };
+      case "Sales-Agent":
+        return {
+          opacity: "0.8",
+        };
+
+      default:
+        return null;
+    }
+  };
+
+  const navlinkstyle = ({ isActive }) => {
+    return {
+      backgroundColor: "white",
+    };
+  };
+  const handleClicks = () => {
+    handleClick();
+  };
+  const activeIndex = -1;
   return (
     <div className="">
       <div className=" d-flex flex-nowrap">
         <div className="d-flex flex-nowrap gap-3  text-nowrap py-3" id="scroll">
           {productList &&
-            productList.map((title) => {
+            productList.map((title, i) => {
               const { backgroundColor, color, border, outline } =
                 buttonStyles(title) ?? {};
+              const { opacity } = style(title) ?? {};
               return (
                 <button
                   key={title}
                   type="button"
-                  className="btn btn-md"
-                  style={{ backgroundColor, color, border, outline }}
-                  onClick={(e) => handleClick(title)}
+                  aria-pressed="true"
+                  className={`btn btn-md ${isActive == title && "opacity-50"}`}
+                  // className={`btn btn-md ${isActive == title ? "active" : ""}`}
+                  style={{
+                    backgroundColor,
+                    color,
+                    border,
+                    // outline,
+                  }}
+                  onClick={(e) => {
+                    handleClick(title);
+                    setIsActive(title);
+                  }}
                 >
                   {title}
                   {title === "DO-WELL-CSC" && (
@@ -81,29 +158,3 @@ const Buttons = ({ onSetChatHeader }) => {
 };
 
 export default Buttons;
-{
-  /* <button type="button" className="rounded  button3">
-            Login
-          </button>
-          <button type="button" className="rounded button4">
-            Extension
-          </button>
-          <button type="button" className="rounded button3 fs-6">
-            Living-Lab-Admin
-          </button>
-          <button type="button" className="rounded buttonCustom">
-            Sales-Agent
-          </button>
-          <button
-            type="button"
-            className="rounded button3 d-flex gap-2 align-items-center"
-          >
-            DoWell CSC
-            <span
-              className="badge bg-primary"
-              // style={{ padding: "0.2px 7px" }}
-            >
-              11
-            </span>
-          </button> */
-}

@@ -56,13 +56,14 @@ const Message = ({ message }) => {
                   const { display, justifyContent } = messageUser ?? {};
                   return (
                     <div
+                      key={id}
                       className=""
                       id="chat1"
                       style={{ borderRadius: "15px" }}
                     >
                       <div className="card-body">
                         <div
-                          className="d-flex flex-row justify-content-end mb-4"
+                          className="d-flex flex-row text-nowrap justify-content-end mb-4"
                           style={{ display, justifyContent }}
                         >
                           <div className="p-3 ms-3 style bg-primary">

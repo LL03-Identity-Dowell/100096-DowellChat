@@ -4,7 +4,7 @@ import { CgCloseR } from "react-icons/cg";
 const DetailsSectionButton = () => {
   return (
     <div>
-      <div className="d-flex gap-4 my-2">
+      <div className="d-flex gap-2 my-2">
         <MdOutlineMoreHoriz className="fs-5" />
         <CgCloseR className="fs-5" />
       </div>

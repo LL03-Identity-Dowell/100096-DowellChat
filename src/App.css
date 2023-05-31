@@ -18,7 +18,9 @@
   /* list-style: none; */
   font-family: "Archivo", sans-serif;
 }
-
+.app-container {
+  max-height: 100vh;
+}
 .header {
   color: var(--header-color);
   font-family: "Archivo", sans-serif;
@@ -107,21 +109,32 @@
 .input- {
   border: 1px solid var(--bg-color);
 
-  outline: none;
+  /* outline: none; */
 }
 /* .myStyle {
   gap: 2rem;
 } */
 .replyBody {
   border-radius: 15px;
-  width: 60%;
+  width: 70%;
   height: 12rem;
+  display: flex;
+  justify-content: end;
+  /* align-items: ; */
+  margin-left: 10rem;
 }
 
 .style {
   border-radius: 10px;
   /* background-color: rgba(57, 192, 237, 0.2); */
   color: white;
+}
+.active {
+  /* opacity: 0.8; */
+  background: red;
+}
+.send_btn {
+  margin-right: 3rem;
 }
 /* .scrollbar {
   margin-left: 30px;
@@ -153,7 +166,11 @@
 #style-3::-webkit-scrollbar-thumb {
   background-color: #000000;
 } */
-
+@media only screen and (min-width: 900px) {
+  .app-container {
+    max-height: 100vh;
+  }
+}
 @media only screen and (min-width: 200px) and (max-width: 900px) {
   .button4 {
     display: block;
@@ -164,6 +181,9 @@
   .inputs {
     width: 100%;
   }
+  .input- {
+    width: auto;
+  }
   .inputBody {
     /* align-items: ; */
     width: 100%;
@@ -172,7 +192,11 @@
     gap: 0;
   }
   .replyBody {
-    width: 100%;
+    width: contain;
+    margin-left: 4rem;
+  }
+  .send_btn {
+    margin-right: 0;
   }
 }
 @media only screen and (min-width: 200px) and (max-width: 500px) {
@@ -198,3 +222,12 @@
   transition-delay: 10000ms;
   margin-bottom: 2rem;
 }
+
+/* .zoom {
+  zoom: 150%;
+  -moz-transform: scale(0.8);
+  -webkit-transform: scale(0.5);
+  -o-transform: scale(0.5);
+  -ms-transform: scale(0.5);
+  transform: scale(0.5);
+} */
