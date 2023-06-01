@@ -1,0 +1,42 @@
+swagger: '2.0'
+info:
+  title: Your API Title
+  description: Description of your API
+  version: '1.0'
+
+paths:
+  /d-chat/{product}/:
+    get:
+      description: |
+        sender side API handling for dowell logged-in users.
+        URL: 100096.pythonanywhere.com/d-chat/<product>/?session_id=<session_id>
+      parameters:
+        - name: session_id
+          in: query
+          description: Session ID parameter
+          required: true
+          type: string
+        - name: product
+          in: path
+          description: Product parameter
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              product:
+                type: string
+              portfolio:
+                type: integer
+              messages:
+                type: array
+                items:
+                  type: object
+              room_pk:
+                type: integer
+              user_id:
+                type: integer
+    ...

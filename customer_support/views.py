@@ -260,9 +260,55 @@ def room_control(portfolio, product):
     return room, messages
 
 
-
-
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def support_context_api(request):
+    if request.method == 'POST':
+        try:
+            data = request.POST
+            d_user = {
+                "userinfo": {
+                    "userID": data['d_user[userinfo][userID]'],
+                    "username": data['d_user[userinfo][username]']
+                },
+                "portfolio_info": [
+                    {
+                        "org_id": data['d_user[portfolio_info][0][org_id]']
+                    }
+                ]
+            }
+            session_id = data['session_id']
+            product_list = data.getlist('product_list[]')
+            company_filter = bool(data.get('company_filter', False))
+            
+            result = support_context(d_user, session_id, product_list, company_filter)
+            
+            response = {
+                'product_list': result['product_list'],
+                'firstroom': result['firstroom'],
+                'portfolio': {
+                    'portfolio_name': result['portfolio'].portfolio_name,
+                    'session_id': result['portfolio'].session_id,
+                    'userID': result['portfolio'].userID,
+                    'organization': result['portfolio'].organization,
+                    'is_staff': result['portfolio'].is_staff,
+                    'dowell_logged_in': result['portfolio'].dowell_logged_in
+                },
+                'rooms': list(result['rooms'].values()),
+                'messages': result['messages'],
+                'session_id': result['session_id'],
+                'organization_id': result['organization_id']
+            }
+            
+            return JsonResponse(response)
+            
+        except KeyError:
+            return JsonResponse({'error': 'Invalid request data.'}, status=400)
+    
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)
+
 
 '''
 @csrf_exempt
@@ -309,40 +355,6 @@ updated  Api for creating portfolio for logged in users
 
 '''
 import json
-
-@csrf_exempt
-def create_portfolio_mobile_portfolio_control(request):
-    if request.method == "POST":
-        try:
-            body = json.loads(request.body.decode('utf8').replace("'", '"'))
-        except:
-            body = {}
-
-        d_user = {
-            "userinfo": {
-                "username": request.POST.get('username') or body.get('username'),
-                "userID": request.POST.get('user_id') or body.get('user_id'),
-            },
-            "portfolio_info": [
-                {
-                    "org_id": request.POST.get('org_id') or body.get('org_id'),
-                }
-            ]
-        }
-
-        p = portfolio_control(d_user, request.POST.get('session_id') or body.get('session_id'), True)
-
-        return JsonResponse({
-            "status": 200,
-            "portfolio": {
-                "portfolio_name": p.portfolio_name,
-                "userID": p.userID,
-                "organization": p.organization
-            }
-        })
-    else:
-        return JsonResponse({"error": "Method not allowed."})
-
 
 @csrf_exempt
 def create_portfolio_mobile(request):

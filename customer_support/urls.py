@@ -34,7 +34,7 @@ urlpatterns = [
 
     path('main-living-lab-support/', views.main_living_lab_support_page, name='main-living-lab-support-page'),
 
-    path('api/create-portfolio/', views.create_portfolio_mobile_portfolio_control , name='create-portfolio2'),
+     path('portfolio-control/', views.support_context_api, name='portfolio_control'),
 
 ]
 
