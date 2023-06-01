@@ -53,7 +53,7 @@ const ReplyChat = () => {
       });
   };
   return (
-    <div className="">
+    <div className="mb-5">
       <div className="">
         <div class="border d-flex replyBody">
           <div class="card-body">

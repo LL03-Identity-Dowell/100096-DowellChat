@@ -4,7 +4,7 @@ import ReplyChat from "./ReplyChat";
 
 const Profile = () => {
   return (
-    <div className="container-sm">
+    <div className="w-100 w-md-100 w-lg-75 w-xl-75 w-xxl-75 mb-5">
       <ProfileHead />
       <ReplyChat />
     </div>

@@ -20,7 +20,7 @@ function App() {
   // ]);
   return (
     <AppProvider>
-      <div className="app-container">
+      <div className="container-lg w-100 h-100">
         {/* <ScrollBar /> */}
         {/* <Navbar /> */}
         {/* <div className="container-fluid"> */}

@@ -7,7 +7,7 @@ const Container = () => {
   // const onSetChatHeader = (header) => setChatHeader(header);
   return (
     <div className="">
-      <div className="container-lg w-full h-full d-flex gap-2 justify-content-start justify-content-md-start justify-content-lg-around justify-content-xl-around justify-content-xxl-around my-1 mx-2 mx-md-3 mx-lg-4 mx-xl-5 mx-xxl-5 mt-3">
+      <div className=" d-flex gap-2 justify-content-start justify-content-md-start justify-content-lg-start justify-content-xl-around justify-content-xxl-around my-1 mx-1 mx-md-1 mx-lg-1 mx-xl-2 mx-xxl-5 mt-3">
         <ChatSection />
         <div className="">
           <DetailsSection />
