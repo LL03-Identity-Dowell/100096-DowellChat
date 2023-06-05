@@ -8,17 +8,17 @@ import Scroll from "./rooms/Scroll";
 // BsStarFill;
 const SearchBar = ({ results }) => {
   const [search, setSearch] = useState("");
-  const searchItems = [
-    { id: 1, name: "usman", room_id: 25 },
-    { id: 1, name: "usman", room_id: 25 },
-    { id: 1, name: "usman", room_id: 25 },
-    { id: 1, name: "usman", room_id: 25 },
-  ];
-  const setChange = (e) => {
-    const filteredSearch = searchItems.filter((s) => s.search === search.name);
-    console.log(filteredSearch);
-  };
-  console.log(search);
+  // const searchItems = [
+  //   { id: 1, name: "usman", room_id: 25 },
+  //   { id: 1, name: "usman", room_id: 25 },
+  //   { id: 1, name: "usman", room_id: 25 },
+  //   { id: 1, name: "usman", room_id: 25 },
+  // ];
+  // const setChange = (e) => {
+  //   const filteredSearch = searchItems.filter((s) => s.search === search.name);
+  //   console.log(filteredSearch);
+  // };
+  // console.log(search);
   return (
     <div className="container-full pt-2">
       <div className="overflow-y-scroll">

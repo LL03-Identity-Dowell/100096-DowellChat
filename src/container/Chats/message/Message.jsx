@@ -1,14 +1,11 @@
 import React, { useState, useContext } from "react";
 import ReplyChat from "./ReplyChat";
 import clsx from "clsx";
-import doctor from "../../../assets/doctor.png";
+import male_avatar from "../../../assets/male_avatar.png";
 import ProductContext from "../../ContextProvider/DataContext";
 const Message = ({ message }) => {
   // const [message, setMessage] = useState(true);
   const { rooms, messages } = useContext(ProductContext);
-  console.log("message", message);
-  console.log("message", messages);
-  console.log("room from message", rooms);
   const { id } = messages ?? {};
   const messageUser = (id) => {
     switch (id) {
@@ -31,75 +28,85 @@ const Message = ({ message }) => {
     paddingTop: "8rem",
   };
 
-  // function authorId(id) {
-  //   if (id) {
-  //     return {
-  //       justifyContent: "start",
-  //     };
-  //   }
-  // }
-  const { display, justifyContent } = messageUser ?? {};
   return (
-    <div className="">
-      <section className="">
-        <div className="container" style={chatStyle}>
+    <section
+      className="container"
+      style={{
+        chatStyle,
+        // background: "purple",
+        paddingBottom: "100%",
+        paddingTop: "1.5rem",
+      }}
+    >
+      {messages ? (
+        messages?.messages?.map(({ message, id, side }) => {
+          return (
+            <div
+              key={id}
+              className={
+                side
+                  ? "d-flex justify-content-end"
+                  : "d-flex justify-content-start"
+              }
+            >
+              <div
+                id="chat1"
+                className={
+                  side
+                    ? "p-3 mb-4 style bg-primary"
+                    : "d-flex align-items-center bg-white text-muted"
+                }
+                style={{
+                  width: "fit-content",
+                  maxWidth: "350px",
+                  // width: "350px",
+                }}
+              >
+                {side ? null : (
+                  <img
+                    src={male_avatar}
+                    height="50px"
+                    width="50px"
+                    alt="male_avatar"
+                  />
+                )}
+                <p
+                  className="fs-6 small text-start mb-0 text-break"
+                  style={{
+                    // width: "350px",
+                    // width: "fit-content",
+                    maxWidth: "350px",
+                  }}
+                >
+                  {message}
+                </p>
+              </div>
+            </div>
+          );
+        })
+      ) : (
+        <div>
           <div
-            className={clsx(
-              `row d-flex justify-content-end`,
-              messageUser && "justify-content-start"
-            )}
-            style={{ display, justifyContent }}
+            className=""
+            id="chat1"
+            style={{ borderRadius: "10px", margin: "auto" }}
           >
-            <div className="col-md-8 col-lg-6 col-xl-4">
-              {rooms ? (
-                rooms?.messages?.map(({ message, id }) => {
-                  const { display, justifyContent } = messageUser ?? {};
-                  return (
-                    <div
-                      key={id}
-                      className=""
-                      id="chat1"
-                      style={{ borderRadius: "15px" }}
-                    >
-                      <div className="card-body">
-                        <div
-                          className="d-flex flex-row text-nowrap justify-content-end mb-4"
-                          style={{ display, justifyContent }}
-                        >
-                          <div className="p-3 ms-3 style bg-primary">
-                            <p className="small mb-0">{message}</p>
-                          </div>
-                        </div>
-                        {/*  */}
-                      </div>
-                    </div>
-                  );
-                })
-              ) : (
-                <div>
-                  <div className="" id="chat1" style={{ borderRadius: "10px" }}>
-                    <div className="card-body">
-                      <div className="d-flex flex-row justify-content-end mb-4">
-                        <div
-                          className=" style bg-primary"
-                          style={{ padding: "0.5rem 1rem" }}
-                        >
-                          <p className="small mb-0 text-nowrap fs-6">
-                            Hey, How may I help you ?
-                          </p>
-                        </div>
-                      </div>
-                      {/*  */}
-                    </div>
-                  </div>
-                  {/* Receiver authorId */}
+            <div className="card-body">
+              <div className="text-nowrap d-flex flex-row justify-content-end mb-4">
+                <div
+                  className=" style bg-primary"
+                  style={{ padding: "0.5rem 1rem" }}
+                >
+                  <p className="small mb-0 text-wrap fs-6">
+                    Hey, How may I help you ?
+                  </p>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
-      </section>
-    </div>
+      )}
+    </section>
   );
 };
 

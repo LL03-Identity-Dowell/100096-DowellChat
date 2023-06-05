@@ -20,9 +20,10 @@ a {
   float: left;
   height: 200px;
   width: 100%;
-  background: white;
+  /* background: teal; */
   overflow-y: scroll;
-  margin-bottom: 15px;
+  overflow-x: hidden;
+  margin-bottom: 100px;
 }
 
 .force-overflow {

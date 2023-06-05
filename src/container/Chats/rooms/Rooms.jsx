@@ -11,9 +11,9 @@ const Rooms = ({ results }) => {
     room_Id,
     getRooms,
   } = useContext(ProductContext);
-  console.log("results", rooms);
+  // console.log("results", rooms);
   const [roomId, setRoomId] = useState();
-  console.log(roomId);
+  // console.log(roomId);
   const setIds = (room_id) => {
     // setRoomId(room_id);
     setRoom_Id(room_id);
@@ -24,29 +24,28 @@ const Rooms = ({ results }) => {
   // }, []);
   return (
     <div className="my-3">
-      <div className="">
-        <div
-          className="d-flex flex-column justify-content-start gap-4  rounded"
-          onClick={() => console.log("clicked")}
-        >
-          {rooms?.rooms?.map(({ room_id, room_name }) => {
-            return (
-              <div
-                key={room_id}
-                className="d-flex mx-2"
-                onClick={() => setIds(room_id)}
-              >
-                <figure className="d-flex ">
-                  <img src={img} height="50px" width="50px" className="mx-2" />
-                </figure>
-                <p className="d-flex flex-column" style={{ color: "black" }}>
-                  <small className="fw-bold fs-6 text-start">{room_id}</small>
-                  <small className="">{room_name}</small>
-                </p>
-              </div>
-            );
-          })}
-        </div>
+      <div
+        className="d-flex flex-column justify-content-start gap-4  rounded"
+        // onClick={() => console.log("clicked")}
+      >
+        {rooms?.rooms?.map(({ room_id, room_name }) => {
+          return (
+            <button
+              key={room_id}
+              style={{ border: "none", background: "transparent" }}
+              className="d-flex mx-2"
+              onClick={() => setIds(room_id)}
+            >
+              <figure className="d-flex ">
+                <img src={img} height="50px" width="50px" className="mx-2" />
+              </figure>
+              <p className="d-flex flex-column" style={{ color: "black" }}>
+                <small className="fw-bold fs-6 text-start">{room_id}</small>
+                <small className="">{room_name}</small>
+              </p>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

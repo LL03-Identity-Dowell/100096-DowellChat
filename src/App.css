@@ -17,6 +17,7 @@
   text-decoration: none;
   /* list-style: none; */
   font-family: "Archivo", sans-serif;
+  /* overflow-x: hidden; */
 }
 .app-container {
   max-height: 100vh;
@@ -88,7 +89,7 @@
   background: var(--card-background);
   border: 1px solid var(--card-background);
   border-radius: 15px;
-
+  height: 90vh;
   /* background-color: rgb(169, 184, 195) 100%; */
 }
 .inputs {
@@ -108,33 +109,36 @@
 }
 .input- {
   border: 1px solid var(--bg-color);
-
-  /* outline: none; */
+  width: 400px;
+  outline: none;
 }
 /* .myStyle {
   gap: 2rem;
 } */
-.replyBody {
+/* .replyBody {
   border-radius: 15px;
   width: 70%;
   height: 12rem;
   display: flex;
   justify-content: end;
-  /* align-items: ; */
+
   margin-left: 10rem;
-}
+} */
 
 .style {
   border-radius: 10px;
   /* background-color: rgba(57, 192, 237, 0.2); */
   color: white;
+  max-width: "75%";
 }
 .active {
   /* opacity: 0.8; */
   background: red;
 }
 .send_btn {
-  margin-right: 3rem;
+  margin-right: 2.1rem;
+  /* position: absolute;
+  left: 65%; */
 }
 /* .scrollbar {
   margin-left: 30px;
@@ -166,9 +170,9 @@
 #style-3::-webkit-scrollbar-thumb {
   background-color: #000000;
 } */
-@media only screen and (min-width: 900px) {
-  .app-container {
-    max-height: 100vh;
+@media only screen and (min-width: 900px) and (max-width: 1300px) {
+  .input- {
+    width: 250px;
   }
 }
 @media only screen and (min-width: 200px) and (max-width: 900px) {
@@ -182,7 +186,7 @@
     width: 100%;
   }
   .input- {
-    width: auto;
+    width: 100%;
   }
   .inputBody {
     /* align-items: ; */
@@ -197,6 +201,9 @@
   }
   .send_btn {
     margin-right: 0;
+  }
+  .style {
+    max-width: 100%;
   }
 }
 @media only screen and (min-width: 200px) and (max-width: 500px) {

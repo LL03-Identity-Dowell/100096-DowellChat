@@ -29,7 +29,7 @@ const ProfileHead = ({ chatHeader }) => {
               }}
             ></small>
             <div className="d-flex flex-column">
-              <small className="fs-6 fw-extrabold">
+              <small className="fs-6 fw-extrabold text-black">
                 {room_Id ? (
                   <small className="fs-6 fw-bold">{room_Id}</small>
                 ) : (

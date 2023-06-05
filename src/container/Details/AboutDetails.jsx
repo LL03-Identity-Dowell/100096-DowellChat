@@ -24,7 +24,7 @@ const AboutDetails = ({ title, ux }) => {
   return (
     <div
       className="container"
-      style={{ marginBottom: "5rem", marginTop: "1rem" }}
+      style={{ marginBottom: "8rem", marginTop: "1rem" }}
     >
       <div className="lh-lg">
         <h5 className="mb-2 fs-6 fw-bold">{title}</h5>
@@ -71,7 +71,7 @@ const AboutDetails = ({ title, ux }) => {
       </div>
       <div
         className="lh-lg "
-        style={{ marginTop: "2rem", marginBottom: "6rem" }}
+        style={{ marginTop: "2rem", marginBottom: "8.9rem" }}
       >
         <h5 className="fs-6 fw-bold">{ux}</h5>
         <main>

@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 const Buttons = ({ onSetChatHeader }) => {
   const { productList, click, setClick, setChatHeader } =
     useContext(ProductContext);
-  console.log(productList);
+  // console.log(productList);
   const [isActive, setIsActive] = useState("");
   const [active, setActive] = useState();
   const buttonStyles = (title) => {
@@ -115,7 +115,10 @@ const Buttons = ({ onSetChatHeader }) => {
   return (
     <div className="">
       <div className=" d-flex flex-nowrap">
-        <div className="d-flex flex-nowrap gap-3  text-nowrap py-3" id="scroll">
+        <div
+          className="d-flex  flex-nowrap gap-3  text-nowrap py-3"
+          id="scroll"
+        >
           {productList &&
             productList.map((title, i) => {
               const { backgroundColor, color, border, outline } =
@@ -126,7 +129,10 @@ const Buttons = ({ onSetChatHeader }) => {
                   key={title}
                   type="button"
                   aria-pressed="true"
-                  className={`btn btn-md ${isActive == title && "opacity-50"}`}
+                  className={`btn btn-md ${
+                    isActive == title &&
+                    "opacity-50 border border-4 border-primary"
+                  }`}
                   // className={`btn btn-md ${isActive == title ? "active" : ""}`}
                   style={{
                     backgroundColor,

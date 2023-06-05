@@ -9,8 +9,6 @@
 }
 
 ::-webkit-scrollbar-track {
-  /* overflow-x: auto; */
-
   border-radius: 5px;
   background-color: lightgray;
 }
@@ -20,3 +18,5 @@
   background: #0d6efd;
   border-radius: 15px;
 }
+
+/* NEW SCROLL */

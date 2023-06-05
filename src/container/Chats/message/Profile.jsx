@@ -4,7 +4,10 @@ import ReplyChat from "./ReplyChat";
 
 const Profile = () => {
   return (
-    <div className="w-100 w-md-100 w-lg-75 w-xl-75 w-xxl-75 mb-5">
+    <div
+      className="w-100 w-md-100 w-lg-75 w-xl-75 w-xxl-75 style"
+      // style={{ maxWidth: "75%" }}
+    >
       <ProfileHead />
       <ReplyChat />
     </div>

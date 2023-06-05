@@ -1,6 +1,6 @@
 import "./App.css";
 import { Tooltip } from "react-tooltip";
-import { Routes, Router } from "react-router-dom";
+import { Routes, Router, redirect } from "react-router-dom";
 // import { createHashRouter } from "react-router-dom";
 import "react-tooltip/dist/react-tooltip.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -18,17 +18,21 @@ function App() {
   //     loader: "",
   //   },
   // ]);
+
+  // const userLogic = () => {
+  //   if (!session_id) {
+  //     redirect;
+  //   }
+  // };
+  const date = new Date();
+  console.log("date", date);
   return (
     <AppProvider>
-      <div className="container-lg w-100 h-100">
-        {/* <ScrollBar /> */}
-        {/* <Navbar /> */}
-        {/* <div className="container-fluid"> */}
+      <div className="container-lg w-100 ">
         <Container />
         {/* </div> */}
-        {/* <div className=""> */}
+
         <Footer />
-        {/* </div> */}
       </div>
     </AppProvider>
   );

@@ -12,7 +12,7 @@ const ChatSection = () => {
 
   const onSetChatHeader = (header) => setChatHeader(header);
   return (
-    <div className="w-100">
+    <div className="w-100 h-100 container-lg mw-75">
       {/* <ChatHeader /> */}
       <ChatHeader onSetChatHeader={onSetChatHeader} />
       {/* chats come here */}
@@ -20,7 +20,7 @@ const ChatSection = () => {
         className="
       "
       >
-        <div className="d-flex myStyle flex-column flex-md-row flex-lg-row flex-xl-row flex-xxl-row ">
+        <div className="d-flex myStyle flex-column flex-md-column flex-lg-row flex-xl-row flex-xxl-row ">
           <Scroll />
           {/* <SearchBar chatHeader={chatHeader} /> */}
           <Profile />

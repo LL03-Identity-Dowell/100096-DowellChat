@@ -16,8 +16,14 @@ import { HiOutlineHandThumbUp, HiHandThumbUp } from "react-icons/hi2";
 import InputBox from "./InputBox";
 import axios from "axios";
 const ReplyChat = () => {
-  const { handleSendMessage, getMessages, setData, setMessages } =
-    useContext(ProductContext);
+  const {
+    handleSendMessage,
+    getMessages,
+    setData,
+    setMessages,
+    messages,
+    room_Id,
+  } = useContext(ProductContext);
   const [input, setInput] = useState("");
   // const [messages, setMessages] = useState();
   const handleSubmit = (e) => {
@@ -41,77 +47,65 @@ const ReplyChat = () => {
     };
 
     axios
-      .post(`https://100096.pythonanywhere.com/send_message/42/`, data)
+      .post(`https://100096.pythonanywhere.com/send_message/${room_Id}/`, data)
       .then((res) => {
         console.log(res, "post res//");
         const newMessage = res;
         console.log(res?.config?.data, "post newMessage//");
-        setMessages(newMessage);
+        setMessages([...messages, newMessage]);
       })
       .catch((error) => {
         console.log(error.message);
       });
   };
   return (
-    <div className="mb-5">
-      <div className="">
-        <div class="border d-flex replyBody">
-          <div class="card-body">
-            <form action="" onSubmit={handleSubmit}>
-              <div className="d-flex align-items-center justify-content-between container-lg">
-                <div className="d-flex gap-2  my-3">
-                  <img src={user} alt="user-image" className=" image-styles" />
-                  <div className="form">
-                    <InputBox input={input} setInput={setInput} />
-                  </div>
-                </div>
-                <div className="send_btn">
-                  <div className="">
-                    <button className="btn " type="submit">
-                      <FaPaperPlane className="fs-4 text-primary" />
-                    </button>
-                  </div>
-                </div>
+    <div className="text-black mb-5 mb-md-5 mb-lg-0 mb-xl-0 mb-xxl-0">
+      <div className="card py-2 ms-2 w-100 " style={{ height: "150px" }}>
+        <div className="card-body p-1 " onSubmit={handleSubmit}>
+          <div className="d-flex w-100 justify-content-between">
+            <InputBox input={input} setInput={setInput} />
+            <div className="d-flex">
+              <div
+                className="d-flex justify-content-end"
+                // style={{ marginBottom: "4rem" }}
+              >
+                <button
+                  className="btn text-primary"
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Attach a file"
+                >
+                  <FaLink className="" />
+                  <Tooltip id="my-tooltip" />
+                </button>
+                <button
+                  className="btn text-primary"
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Reply"
+                >
+                  {" "}
+                  <FaReply className="" />
+                  <Tooltip id="my-tooltip" />
+                </button>
+                <button
+                  className="btn text-primary"
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="emoji"
+                >
+                  <HiOutlineEmojiHappy className="" />
+                  <Tooltip id="my-tooltip" />
+                </button>
+                <button
+                  className="btn text-primary"
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Like"
+                >
+                  <FaThumbsUp className="" />
+                  <Tooltip id="my-tooltip" />
+                </button>
               </div>
-            </form>
-            <div className="d-flex justify-content-end">
-              <div className="">
-                <ul className="">
-                  <button
-                    className="btn text-primary"
-                    data-tooltip-id="my-tooltip"
-                    data-tooltip-content="Attach a file"
-                  >
-                    <FaLink className="" />
-                    <Tooltip id="my-tooltip" />
-                  </button>
-                  <button
-                    className="btn text-primary"
-                    data-tooltip-id="my-tooltip"
-                    data-tooltip-content="Reply"
-                  >
-                    {" "}
-                    <FaReply className="" />
-                    <Tooltip id="my-tooltip" />
-                  </button>
-                  <button
-                    className="btn text-primary"
-                    data-tooltip-id="my-tooltip"
-                    data-tooltip-content="emoji"
-                  >
-                    <HiOutlineEmojiHappy className="" />
-                    <Tooltip id="my-tooltip" />
-                  </button>
-                  <button
-                    className="btn text-primary"
-                    data-tooltip-id="my-tooltip"
-                    data-tooltip-content="Like"
-                  >
-                    <FaThumbsUp className="" />
-                    <Tooltip id="my-tooltip" />
-                  </button>
-                </ul>
-              </div>
+              <button className="btn text-primary " typeof="submit">
+                <FaPaperPlane />
+              </button>
             </div>
           </div>
         </div>
@@ -121,68 +115,3 @@ const ReplyChat = () => {
 };
 
 export default ReplyChat;
-
-//  <div className="mt-4">
-//    <div className="d-flex justify-content-end pb-2">
-//      <div class="border d-flex replyBody">
-//        <div class="card-body">
-//          <form action="" onSubmit={handleSubmit}>
-//            <div className="d-flex align-items-center justify-content-between mx-3">
-//              <div className="d-flex gap-4  my-3">
-//                <img src={user} alt="user-image" className=" image-styles" />
-//                <div className="form">
-//                  <InputBox input={input} setInput={setInput} />
-//                </div>
-//              </div>
-//              <div className="">
-//                <div className="">
-//                  <button className="btn" type="submit">
-//                    <FaPaperPlane className="fs-4 text-primary" />
-//                  </button>
-//                </div>
-//              </div>
-//            </div>
-//          </form>
-//          <div className="d-flex justify-content-end">
-//            <div className="">
-//              <ul className="">
-//                <button
-//                  className="btn text-primary"
-//                  data-tooltip-id="my-tooltip"
-//                  data-tooltip-content="Attach a file"
-//                >
-//                  <FaLink className="" />
-//                  <Tooltip id="my-tooltip" />
-//                </button>
-//                <button
-//                  className="btn text-primary"
-//                  data-tooltip-id="my-tooltip"
-//                  data-tooltip-content="Reply"
-//                >
-//                  {" "}
-//                  <FaReply className="" />
-//                  <Tooltip id="my-tooltip" />
-//                </button>
-//                <button
-//                  className="btn text-primary"
-//                  data-tooltip-id="my-tooltip"
-//                  data-tooltip-content="emoji"
-//                >
-//                  <HiOutlineEmojiHappy className="" />
-//                  <Tooltip id="my-tooltip" />
-//                </button>
-//                <button
-//                  className="btn text-primary"
-//                  data-tooltip-id="my-tooltip"
-//                  data-tooltip-content="Like"
-//                >
-//                  <FaThumbsUp className="" />
-//                  <Tooltip id="my-tooltip" />
-//                </button>
-//              </ul>
-//            </div>
-//          </div>
-//        </div>
-//      </div>
-//    </div>
-//  </div>;

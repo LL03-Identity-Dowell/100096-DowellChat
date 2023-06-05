@@ -7,8 +7,8 @@ const ScrollBar = ({ message }) => {
   return (
     <div>
       <div id="wrappers">
-        <div class="scrollbars" id="style-1">
-          <div class="force-overflow">
+        <div className="scrollbars" id="style-1">
+          <div className="force-overflow">
             {/* <ProfileHead /> */}
             <Message message={message} />
             {/* <ReplyChat /> */}
