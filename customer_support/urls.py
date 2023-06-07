@@ -16,13 +16,13 @@ urlpatterns = [
 
     re_path(r'^dowell-api/create-room/(?P<product>[0-9\w-]+)/(?:session_id=(?P<session_id>[a-z0-9])/)?$', views.create_room_API, name= 'create-room-API'),    #    create room API without login -
     re_path(r'^chat/(?P<product>[0-9\w-]+)/(?:session_id=(?P<session_id>[a-z0-9])/)?$', views.chat_box_view, name='chat-box'),  # login and extension
-    path('send/<int:pk>/', views.send_message_api, name= 'send_message'),
+    path('send/<int:pk>/', views.send_message_api, name= 'send_message'), #for without login user
 
     # login urls start here
     path('create-portfolio-mobile/', views.create_portfolio_mobile, name='create-portfolio-mobile'), # after login mobile application - used by muzahid application
     #   path('create-portfolio/', views.create_portfolio, name='create-portfolio'),     #   ?session_id=jhufy8yea89aef
     re_path(r'^d-chat/(?P<product>[0-9\w-]+)/(?:session_id=(?P<session_id>[a-z0-9])/)?$', views.create_room_api__dowell_user, name= 'create-room-API-loggedin'),    #    create room API for logged in user
-    path('send_message/<int:pk>/', views.send_msg_api_3, name= 'send_message_3'),
+    path('send_message/<int:pk>/', views.send_msg_api_3, name= 'send_message_3'), #for login user
 
 
 

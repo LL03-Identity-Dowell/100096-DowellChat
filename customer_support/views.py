@@ -516,7 +516,7 @@ def room_list(request, *agrs, **kwargs):
         if rooms:
             for r in rooms:
                 if r.active :
-                    rm_list.append({'room_id': r.id, 'room_name': r.room_name, 'company': r.company, 'r_session': r.room_id})
+                    rm_list.append({'room_id': r.id, 'room_name': r.room_name, 'company': r.company, 'r_session': r.room_id,"userinfo":{"userID":r.sender_portfolio.userID,"portfolio_name":r.sender_portfolio.portfolio_name }})
             try:
                 firstroom = rm_list[0]
             except:
