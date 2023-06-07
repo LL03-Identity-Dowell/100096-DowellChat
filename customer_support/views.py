@@ -516,7 +516,14 @@ def room_list(request, *agrs, **kwargs):
         if rooms:
             for r in rooms:
                 if r.active :
-                    rm_list.append({'room_id': r.id, 'room_name': r.room_name, 'company': r.company, 'r_session': r.room_id,"userinfo":{"userID":r.sender_portfolio.userID,"portfolio_name":r.sender_portfolio.portfolio_name }})
+                    url = 'https://100093.pythonanywhere.com/api/userinfo/'
+                    response = requests.post(url, data={'session_id': r.sender_portfolio.session_id})
+                    response = response.json()
+                    if response['userinfo'].get('profile_img'):
+                        profile_img  = response['userinfo']['profile_img']
+                    else:
+                        profile_img = "No profile image"   
+                    rm_list.append({'room_id': r.id, 'room_name': r.room_name, 'company': r.company, 'r_session': r.room_id,"userinfo":{"userID":r.sender_portfolio.userID,"portfolio_name":r.sender_portfolio.portfolio_name, "profile_img":profile_img }})
             try:
                 firstroom = rm_list[0]
             except:
