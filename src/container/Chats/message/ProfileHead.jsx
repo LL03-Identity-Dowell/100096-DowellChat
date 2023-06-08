@@ -16,18 +16,30 @@ const ProfileHead = ({ chatHeader }) => {
     <div className="container-lg" style={{ gap: "2rem" }}>
       <div className="">
         <div className="w-full d-flex gap-3 align-items-center border-bottom my-0 my-md-0 my-lg-0 my-xl-0 my-xxl-0 justify-content-between">
-          <figure className="d-flex gap-3  align-items-center">
-            <img src={user} className=" image-style" />
-            <small
-              className="bg-success rounded"
-              style={{
-                position: "absolute",
-                height: "7px",
-                width: "7px",
-                marginLeft: "2.7rem",
-                marginTop: "1.9rem",
-              }}
-            ></small>
+          <figure className="d-flex gap-3 align-items-center">
+            <div className="position-relative">
+              <img
+                src={user}
+                className=" rounded-circle"
+                width="60px"
+                height="60px"
+              />
+              <small
+                className="bg-success rounded position-absolute end-0 top-50 mt-3"
+                style={{
+                  // position: "absolute",
+                  height: "7px",
+                  width: "7px",
+                  marginRight: "4px",
+                  // marginRight: "66.2vw",
+                  // left: "",
+                  // marginLeft: "2.7rem",
+                  // marginTop: "1.9rem",
+                  // marginLeft: "3vw",
+                  // top: "26.8vh",
+                }}
+              ></small>
+            </div>
             <div className="d-flex flex-column">
               <small className="fs-6 fw-extrabold text-black">
                 {room_Id ? (
@@ -47,7 +59,7 @@ const ProfileHead = ({ chatHeader }) => {
       <ScrollBar message={result} />
 
       {/* <Message /> */}
-      {/* <ReplyChat /> */}
+      <ReplyChat />
     </div>
   );
 };

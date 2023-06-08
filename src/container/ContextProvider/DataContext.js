@@ -16,6 +16,7 @@ export const AppProvider = ({ children }) => {
   const [message, setMessage] = useState();
   const [room_Id, setRoom_Id] = useState("");
   const [roomsId, setRoomsId] = useState();
+
   // console.log("chatHeader from context", chatHeader);
   // const onSetChatHeader = (header) => setChatHeader(header);
   // const myMessage = [{ name: "usman" }];
@@ -34,7 +35,9 @@ export const AppProvider = ({ children }) => {
   //     console.error("error", error);
   //   }
   // };
-
+  const sessionId = {
+    session_id: "5p8do0ht7no4gyjo0w2984o4vj5dc2hs",
+  };
   useEffect(() => {
     const getRooms = async (title) => {
       try {
@@ -96,9 +99,7 @@ export const AppProvider = ({ children }) => {
   const url = "https://100093.pythonanywhere.com/api/userinfo/";
   useEffect(() => {
     const getUserInfo = async () => {
-      const res = await axios.post(url, {
-        session_id: "5p8do0ht7no4gyjo0w2984o4vj5dc2hs",
-      });
+      const res = await axios.post(url, sessionId);
       setUserInfo(res?.data?.userinfo);
       // console.log(res);
     };
@@ -203,6 +204,7 @@ export const AppProvider = ({ children }) => {
         // handleSendMessage,
         getMessages,
         setData,
+        sessionId,
         // getRooms,
       }}
     >

@@ -1,34 +1,20 @@
-// import { Navigate, Outlet } from "react-router-dom";
-
+import { useContext } from "react";
+import { Link, Navigate, Outlet } from "react-router-dom";
+import ProductContext from "../ContextProvider/DataContext";
 // const useAuth = () => {
 //   const user = { loggedIn: localStorage.getItem("tokenId") };
-//   return user && user.loggedIn;
+//   const user = { token: false };
+//   return user;
 // };
 
-// const ProtectedRoutes = () => {
-//   const isAuth = useAuth();
-//   return isAuth ? <Outlet /> : <Navigate to="/" />;
-// };
+const ProtectedRoutes = () => {
+  const { sessionId } = useContext(ProductContext);
+  // const
+  let isAuth = { token: true };
+  if (!isAuth.token)
+    return (window.location = "https://100014.pythonanywhere.com/");
 
-// export default ProtectedRoutes;
+  return <Outlet />;
+};
 
-// then app.js should look this way
-
-// import React from "react";
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import other components that you need...
-
-{
-  /* <BrowserRouter>
-      <Routes>
-        <Route path="*" element={<NotFoundPage />} />
-        <Route path="/" element={<LoginPage />} />
-        <Route element={<ProtectedRoutes />}>
-          <Route path="/user-list" element={<UserListPage />} />
-          <Route path="/add-user" element={<AddUserPage />} />
-          <Route path="/user-details/:id" element={<UserDetailsPage />} />
-          <Route path="/update-user/:id" element={<UpdateUserPage />} />
-        </Route>
-      </Routes>
-</BrowserRouter> */
-}
+export default ProtectedRoutes;

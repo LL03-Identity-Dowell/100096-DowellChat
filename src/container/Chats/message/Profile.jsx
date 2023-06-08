@@ -9,7 +9,7 @@ const Profile = () => {
       // style={{ maxWidth: "75%" }}
     >
       <ProfileHead />
-      <ReplyChat />
+      {/* <ReplyChat /> */}
     </div>
   );
 };

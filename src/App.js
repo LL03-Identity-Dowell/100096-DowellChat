@@ -1,40 +1,52 @@
 import "./App.css";
 import { Tooltip } from "react-tooltip";
-import { Routes, Router, redirect } from "react-router-dom";
-// import { createHashRouter } from "react-router-dom";
+import {
+  Routes,
+  Router,
+  redirect,
+  Route,
+  useSearchParams,
+} from "react-router-dom";
 import "react-tooltip/dist/react-tooltip.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import Container from "./container";
-import Footer from "./container/Footer";
 import { AppProvider } from "./container/ContextProvider/DataContext";
-import Navbar from "./container/Header/Navbar";
-import ScrollBar from "./container/Chats/message/ScrollBar";
+import ProtectedRoutes from "./container/protected/protectedRoutes";
+import Home from "./container/home";
+import { useEffect } from "react";
 function App() {
-  // const router = createHashRouter([
-  //   {
-  //     path: "/",
-  //     element: <Container />,
-  //     loader: "",
-  //   },
-  // ]);
+  let [searchParams, setSearchParams] = useSearchParams();
+  // let [searchParams] = useSearchParams();
+  console.log(searchParams);
+  // const date = new Date();
+  // console.log("date", date);
+  // for (const entry of searchParams.entries()) {
+  //   const [param, value] = entry;
+  // }
+  // console.log([...searchParams]);
+  const params = Object.fromEntries([...searchParams]);
+  console.log("mounted", params);
+  useEffect(() => {
+    const currentParams = Object.fromEntries([...searchParams]);
+    console.log(currentParams);
+    setSearchParams({ sort: "name", order: "ascending" });
+  }, [searchParams]);
+  // function handleSubmit(e) {
+  //   e.preventDefault();
 
-  // const userLogic = () => {
-  //   if (!session_id) {
-  //     redirect;
-  //   }
-  // };
-  const date = new Date();
-  console.log("date", date);
+  //   let params = serializeFormQuery(e.target);
+  //   setSearchParams(params);
+  // }
   return (
-    <AppProvider>
-      <div className="container-lg w-100 ">
-        <Container />
-        {/* </div> */}
-
-        <Footer />
-      </div>
-    </AppProvider>
+    <div className="container-lg w-100 ">
+      <AppProvider>
+        <Routes>
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/dowell-chat-app" element={<Home />} />
+          </Route>
+        </Routes>
+      </AppProvider>
+    </div>
   );
 }
 

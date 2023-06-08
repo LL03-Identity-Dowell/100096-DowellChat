@@ -116,7 +116,7 @@ const Buttons = ({ onSetChatHeader }) => {
     <div className="">
       <div className=" d-flex flex-nowrap">
         <div
-          className="d-flex  flex-nowrap gap-3  text-nowrap py-3"
+          className="d-flex  flex-nowrap gap-3  text-nowrap pb-2"
           id="scroll"
         >
           {productList &&

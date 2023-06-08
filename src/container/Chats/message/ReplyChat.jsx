@@ -59,12 +59,12 @@ const ReplyChat = () => {
       });
   };
   return (
-    <div className="text-black mb-5 mb-md-5 mb-lg-0 mb-xl-0 mb-xxl-0">
-      <div className="card py-2 ms-2 w-100 " style={{ height: "150px" }}>
+    <div className="text-black mb-5 mb-md-5 mb-lg-5 mb-xl-5 mb-xxl-5">
+      <div className="card py-2 ms-2 w-100 " style={{ height: "165px" }}>
         <div className="card-body p-1 " onSubmit={handleSubmit}>
           <div className="d-flex w-100 justify-content-between">
             <InputBox input={input} setInput={setInput} />
-            <div className="d-flex">
+            <div className="d-flex align-items-center flex-column-reverse flex-md-row flex-lg-row flex-xl-row flex-xxl-row">
               <div
                 className="d-flex justify-content-end"
                 // style={{ marginBottom: "4rem" }}
@@ -103,9 +103,11 @@ const ReplyChat = () => {
                   <Tooltip id="my-tooltip" />
                 </button>
               </div>
-              <button className="btn text-primary " typeof="submit">
-                <FaPaperPlane />
-              </button>
+              <div>
+                <button className="btn text-primary " typeof="submit">
+                  <FaPaperPlane />
+                </button>
+              </div>
             </div>
           </div>
         </div>
