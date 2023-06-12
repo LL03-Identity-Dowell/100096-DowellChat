@@ -263,23 +263,37 @@ def room_control(portfolio, product):
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+import json
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+import json
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+
+@dowell_login_required
 @csrf_exempt
 def support_context_api(request):
     if request.method == 'POST':
         try:
+            session_id = request.GET.get('session_id')  # Get the session_id from the query parameter
+            if not session_id:
+                return JsonResponse({'error': 'Missing session_id in the URL.'}, status=400)
+
             data = request.POST
-            d_user = {
-                "userinfo": {
-                    "userID": data['d_user[userinfo][userID]'],
-                    "username": data['d_user[userinfo][username]']
-                },
-                "portfolio_info": [
-                    {
-                        "org_id": data['d_user[portfolio_info][0][org_id]']
-                    }
-                ]
-            }
-            session_id = data['session_id']
+
+            # Set the session_id in the session object
+            request.session['session_id'] = session_id
+
+            # Make a request to the userinfo API
+            userinfo_url = 'https://100093.pythonanywhere.com/api/userinfo/'
+            response = requests.post(userinfo_url, json={'session_id': session_id})
+            d_user = response.json()
+            print(d_user)
+            
             product_list = data.getlist('product_list[]')
             company_filter = bool(data.get('company_filter', False))
             
@@ -308,6 +322,8 @@ def support_context_api(request):
             return JsonResponse({'error': 'Invalid request data.'}, status=400)
     
     return JsonResponse({'error': 'Invalid request method.'}, status=405)
+
+
 
 
 '''
@@ -670,30 +686,36 @@ def main_living_lab_support_page(request, *args, **kwargs):
 
 
 
-
+from django.http import HttpResponseNotFound
 #   @dowell_login_required
-def room_list(request, *agrs, **kwargs):
+def room_list(request, *args, **kwargs):
     firstroom = None
     rooms = None
     rm_list = []
     try:
-        if kwargs['product'].lower() == 'login' or kwargs['product'].lower() == 'sales-agent' or kwargs['product'].lower() == 'extension' :
+        if kwargs['product'].lower() == 'login' or kwargs['product'].lower() == 'sales-agent' or kwargs['product'].lower() == 'extension':
             rooms = Room.objects.filter(product=kwargs['product'].lower()).order_by("-id")
         else:
             rooms = Room.objects.filter(product=kwargs['product'].lower(), company=kwargs['organization_id']).order_by("-id")
         print('room API product : ', kwargs['product'])
         if rooms:
             for r in rooms:
-                if r.active :
+                if r.active:
                     rm_list.append({'room_id': r.id, 'room_name': r.room_name, 'company': r.company, 'r_session': r.room_id})
             try:
                 firstroom = rm_list[0]
-            except:
-                firstroom = {'room_id': None, 'room_name': '', 'company': ''}
+            except IndexError:
+                firstroom = None
+        
         frm_id = firstroom['room_id'] if firstroom else None
-        return JsonResponse({'rooms': rm_list, 'firstroom': firstroom, 'messages': [jsonify_message_object(message) for message in Message.objects.filter(room_id=frm_id)]})
+        messages = [jsonify_message_object(message) for message in Message.objects.filter(room_id=frm_id)]
+        
+        if not rooms:
+            return JsonResponse({'error': 'No rooms found'}, status=HttpResponseNotFound.status_code)
+        
+        return JsonResponse({'rooms': rm_list, 'firstroom': firstroom, 'messages': messages})
     except Room.DoesNotExist:
-        return JsonResponse({'rooms': []})
+        return JsonResponse({'error': 'No rooms found'}, status=HttpResponseNotFound.status_code)
 
 
 

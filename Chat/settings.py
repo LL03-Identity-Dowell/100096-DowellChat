@@ -139,6 +139,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ORIGIN_ALLOW_ALL = True
 
+# Session Engine
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# Session Storage
+SESSION_COOKIE_NAME = 'chat_session'
+
 
 
 
