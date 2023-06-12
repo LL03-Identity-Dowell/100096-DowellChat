@@ -114,7 +114,7 @@ const Buttons = ({ onSetChatHeader }) => {
   const activeIndex = -1;
   return (
     <div className="">
-      <div className=" d-flex flex-nowrap">
+      <div className="pt-3 pt-md-2 pt-lg-0 pt-xl-0 pt-xxl-0 d-flex flex-nowrap">
         <div
           className="d-flex  flex-nowrap gap-3  text-nowrap pb-2"
           id="scroll"

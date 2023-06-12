@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 
 const ProductContext = createContext();
 
@@ -16,6 +17,53 @@ export const AppProvider = ({ children }) => {
   const [message, setMessage] = useState();
   const [room_Id, setRoom_Id] = useState("");
   const [roomsId, setRoomsId] = useState();
+  const [orgId, setOrgId] = useState("");
+
+  let [searchParams, setSearchParams] = useSearchParams();
+  // let [searchParams] = useSearchParams();
+  console.log(searchParams);
+  // const date = new Date();
+  // console.log("date", date);
+  // for (const entry of searchParams.entries()) {
+  //   const [param, value] = entry;
+  // }
+  // console.log([...searchParams]);
+  const params = Object.fromEntries([...searchParams]);
+  console.log("mounted", params);
+  useEffect(() => {
+    const currentParams = Object.fromEntries([...searchParams]);
+    console.log(currentParams);
+    setSearchParams({
+      // sort: "name",
+      // order: "ascending",
+      session_id: "5p8do0ht7no4gyjo0w2984o4vj5dc2hs",
+    });
+  }, [searchParams]);
+  useEffect(() => {
+    const getSessionId = async () => {
+      const res = await axios.post(
+        "https://100093.pythonanywhere.com/api/userinfo/",
+        searchParams
+      );
+      console.log("res.data", res);
+      setOrgId(res?.data?.selected_product?.orgid);
+      setUserInfo(res?.data?.userinfo);
+      // console.log("organizations id", res?.data?.selected_product?.orgid);
+    };
+    getSessionId();
+  }, []);
+  console.log("searchParams", searchParams);
+  console.log(`this is the organization ${orgId}`);
+
+  useEffect(() => {
+    const createRooms = async () => {
+      const res = await axios.get(
+        "https://100096.pythonanywhere.com/dowell-api/create-room/Login/?e0swj8kzqq3h87hagqs2b1i7kp1yqerw"
+      );
+      console.log("createRoom response", res, { status: 200 });
+    };
+    createRooms();
+  }, []);
 
   // console.log("chatHeader from context", chatHeader);
   // const onSetChatHeader = (header) => setChatHeader(header);
@@ -41,14 +89,15 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const getRooms = async (title) => {
       try {
-        const BASE_URL = `https://100096.pythonanywhere.com/room_list/${chatHeader}/644f9d104baba28710c128e3/`;
+        const BASE_URL = `https://100096.pythonanywhere.com/room_list/${chatHeader}/${orgId}/`;
         const res = await axios.get(BASE_URL);
 
         // console.log(`res.data from messages${chatHeader}`, res?.data?.messages);
         // console.log(`res.data from messages${chatHeader}`, res?.data);
+        // console.log("response from get rooms", res?.data);
         setRooms(res?.data);
         // setMessages(res)
-        // setRoom(res?.data);
+        setRoom(res?.data);
       } catch (error) {
         console.error("error", error);
       }
@@ -88,7 +137,7 @@ export const AppProvider = ({ children }) => {
   // }, []);
 
   useEffect(() => {
-    const url = `https://100096.pythonanywhere.com/send/${room_Id}`;
+    const url = `https://100096.pythonanywhere.com/send/${room_Id}/`;
     const getMessages = async () => {
       const res = await axios.get(url);
       console.log("response", res);
@@ -96,15 +145,14 @@ export const AppProvider = ({ children }) => {
     };
     getMessages();
   }, [room_Id]);
-  const url = "https://100093.pythonanywhere.com/api/userinfo/";
-  useEffect(() => {
-    const getUserInfo = async () => {
-      const res = await axios.post(url, sessionId);
-      setUserInfo(res?.data?.userinfo);
-      // console.log(res);
-    };
-    getUserInfo();
-  }, []);
+  // const url = "https://100093.pythonanywhere.com/api/userinfo/";
+  // useEffect(() => {
+  //   const getUserInfo = async () => {
+  //     const res = await axios.post(url, sessionId);
+  //     setUserInfo(res?.data?.userinfo);
+  //   };
+  //   getUserInfo();
+  // }, []);
   // console.log("userInfo", userInfo);
 
   useEffect(() => {
@@ -205,6 +253,7 @@ export const AppProvider = ({ children }) => {
         getMessages,
         setData,
         sessionId,
+        searchParams,
         // getRooms,
       }}
     >
