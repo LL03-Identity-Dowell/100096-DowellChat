@@ -503,35 +503,106 @@ def main_living_lab_support_page(request, *args, **kwargs):
 
 
 #   @dowell_login_required
-def room_list(request, *agrs, **kwargs):
-    firstroom = None
-    rooms = None
-    rm_list = []
+# def room_list(request, *agrs, **kwargs):
+#     firstroom = None
+#     rooms = None
+#     rm_list = []
+#     try:
+#         if kwargs['product'].lower() == 'login' or kwargs['product'].lower() == 'sales-agent' or kwargs['product'].lower() == 'extension' :
+#             rooms = Room.objects.filter(product=kwargs['product'].lower()).order_by("-id")
+#         else:
+#             rooms = Room.objects.filter(product=kwargs['product'].lower(), company=kwargs['organization_id']).order_by("-id")
+#         print('room API product : ', kwargs['product'])
+#         if rooms:
+#             for r in rooms:
+#                 if r.active :
+#                     url = 'https://100093.pythonanywhere.com/api/userinfo/'
+#                     response = requests.post(url, data={'session_id': r.sender_portfolio.session_id})
+#                     print(response)
+#                     response = response.json()
+#                     print(response)
+#                     userinfo = response.get('userinfo', {})  # Get the 'userinfo' key or default to an empty dictionary
+#                     profile_img = userinfo.get('profile_img', 'No profile image')  # Get the 'profile_img' key or default to 'No profile image'
+#                     rm_list.append({'room_id': r.id, 'room_name': r.room_name, 'company': r.company, 'r_session': r.room_id,"userinfo":{"userID":r.sender_portfolio.userID,"portfolio_name":r.sender_portfolio.portfolio_name, "profile_img":"profile_img" }})
+#                 else:
+#                     return JsonResponse({'rooms': []})
+#             try:
+#                 firstroom = rm_list[0]
+#             except:
+#                 firstroom = {'room_id': None, 'room_name': '', 'company': ''}
+#         frm_id = firstroom['room_id'] if firstroom else None
+#         return JsonResponse({'rooms': rm_list, 'firstroom': firstroom, 'messages': [jsonify_message_object(message) for message in Message.objects.filter(room_id=frm_id)]})
+#     except Room.DoesNotExist:
+#         return JsonResponse({'rooms': []})
+
+
+def room_list(request, *args, **kwargs):
     try:
-        if kwargs['product'].lower() == 'login' or kwargs['product'].lower() == 'sales-agent' or kwargs['product'].lower() == 'extension' :
-            rooms = Room.objects.filter(product=kwargs['product'].lower()).order_by("-id")
+        product = kwargs['product'].lower()
+        print(product)
+        organization_id = kwargs['organization_id']
+        
+        if product in ['login', 'sales-agent', 'extension']:
+            rooms = Room.objects.filter(product=product).order_by("-id")
         else:
-            rooms = Room.objects.filter(product=kwargs['product'].lower(), company=kwargs['organization_id']).order_by("-id")
-        print('room API product : ', kwargs['product'])
+            rooms = Room.objects.filter(product=product, company=organization_id).order_by("-id")
+        
+        print('room API product:', product)
+        
         if rooms:
+            rm_list = []
+            
             for r in rooms:
-                if r.active :
-                    url = 'https://100093.pythonanywhere.com/api/userinfo/'
-                    response = requests.post(url, data={'session_id': r.sender_portfolio.session_id})
-                    response = response.json()
-                    if response['userinfo'].get('profile_img'):
-                        profile_img  = response['userinfo']['profile_img']
-                    else:
-                        profile_img = "No profile image"   
-                    rm_list.append({'room_id': r.id, 'room_name': r.room_name, 'company': r.company, 'r_session': r.room_id,"userinfo":{"userID":r.sender_portfolio.userID,"portfolio_name":r.sender_portfolio.portfolio_name, "profile_img":profile_img }})
-            try:
+                if not r.active:
+                    return JsonResponse({'rooms': []})
+                
+                url = 'https://100093.pythonanywhere.com/api/userinfo/'
+                response = requests.post(url, data={'session_id': r.sender_portfolio.session_id})
+                
+                if response.status_code == 200:
+                    response_data = response.json()
+                    userinfo = response_data.get('userinfo', {})
+                    userName = userinfo.get('username') or r.sender_portfolio.userID
+                    profile_img = userinfo.get('profile_img', 'No profile image')
+                    email = userinfo.get("email", "example@gmail.com")
+                    userBrowser = userinfo.get("userBrowser","Chrome111")
+                    phone = userinfo.get("phone", "+ 08129337783")
+                    country= userinfo.get("country","country")
+
+                    
+                    rm_list.append({
+                        'room_id': r.id,
+                        'room_name': r.room_name,
+                        'company': r.company,
+                        'r_session': r.room_id,
+                        'userinfo': {
+                            'userID': userName,
+                            'portfolio_name': r.sender_portfolio.portfolio_name,
+                            'profile_img': profile_img,
+                            "email": email,
+                            "userBrowser":userBrowser,
+                            "phone": phone,
+                            "country" : country
+                        },
+                    })
+            
+            if rm_list:
                 firstroom = rm_list[0]
-            except:
+            else:
                 firstroom = {'room_id': None, 'room_name': '', 'company': ''}
-        frm_id = firstroom['room_id'] if firstroom else None
-        return JsonResponse({'rooms': rm_list, 'firstroom': firstroom, 'messages': [jsonify_message_object(message) for message in Message.objects.filter(room_id=frm_id)]})
-    except Room.DoesNotExist:
+            
+            frm_id = firstroom['room_id'] if firstroom else None
+            messages = [jsonify_message_object(message) for message in Message.objects.filter(room_id=frm_id)]
+            
+            return JsonResponse({'rooms': rm_list, 'firstroom': firstroom, 'messages': messages})
+        
         return JsonResponse({'rooms': []})
+    
+    except (KeyError, Room.DoesNotExist) as e:
+        return JsonResponse({'rooms': [], 'error': str(e)})
+    
+    except Exception as e:
+        return JsonResponse({'error': str(e)})
 
 
 
