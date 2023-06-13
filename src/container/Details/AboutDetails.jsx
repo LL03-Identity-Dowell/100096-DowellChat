@@ -79,8 +79,8 @@ const AboutDetails = ({ title, ux }) => {
             <ul>
               <li>
                 <small style={{ color: "#94a3b8" }}>
-                  <FaRegThumbsUp className="fw-bold fs-6" /> Liked Since Jan
-                  18,2023
+                  <FaRegThumbsUp className="fw-bold fs-6" />{" "}
+                  {userInfo?.dowell_time}
                 </small>
                 {/* date from the api */}
               </li>

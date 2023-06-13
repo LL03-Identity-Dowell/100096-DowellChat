@@ -28,24 +28,28 @@ const Rooms = ({ results }) => {
         className="d-flex flex-column justify-content-start gap-4  rounded"
         // onClick={() => console.log("clicked")}
       >
-        {rooms?.rooms?.map(({ room_id, room_name }) => {
-          return (
-            <button
-              key={room_id}
-              style={{ border: "none", background: "transparent" }}
-              className="d-flex mx-2"
-              onClick={() => setIds(room_id)}
-            >
-              <figure className="d-flex ">
-                <img src={img} height="50px" width="50px" className="mx-2" />
-              </figure>
-              <p className="d-flex flex-column" style={{ color: "black" }}>
-                <small className="fw-bold fs-6 text-start">{room_id}</small>
-                <small className="">{room_name}</small>
-              </p>
-            </button>
-          );
-        })}
+        {rooms?.rooms?.length <= 0 ? (
+          <h1 className="text-muted fs-5">No Rooms available</h1>
+        ) : (
+          rooms?.rooms?.map(({ room_id, room_name }) => {
+            return (
+              <button
+                key={room_id}
+                style={{ border: "none", background: "transparent" }}
+                className="d-flex mx-2"
+                onClick={() => setIds(room_id)}
+              >
+                <figure className="d-flex ">
+                  <img src={img} height="50px" width="50px" className="mx-2" />
+                </figure>
+                <p className="d-flex flex-column" style={{ color: "black" }}>
+                  <small className="fw-bold fs-6 text-start">{room_id}</small>
+                  <small className="">{room_name}</small>
+                </p>
+              </button>
+            );
+          })
+        )}
       </div>
     </div>
   );

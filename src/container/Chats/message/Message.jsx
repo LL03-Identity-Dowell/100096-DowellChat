@@ -38,74 +38,53 @@ const Message = ({ message }) => {
         paddingTop: "1.5rem",
       }}
     >
-      {messages ? (
-        messages?.messages?.map(({ message, id, side }) => {
-          return (
-            <div
-              key={id}
-              className={
-                side
-                  ? "d-flex justify-content-end"
-                  : "d-flex justify-content-start"
-              }
-            >
+      {messages?.messages?.length && rooms?.rooms?.length <= 0
+        ? null
+        : messages?.messages?.map(({ message, id, side }) => {
+            return (
               <div
-                id="chat1"
+                key={id}
                 className={
                   side
-                    ? "p-3 mb-4 style bg-primary"
-                    : "d-flex align-items-center bg-white text-muted"
+                    ? "d-flex justify-content-end"
+                    : "d-flex justify-content-start"
                 }
-                style={{
-                  width: "fit-content",
-                  maxWidth: "350px",
-                  // width: "350px",
-                }}
               >
-                {side ? null : (
-                  <img
-                    src={male_avatar}
-                    height="50px"
-                    width="50px"
-                    alt="male_avatar"
-                  />
-                )}
-                <p
-                  className="fs-6 small text-start mb-0 text-break"
+                <div
+                  id="chat1"
+                  className={
+                    side
+                      ? "p-3 mb-4 style bg-primary"
+                      : "d-flex align-items-center bg-white text-muted"
+                  }
                   style={{
-                    // width: "350px",
-                    // width: "fit-content",
+                    width: "fit-content",
                     maxWidth: "350px",
+                    // width: "350px",
                   }}
                 >
-                  {message}
-                </p>
-              </div>
-            </div>
-          );
-        })
-      ) : (
-        <div>
-          <div
-            className=""
-            id="chat1"
-            style={{ borderRadius: "10px", margin: "auto" }}
-          >
-            <div className="card-body">
-              <div className="text-nowrap d-flex flex-row justify-content-end mb-4">
-                <div
-                  className=" style bg-primary"
-                  style={{ padding: "0.5rem 1rem" }}
-                >
-                  <p className="small mb-0 text-wrap fs-6">
-                    Hey, How may I help you ?
+                  {side ? null : (
+                    <img
+                      src={male_avatar}
+                      height="50px"
+                      width="50px"
+                      alt="male_avatar"
+                    />
+                  )}
+                  <p
+                    className="fs-6 small text-start mb-0 text-break"
+                    style={{
+                      // width: "350px",
+                      // width: "fit-content",
+                      maxWidth: "350px",
+                    }}
+                  >
+                    {message}
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
+            );
+          })}
     </section>
   );
 };
