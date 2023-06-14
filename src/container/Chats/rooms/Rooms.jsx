@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import img from "../../../assets/avatar.png";
 import ProductContext from "../../ContextProvider/DataContext";
+import { Loader } from "../../spinner/loader";
 const Rooms = ({ results }) => {
   const {
     productList,
@@ -10,6 +11,8 @@ const Rooms = ({ results }) => {
     setRoom_Id,
     room_Id,
     getRooms,
+    loading,
+    memorizedRooms,
   } = useContext(ProductContext);
   // console.log("results", rooms);
   const [roomId, setRoomId] = useState();
@@ -22,13 +25,15 @@ const Rooms = ({ results }) => {
   // useEffect(() => {
   //   getMessage();
   // }, []);
-  return (
-    <div className="my-3">
+  return loading ? (
+    <Loader />
+  ) : (
+    <section className="my-3">
       <div
         className="d-flex flex-column justify-content-start gap-4  rounded"
         // onClick={() => console.log("clicked")}
       >
-        {rooms?.rooms?.length <= 0 ? (
+        {memorizedRooms?.rooms?.length <= 0 ? (
           <h1 className="text-muted fs-5">No Rooms available</h1>
         ) : (
           rooms?.rooms?.map(({ room_id, room_name }) => {
@@ -40,7 +45,13 @@ const Rooms = ({ results }) => {
                 onClick={() => setIds(room_id)}
               >
                 <figure className="d-flex ">
-                  <img src={img} height="50px" width="50px" className="mx-2" />
+                  <img
+                    src={img}
+                    height="50px"
+                    width="50px"
+                    className="mx-2"
+                    alt="male_avatar"
+                  />
                 </figure>
                 <p className="d-flex flex-column" style={{ color: "black" }}>
                   <small className="fw-bold fs-6 text-start">{room_id}</small>
@@ -51,7 +62,7 @@ const Rooms = ({ results }) => {
           })
         )}
       </div>
-    </div>
+    </section>
   );
 };
 

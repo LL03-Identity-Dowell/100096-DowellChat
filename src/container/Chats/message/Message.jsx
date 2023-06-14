@@ -3,9 +3,11 @@ import ReplyChat from "./ReplyChat";
 import clsx from "clsx";
 import male_avatar from "../../../assets/male_avatar.png";
 import ProductContext from "../../ContextProvider/DataContext";
+import { Loader } from "../../spinner/loader";
 const Message = ({ message }) => {
   // const [message, setMessage] = useState(true);
-  const { rooms, messages } = useContext(ProductContext);
+  const { rooms, messages, loading, memorizedMessages } =
+    useContext(ProductContext);
   const { id } = messages ?? {};
   const messageUser = (id) => {
     switch (id) {
@@ -40,7 +42,7 @@ const Message = ({ message }) => {
     >
       {messages?.messages?.length && rooms?.rooms?.length <= 0
         ? null
-        : messages?.messages?.map(({ message, id, side }) => {
+        : memorizedMessages?.messages?.map(({ message, id, side }) => {
             return (
               <div
                 key={id}

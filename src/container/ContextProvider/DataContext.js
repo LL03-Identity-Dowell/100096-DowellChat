@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 
@@ -8,7 +8,7 @@ export const AppProvider = ({ children }) => {
   const [productList, setProductList] = useState([]);
   const [roomList, setRoomList] = useState({});
   const [click, setClick] = useState(null);
-  // const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState();
   const [chatHeader, setChatHeader] = useState("");
   const [rooms, setRooms] = useState();
@@ -20,40 +20,34 @@ export const AppProvider = ({ children }) => {
   const [orgId, setOrgId] = useState("");
 
   let [searchParams, setSearchParams] = useSearchParams();
-  // let [searchParams] = useSearchParams();
+
   console.log(searchParams);
-  // const date = new Date();
-  // console.log("date", date);
-  // for (const entry of searchParams.entries()) {
-  //   const [param, value] = entry;
-  // }
-  // console.log([...searchParams]);
+
   const sessionId = {
     session_id: "5p8do0ht7no4gyjo0w2984o4vj5dc2hs",
   };
+  // const cachedSessionId = useMemo(() => sessionId, [sessionId]);
   const params = Object.fromEntries([...searchParams]);
   console.log("mounted", params);
   useEffect(() => {
     const currentParams = Object.fromEntries([...searchParams]);
     console.log(currentParams);
     setSearchParams(sessionId);
-  }, [searchParams, setSearchParams]);
+  });
   useEffect(() => {
     const getSessionId = async () => {
       const res = await axios.post(
         "https://100093.pythonanywhere.com/api/userinfo/",
         searchParams
       );
-      console.log("res.data", res);
+      // console.log("res.data", res);
       setOrgId(res?.data?.selected_product?.orgid);
       setUserInfo(res?.data?.userinfo);
-      // console.log("organizations id", res?.data?.selected_product?.orgid);
     };
     getSessionId();
   }, [searchParams]);
-  console.log("searchParams", searchParams);
-  console.log(`this is the organization ${orgId}`);
 
+  // create Room UseEffect
   // useEffect(() => {
   //   const createRooms = async () => {
   //     const res = await axios.get(
@@ -64,29 +58,11 @@ export const AppProvider = ({ children }) => {
   //   createRooms();
   // }, [sessionId]);
 
-  // console.log("chatHeader from context", chatHeader);
-  // const onSetChatHeader = (header) => setChatHeader(header);
-  // const myMessage = [{ name: "usman" }];
-  // console.log(room, "room");
-  // console.log(room_Id);
-  // console.log(messages, "messages");
-  // const getMessages = async (title) => {
-  //   try {
-  //     const res = await axios.get(
-  //       `https://100096.pythonanywhere.com/room_list/Login`
-  //     );
-
-  //     console.log("res.data from context", res?.data);
-  //     setRooms(res?.data);
-  //   } catch (error) {
-  //     console.error("error", error);
-  //   }
-  // };
-
   useEffect(() => {
     const getRooms = async (title) => {
       try {
         const BASE_URL = `https://100096.pythonanywhere.com/room_list/${chatHeader}/${orgId}/`;
+        setLoading(true);
         const res = await axios.get(BASE_URL);
 
         // console.log(`res.data from messages${chatHeader}`, res?.data?.messages);
@@ -95,78 +71,43 @@ export const AppProvider = ({ children }) => {
         setRooms(res?.data);
         // setMessages(res)
         setRoom(res?.data);
+        setLoading(false);
       } catch (error) {
         console.error("error", error);
       }
     };
     getRooms();
-  }, [chatHeader]);
-  // const getMessage = async (room_Id) => {
-  //   try {
-  //     const BASE_URL = `https://100096.pythonanywhere.com/room_list/${chatHeader}/644f9d104baba28710c128e3/`;
-  //     const res = await axios.get(BASE_URL);
-
-  //     console.log(`res.data from messages${chatHeader}`, res?.data?.messages);
-  //     setRooms(res?.data);
-  //     // setRoom(res?.data);
-  //   } catch (error) {
-  //     console.error("error", error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   const BASE_URL = `https://100096.pythonanywhere.com/room_list/Login/644f9d104baba28710c128e3`;
-  //   const getRooms = async () => {
-  //     const res = await axios.get(BASE_URL);
-  //     console.log(res);
-  //   };
-  //   getRooms();
-  // }, []);
-
-  // USER INFO COMPONENT
-
-  // useEffect(() => {
-  //   const url = "https://100093.pythonanywhere.com/api/userinfo";
-  //   const getInfo = async () => {
-  //     const res = await axios.get(url);
-  //     console.log("response", res);
-  //   };
-  //   getInfo();
-  // }, []);
+  }, [chatHeader, orgId]);
 
   useEffect(() => {
     const url = `https://100096.pythonanywhere.com/send_message/${room_Id}/`;
     const getMessages = async () => {
+      setLoading(true);
       const res = await axios.get(url);
       console.log("response", res?.data);
       setMessages(res?.data);
+      setLoading(false);
     };
     getMessages();
   }, [room_Id]);
-  // const url = "https://100093.pythonanywhere.com/api/userinfo/";
-  // useEffect(() => {
-  //   const getUserInfo = async () => {
-  //     const res = await axios.post(url, sessionId);
-  //     setUserInfo(res?.data?.userinfo);
-  //   };
-  //   getUserInfo();
-  // }, []);
-  // console.log("userInfo", userInfo);
 
-  useEffect(() => {
-    const getSessionId = async () => {
-      try {
-        // const res = await axios.post(
-        //   "https://100096.pythonanywhere.com/send_message/42"
-        // );
-        const res = await axios.get("https://100096.pythonanywhere.com/");
-        // roomId would be placed in the url
-        console.log(res);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    getSessionId();
-  }, []);
+  //create a usememo for the messages data
+  const memorizedMessages = useMemo(() => messages, [messages]);
+  const memorizedRooms = useMemo(() => rooms, [rooms]);
+  console.log("memoized", memorizedMessages, memorizedRooms);
+  // useEffect(() => {
+  //   const getSessionId = async () => {
+  //     try {
+
+  //       const res = await axios.get("https://100096.pythonanywhere.com/");
+
+  //       console.log(res);
+  //     } catch (error) {
+  //       console.log(error.message);
+  //     }
+  //   };
+  //   getSessionId();
+  // }, []);
 
   useEffect(() => {
     axios
@@ -179,11 +120,7 @@ export const AppProvider = ({ children }) => {
         console.log("error", err);
       });
   }, []);
-  // useEffect(() => {
 
-  // handleProductClick();
-  // }, []);
-  // console.log(click);
   useEffect(() => {
     const clientProductList = async () => {
       const res = await axios.get(
@@ -193,41 +130,7 @@ export const AppProvider = ({ children }) => {
     };
     clientProductList();
   }, []);
-  // useEffect(() => {
-  // const getMessages = async (message) => {
-  //   try {
-  //     const res = await axios.post(
-  //       `https://100096.pythonanywhere.com/send_message/42/`,
-  //       {
-  //         message,
-  //       }
-  //     );
-  //     console.log(res.data, "response");
-  //     setMessage(res.data);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
 
-  // useEffect(() => {
-  //   const getSentMessages = async () => {
-  //     try {
-  //       const res = await axios.get(
-  //         "https://100096.pythonanywhere.com/send_message/42/"
-  //       );
-  //       // console.log(res?.data, "response2");
-  //       setMessages(res?.data);
-  //     } catch (error) {
-  //       console.log(error.message);
-  //     }
-  //   };
-  //   getSentMessages();
-  // }, []);
-
-  const setData = (message) => setData;
-  // getMessages()
-  // }, []);
-  // console.log(message, "age");
   return (
     <ProductContext.Provider
       value={{
@@ -242,16 +145,14 @@ export const AppProvider = ({ children }) => {
         rooms,
         setRooms,
         room,
-        // getMessage,
         setRoom_Id,
         room_Id,
         userInfo,
-        // handleSendMessage,
-        // getMessages,
-        setData,
         sessionId,
         searchParams,
-        // getRooms,
+        loading,
+        memorizedMessages,
+        memorizedRooms,
       }}
     >
       {children}
