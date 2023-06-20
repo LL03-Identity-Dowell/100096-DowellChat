@@ -501,6 +501,37 @@ def main_living_lab_support_page(request, *args, **kwargs):
 
 
 
+# DELETE APIs
+
+# Delete room api
+@csrf_exempt
+@dowell_login_required
+
+def delete_room(request, product):
+    session_id = request.GET.get('session_id')
+    product=request.GET.get('product')
+    print(product)
+    print("Logged in as: ", request.session["dowell_user"]["userinfo"]["username"])  
+
+    try:
+        # portfolio = Portfolio.objects.get(session_id=session_id)
+        d_user=request.session["dowell_user"]
+        portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"] , organization = d_user["portfolio_info"][0]["org_id"])
+        print(portfolio)
+        
+        
+        room = Room.objects.filter(active=True, sender_portfolio=portfolio, product=product).order_by('id').first()
+        print(room)
+        if room:
+            room.active = False
+            room.save()
+            return JsonResponse({'status': 'Room deleted successfuly'})
+        else:
+            return JsonResponse({'status': 'Room not found'}, status=404)
+    except (Portfolio.DoesNotExist, Room.DoesNotExist):
+        return JsonResponse ({'status': 'Room not found'}, status=404)
+    
+
 
 #   @dowell_login_required
 # def room_list(request, *agrs, **kwargs):
