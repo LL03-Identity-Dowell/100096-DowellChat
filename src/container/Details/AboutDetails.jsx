@@ -32,32 +32,32 @@ const AboutDetails = ({ title, ux }) => {
           <p style={{ color: "#94a3b8", fontSize: "14px" }}>Added Details</p>
           <div className="">
             <ul>
-              <li className="">
-                <small style={{ color: "#94a3b8" }}>
+              <li style={{ color: "#94a3b8" }}>
+                <small>
                   <FaPhone className="fw-bold fs-6" /> +{" "}
                   <span className="" style={{ fontSize: "13px" }}>
                     {userInfo?.phone}
                   </span>
                 </small>
               </li>
-              <li>
-                <small style={{ color: "#94a3b8" }}>
+              <li style={{ color: "#94a3b8" }}>
+                <small className="d-flex gap-2 align-items-center">
                   <FaRegEnvelope className="fw-bold fs-6" /> +{" "}
                   <span className="" style={{ fontSize: "13px" }}>
                     {userInfo?.email}
                   </span>
                 </small>
               </li>
-              <li>
-                <small style={{ color: "#94a3b8" }}>
+              <li style={{ color: "#94a3b8" }}>
+                <small>
                   <BiWorld className="fw-bold fs-5" /> +{" "}
                   <span className="" style={{ fontSize: "13px" }}>
                     {userInfo?.userBrowser}
                   </span>
                 </small>
               </li>
-              <li>
-                <small style={{ color: "#94a3b8" }}>
+              <li style={{ color: "#94a3b8" }}>
+                <small>
                   {/* <AiFillHome /> + Address */}
                   <HiHome className="fw-bold fs-5" /> +{" "}
                   <span className="" style={{ fontSize: "13px" }}>
@@ -77,31 +77,23 @@ const AboutDetails = ({ title, ux }) => {
         <main>
           <div className="">
             <ul>
-              <li>
-                <small style={{ color: "#94a3b8" }}>
-                  <FaRegThumbsUp className="fw-bold fs-6" />{" "}
-                  {userInfo?.dowell_time}
-                </small>
+              <li style={{ color: "#94a3b8" }}>
+                <FaRegThumbsUp className="fw-bold fs-6" />{" "}
+                {userInfo?.dowell_time}
                 {/* date from the api */}
               </li>
-              <li>
-                <small style={{ color: "#94a3b8" }}>
-                  <FaBriefcase className="fw-bold fs-6" /> Works at Graphic
-                  Designer
-                </small>
+              <li style={{ color: "#94a3b8" }}>
+                <FaBriefcase className="fw-bold fs-6" /> Works at Graphic
+                Designer
               </li>
-              <li>
-                <small style={{ color: "#94a3b8" }}>
-                  <FaGraduationCap className="fw-bold fs-4" /> <br /> Studied at
-                  Harvard University Cambridge
-                </small>
+              <li style={{ color: "#94a3b8" }}>
+                <FaGraduationCap className="fw-bold fs-4" /> <br /> Studied at
+                Harvard University Cambridge
                 {/* Place of work from the api */}
               </li>
-              <li>
-                <small style={{ color: "#94a3b8" }}>
-                  <FaLocationArrow className="fw-bold fs-6" /> From
-                  <span> {userInfo?.user_country}</span>
-                </small>
+              <li style={{ color: "#94a3b8" }}>
+                <FaLocationArrow className="fw-bold fs-6" /> From
+                <span> {userInfo?.user_country}</span>
               </li>
             </ul>
           </div>

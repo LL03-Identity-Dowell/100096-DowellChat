@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import img from "../../../assets/avatar.png";
 import ProductContext from "../../ContextProvider/DataContext";
 import { Loader } from "../../spinner/loader";
+// import { Spinner } from "phosphor-react";
 const Rooms = ({ results }) => {
   const {
     productList,
@@ -25,9 +26,7 @@ const Rooms = ({ results }) => {
   // useEffect(() => {
   //   getMessage();
   // }, []);
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <section className="my-3">
       <div
         className="d-flex flex-column justify-content-start gap-4  rounded"
@@ -35,8 +34,10 @@ const Rooms = ({ results }) => {
       >
         {memorizedRooms?.rooms?.length <= 0 ? (
           <h1 className="text-muted fs-5">No Rooms available</h1>
+        ) : loading ? (
+          <Loader />
         ) : (
-          rooms?.rooms?.map(({ room_id, room_name }) => {
+          memorizedRooms?.rooms?.map(({ room_id, room_name }) => {
             return (
               <button
                 key={room_id}
