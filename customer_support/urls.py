@@ -34,6 +34,9 @@ urlpatterns = [
 
     path('main-living-lab-support/', views.main_living_lab_support_page, name='main-living-lab-support-page'),
 
+     # Delete APIs
+    path('api/delete-room/<str:product>/', views.delete_room, name='delete-room'),
+
 ]
 
 '''
