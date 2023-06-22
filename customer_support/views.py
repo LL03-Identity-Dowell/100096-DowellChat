@@ -220,8 +220,8 @@ def test(request):
     return JsonResponse({"status":"it is working", "session_id": request.session["dowell_user"]["userinfo"]["username"]})
 
 
-def test1(request):
-    return JsonResponse({"status":"it is working"})
+def dowell_mail_view(request):
+    return render(request, "mail_chat.html")
 
 
 @xframe_options_exempt
@@ -432,7 +432,7 @@ def pop_up_api(request, *args, **kwargs):
 
 
 
-ADMIN_PRODUCT = ["Login", "Extension", "Living-Lab-Admin", "Sales-Agent"]
+ADMIN_PRODUCT = ["Login", "Dowell-Mail", "Extension", "Living-Lab-Admin", "Sales-Agent"]
 
 PRODUCT_LIST = ["Workflow-AI", "Wifi-QR-Code", "Legalzard", "User-Experience-Live", "Social-Media-Automation", "Living-Lab-Scales", "Logo-Scan", "Team-Management", "Living-Lab-Monitoring", "Permutation-Calculator", "Secure-Repositories", "Secure-Data", "Customer-Experience", "DoWell-CSC", "Living-Lab-Chat"]
 
@@ -500,6 +500,37 @@ def main_living_lab_support_page(request, *args, **kwargs):
     return render(request, 'customer_support_chat_1.html', support_context(request.session["dowell_user"], request.session['session_id'], PRODUCT_LIST, True))
 
 
+
+# DELETE APIs
+
+# Delete room api
+@csrf_exempt
+@dowell_login_required
+
+def delete_room(request, product):
+    session_id = request.GET.get('session_id')
+    product=request.GET.get('product')
+    print(product)
+    print("Logged in as: ", request.session["dowell_user"]["userinfo"]["username"])  
+
+    try:
+        # portfolio = Portfolio.objects.get(session_id=session_id)
+        d_user=request.session["dowell_user"]
+        portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"] , organization = d_user["portfolio_info"][0]["org_id"])
+        print(portfolio)
+        
+        
+        room = Room.objects.filter(active=True, sender_portfolio=portfolio, product=product).order_by('id').first()
+        print(room)
+        if room:
+            room.active = False
+            room.save()
+            return JsonResponse({'status': 'Room deleted successfuly'})
+        else:
+            return JsonResponse({'status': 'Room not found'}, status=404)
+    except (Portfolio.DoesNotExist, Room.DoesNotExist):
+        return JsonResponse ({'status': 'Room not found'}, status=404)
+    
 
 
 #   @dowell_login_required
