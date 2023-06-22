@@ -556,46 +556,37 @@ def room_list(request, *args, **kwargs):
                 if not r.active:
                     return JsonResponse({'rooms': []})
                 
-                # url = 'https://100093.pythonanywhere.com/api/userinfo/'
-                # response = requests.post(url, data={'session_id': r.sender_portfolio.session_id})
+                url = 'https://100093.pythonanywhere.com/api/userinfo/'
+                response = requests.post(url, data={'session_id': r.sender_portfolio.session_id})
                 
-                # if response.status_code == 200:
-                # response_data = response.json()
-                # userinfo = response_data.get('userinfo', {})
-                # userName = userinfo.get('username') or r.sender_portfolio.userID
-                # profile_img = userinfo.get('profile_img', 'No profile image')
-                # email = userinfo.get("email", "example@gmail.com")
-                # userBrowser = userinfo.get("userBrowser","Chrome111")
-                # phone = userinfo.get("phone", "+ 08129337783")
-                # country= userinfo.get("country","country")
+                if response.status_code == 200:
+                    response_data = response.json()
+                    userinfo = response_data.get('userinfo', {})
+                    userName = userinfo.get('username') or r.sender_portfolio.userID
+                    profile_img = userinfo.get('profile_img', 'No profile image')
+                    email = userinfo.get("email", "example@gmail.com")
+                    userBrowser = userinfo.get("userBrowser","Chrome111")
+                    phone = userinfo.get("phone", "+ 08129337783")
+                    country= userinfo.get("country","country")
+                    user_id = userinfo.get('userID') or r.sender_portfolio.userID
 
-                    
-                    # rm_list.append({
-                    #     'room_id': r.id,
-                    #     'room_name': r.room_name,
-                    #     'company': r.company,
-                    #     'r_session': r.room_id,
-                    #     'userinfo': {
-                    #         'userID': userName,
-                    #         'portfolio_name': r.sender_portfolio.portfolio_name,
-                    #         'profile_img': profile_img,
-                    #         "email": email,
-                    #         "userBrowser":userBrowser,
-                    #         "phone": phone,
-                    #         "country" : country
-                    #     },
-                    # })
-                rm_list.append({
-                    'room_id': r.id,
-                    'room_name': r.room_name,
-                    'company': r.company,
-                    'r_session': r.room_id,
-                    'userinfo': {
-                        'userID': r.sender_portfolio.userID,
-                        'portfolio_name': r.sender_portfolio.portfolio_name,
-                        "session_id": r.sender_portfolio.session_id,
-                    },
-                })
+
+                    rm_list.append({
+                        'room_id': r.id,
+                        'room_name': r.room_name,
+                        'company': r.company,
+                        'r_session': r.room_id,
+                        'userinfo': {
+                            'userID': userName,
+                            'portfolio_name': r.sender_portfolio.portfolio_name,
+                            'profile_img': profile_img,
+                            "email": email,
+                            "userBrowser":userBrowser,
+                            "phone": phone,
+                            "country" : country,
+                            "user_id": user_id
+                        },
+                    })
         
             if rm_list:
                 firstroom = rm_list[0]
