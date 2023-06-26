@@ -16,18 +16,14 @@ import ProtectedRoutes from "./container/protected/protectedRoutes";
 import Home from "./container/home";
 import { useEffect } from "react";
 function App() {
-  // function handleSubmit(e) {
-  //   e.preventDefault();
-
-  //   let params = serializeFormQuery(e.target);
-  //   setSearchParams(params);
-  // }
   return (
     <div className="container-lg w-100 ">
       <AppProvider>
         <Routes>
+          {/* <Route path="/dowell-chat-app" element={<Home />} /> */}
+
           <Route element={<ProtectedRoutes />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/dowell-chat-app" element={<Home />} />
           </Route>
         </Routes>
       </AppProvider>

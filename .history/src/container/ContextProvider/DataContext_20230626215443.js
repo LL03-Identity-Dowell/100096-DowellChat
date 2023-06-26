@@ -33,7 +33,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const currentParams = Object.fromEntries([...searchParams]);
     // console.log(currentParams);
-    setSearchParams(sessionId);
+    setSearchParams({"dowell-chat-app", sessionId});
   });
   useEffect(() => {
     const getSessionId = async () => {

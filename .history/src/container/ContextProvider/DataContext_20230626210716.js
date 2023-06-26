@@ -25,8 +25,8 @@ export const AppProvider = ({ children }) => {
   let [searchParams, setSearchParams] = useSearchParams();
 
   const sessionId = {
-    session_id: "4sjl7vrpycwauvueewhqrme0u5vqnnmj",
-    // session_id: "5p8do0ht7no4gyjo0w2984o4vj5dc2hs",
+    // session_id: "4sjl7vrpycwauvueewhqrme0u5vqnnmj",
+    session_id: "5p8do0ht7no4gyjo0w2984o4vj5dc2hs",
   };
   // const cachedSessionId = useMemo(() => sessionId, [sessionId]);
   const params = Object.fromEntries([...searchParams]);
@@ -118,6 +118,20 @@ export const AppProvider = ({ children }) => {
   //create a usememo for the messages data
   const memorizedMessages = useMemo(() => messages, [messages]);
   const memorizedRooms = useMemo(() => rooms, [rooms]);
+  // console.log("memoized", memorizedMessages, memorizedRooms);
+  // useEffect(() => {
+  //   const getSessionId = async () => {
+  //     try {
+
+  //       const res = await axios.get("https://100096.pythonanywhere.com/");
+
+  //       console.log(res);
+  //     } catch (error) {
+  //       console.log(error.message);
+  //     }
+  //   };
+  //   getSessionId();
+  // }, []);
 
   useEffect(() => {
     axios

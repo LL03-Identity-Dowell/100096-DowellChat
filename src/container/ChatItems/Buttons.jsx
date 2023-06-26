@@ -19,6 +19,14 @@ const Buttons = ({ onSetChatHeader }) => {
           border: "none",
           opacity: "0.8",
         };
+      case "Dowell-Mail":
+        return {
+          backgroundColor: "#90e7b5",
+          color: "black",
+          outline: "none",
+          border: "none",
+          opacity: "0.8",
+        };
       case "Extension":
         return {
           backgroundColor: "#ff9898",
@@ -54,6 +62,10 @@ const Buttons = ({ onSetChatHeader }) => {
           // backgroundColor: "#90e7b5",
           opacity: "0.8",
         };
+      case "Dowell-Mail":
+        return {
+          opacity: "0.8",
+        };
       case "Extension":
         return {
           opacity: "0.8",
@@ -80,6 +92,12 @@ const Buttons = ({ onSetChatHeader }) => {
   const style = (title) => {
     switch (title) {
       case "Login":
+        return {
+          // backgroundColor: "#90e7b5",
+          // backgroundColor: "white",
+          opacity: "0.8",
+        };
+      case "Dowell-Mail":
         return {
           // backgroundColor: "#90e7b5",
           // backgroundColor: "white",

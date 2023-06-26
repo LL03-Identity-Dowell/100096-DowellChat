@@ -27,7 +27,7 @@ function App() {
       <AppProvider>
         <Routes>
           <Route element={<ProtectedRoutes />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/dowell-chat-app" element={<Home />} />
           </Route>
         </Routes>
       </AppProvider>

@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import user from "../../../assets/male_avatar.png";
+import ProductContext from "../../ContextProvider/DataContext";
+
 const InputBox = ({ input, setInput }) => {
+  const { room_Id } = useContext(ProductContext);
   return (
     <div>
       <div className="d-flex gap-2">

@@ -33,7 +33,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const currentParams = Object.fromEntries([...searchParams]);
     // console.log(currentParams);
-    setSearchParams(sessionId);
+    // setSearchParams(sessionId);
   });
   useEffect(() => {
     const getSessionId = async () => {
@@ -118,6 +118,20 @@ export const AppProvider = ({ children }) => {
   //create a usememo for the messages data
   const memorizedMessages = useMemo(() => messages, [messages]);
   const memorizedRooms = useMemo(() => rooms, [rooms]);
+  // console.log("memoized", memorizedMessages, memorizedRooms);
+  // useEffect(() => {
+  //   const getSessionId = async () => {
+  //     try {
+
+  //       const res = await axios.get("https://100096.pythonanywhere.com/");
+
+  //       console.log(res);
+  //     } catch (error) {
+  //       console.log(error.message);
+  //     }
+  //   };
+  //   getSessionId();
+  // }, []);
 
   useEffect(() => {
     axios
