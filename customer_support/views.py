@@ -642,7 +642,7 @@ def room_list(request, *args, **kwargs):
 
 
 
-'''
+
 @dowell_login_required
 def create_portfolio(request):
     """
@@ -660,7 +660,7 @@ def create_portfolio(request):
     })
 
 
-
+'''
 
 @xframe_options_exempt
 @dowell_login_required
