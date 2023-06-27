@@ -76,6 +76,10 @@ export const AppProvider = ({ children }) => {
         setUserId(res?.data?.rooms?.[0]?.userinfo?.user_id);
         setRooms(res?.data);
         setLoading(false);
+
+        // setMessages(res)
+        // setId(rooms?.rooms?.[0]?.userinfo?.session_id);
+        // setRoom(res?.data);
       } catch (error) {
         console.error("error", error);
       }
@@ -88,6 +92,7 @@ export const AppProvider = ({ children }) => {
     const getMessages = async () => {
       setLoading(true);
       const res = await axios.get(url);
+      // console.log("response", res?.data?.messages?.[0]?.author?.session_id);
       setId(res?.data?.messages?.[1]?.author?.session_id);
       setMessages(res?.data);
       setLoading(false);

@@ -4,7 +4,7 @@ import ProductContext from "../ContextProvider/DataContext";
 
 const ProtectedRoutes = () => {
   const { searchParams } = useContext(ProductContext);
-  if (!searchParams)
+  if (searchParams)
     return (window.location = "https://100014.pythonanywhere.com/");
 
   return <Outlet />;

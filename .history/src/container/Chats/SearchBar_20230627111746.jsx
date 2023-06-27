@@ -25,9 +25,13 @@ const SearchBar = ({ results }) => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
+          {/* <FontAwesomeIcon icon="fa-regular fa-magnifying-glass" /> */}
+
+          {/* <i className="fa fa-search"></i> */}
         </form>
         <Icons />
       </div>
+      {/* <Scroll results={results} /> */}
       <Rooms results={results} />
     </div>
   );

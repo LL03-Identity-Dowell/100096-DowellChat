@@ -5,6 +5,9 @@ import { IoClose } from "react-icons/io5";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const click = (e) => {
+    // if (open.width <= 500) {
+    //   console.log("page too small");
+    // }
     setOpen(!open);
   };
   return (

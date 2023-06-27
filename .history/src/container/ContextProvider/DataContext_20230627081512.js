@@ -73,9 +73,20 @@ export const AppProvider = ({ children }) => {
         const BASE_URL = `https://100096.pythonanywhere.com/room_list/${chatHeader}/${orgId}/`;
         setLoading(true);
         const res = await axios.get(BASE_URL);
+
+        // console.log(`res.data from messages${chatHeader}`, res?.data?.messages);
+        // console.log(`res.data from messages${chatHeader}`, res?.data);
+        console.log(
+          "response from get rooms",
+          res?.data?.rooms?.[0 | 1]?.userinfo?.user_id
+        );
         setUserId(res?.data?.rooms?.[0]?.userinfo?.user_id);
         setRooms(res?.data);
         setLoading(false);
+
+        // setMessages(res)
+        // setId(rooms?.rooms?.[0]?.userinfo?.session_id);
+        // setRoom(res?.data);
       } catch (error) {
         console.error("error", error);
       }
@@ -83,11 +94,16 @@ export const AppProvider = ({ children }) => {
     getRooms();
   }, [chatHeader, orgId]);
 
+  console.log(
+    "this is the session Id from rooms",
+    rooms?.rooms?.[0]?.userinfo?.session_id
+  );
   useEffect(() => {
     const url = `https://100096.pythonanywhere.com/send_message/${room_Id}/`;
     const getMessages = async () => {
       setLoading(true);
       const res = await axios.get(url);
+      // console.log("response", res?.data?.messages?.[0]?.author?.session_id);
       setId(res?.data?.messages?.[1]?.author?.session_id);
       setMessages(res?.data);
       setLoading(false);
@@ -103,6 +119,7 @@ export const AppProvider = ({ children }) => {
     axios
       .get(`https://100096.pythonanywhere.com/admin_product_list/`)
       .then((res) => {
+        // console.log("getting products", productList);
         setProductList(res.data.product_list);
       })
       .catch((err) => {
@@ -115,6 +132,7 @@ export const AppProvider = ({ children }) => {
       const res = await axios.get(
         "https://100096.pythonanywhere.com/client_product_list"
       );
+      // console.log(productList, res);
     };
     clientProductList();
   }, []);

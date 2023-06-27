@@ -4,6 +4,7 @@ import HeaderButtons from "./HeaderButtons";
 const ChatHeader = ({ title, caption, onSetChatHeader }) => {
   return (
     <div className="c">
+      {/* <div className="d-flex"></div> */}
       <div className="">
         <div className=" d-flex flex-column flex-md-row flex-lg-row flex-xl-row flex-xxl-row my-0 justify-content-between">
           <header>
@@ -13,6 +14,7 @@ const ChatHeader = ({ title, caption, onSetChatHeader }) => {
           <HeaderButtons />
         </div>
         <Buttons />
+        {/* <Buttons onSetChatHeader={onSetChatHeader} /> */}
       </div>
       <div
         className=" my-2"
