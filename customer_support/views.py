@@ -2,7 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-
+# from customer_support.database_managment.connection import dowellconnection
+# from customer_support.database_managment.database import chat
+from customer_support.database_managment.event import get_event_id
+from customer_support.database_managment.database import chat
+from customer_support.database_managment.connection import dowellconnection
 from django.urls import reverse
 
 from .models import Portfolio, Room, Message
@@ -174,9 +178,11 @@ def user_passes_test(test_func, login_url='https://100014.pythonanywhere.com/?co
         @wraps(view_func)
         def rt_wrapper(request, *args, **kwargs):
             session_id = request.GET.get("session_id", None)
+            print(session_id,"session_id")
             if session_id:
                 url = 'https://100093.pythonanywhere.com/api/userinfo/'
                 response = requests.post(url, data={'session_id': session_id})
+                print(response)
 
                 try:
                     response=response.json()
@@ -246,7 +252,7 @@ def portfolio_control(d_user, session_id, is_staff):
 
 
 def room_control(portfolio, product):
-    room = Room.objects.filter(sender_portfolio__id=portfolio.id, product=product.lower(), company=portfolio.organization).order_by('id').first()
+    room = Room.objects.filter(sender_portfolio__id=portfolio.id, product=product.lower(), company=portfolio.organization, active = True).order_by('id').first()
     if not room :
         room = Room.objects.create(
             room_name=portfolio.portfolio_name,
@@ -532,6 +538,53 @@ def delete_room(request, product):
         return JsonResponse ({'status': 'Room not found'}, status=404)
     
 
+@csrf_exempt
+@dowell_login_required
+def sender_side_delete_room_api(request):
+    try:
+        session_id = request.GET.get('session_id')
+        product = request.GET.get('product')
+        # Check if 'dowell_user' key is present in the session
+        if 'dowell_user' not in request.session:
+            return JsonResponse({'status': 'Session error: dowell_user key not found'}, status=400)
+
+        # Fetch room to be deleted
+        d_user = request.session["dowell_user"]
+    
+        portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"], organization=d_user["portfolio_info"][0]["org_id"])
+        room = Room.objects.filter(active=True, sender_portfolio=portfolio, product=product).order_by('id').first()
+        if room:
+            # Call the delete room API
+            response = delete_room(request, product)
+            if response.status_code == 200:
+                # Insert room details into MongoDB
+                field = {
+                    "evenId":get_event_id()['event_id'],
+                    "room_id":room.id,
+                    "actvie_room":room.active,
+                    "product":room.product,
+                    "sender_user":{
+                        "Portfolio name": room.sender_portfolio.portfolio_name,
+                        "session_id":room.sender_portfolio.session_id,
+                        "Organization": room.sender_portfolio.organization,
+                        "UserID":room.sender_portfolio.userID,
+                        "Dowell logged in":room.sender_portfolio.dowell_logged_in,
+                        "Is Staff":room.sender_portfolio.is_staff
+                    }
+                }
+                update_field = {
+                "status":"nothing to update"
+                }
+                insert_response=dowellconnection(*chat, "insert", field, update_field)
+                return JsonResponse({'status': 'Room deleted successfully'})
+            else:
+                return JsonResponse({'status': 'Failed to delete room'})
+        else:
+            return JsonResponse({'status': 'Room not found'}, status=404)
+    except (Portfolio.DoesNotExist, Room.DoesNotExist):
+        return JsonResponse({'status': 'Room not found'}, status=404)
+
+
 
 #   @dowell_login_required
 # def room_list(request, *agrs, **kwargs):
@@ -645,6 +698,7 @@ def room_list(request, *args, **kwargs):
 
 @dowell_login_required
 def create_portfolio(request):
+    print(request.GET.get("session_id"))
     """
     Api for creating portfolio for logged in users
     currently not been in use
