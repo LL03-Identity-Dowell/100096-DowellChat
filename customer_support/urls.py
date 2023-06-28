@@ -20,7 +20,7 @@ urlpatterns = [
 
     # login urls start here
     path('create-portfolio-mobile/', views.create_portfolio_mobile, name='create-portfolio-mobile'), # after login mobile application - used by muzahid application
-    path('create-portfolio/', views.create_portfolio, name='create-portfolio'),     #   ?session_id=jhufy8yea89aef
+    path('create-user-profile/', views.create_portfolio, name='create-portfolio'),     #   ?session_id=jhufy8yea89aef
     re_path(r'^d-chat/(?P<product>[0-9\w-]+)/(?:session_id=(?P<session_id>[a-z0-9])/)?$', views.create_room_api__dowell_user, name= 'create-room-API-loggedin'),    #    create room API for logged in user
     path('send_message/<int:pk>/', views.send_msg_api_3, name= 'send_message_3'), #for login user
 
@@ -35,8 +35,8 @@ urlpatterns = [
     path('main-living-lab-support/', views.main_living_lab_support_page, name='main-living-lab-support-page'),
 
      # Delete APIs
-    path('api/delete-room/<str:product>/', views.delete_room, name='delete-room'),
-    path('api/delete-customer-support-room/', views.sender_side_delete_room_api, name='delete-customer-support-room'),
+    path('delete-room/<str:product>/', views.delete_room, name='delete-room'),
+    path('delete-customer-support-room/', views.sender_side_delete_room_api, name='delete-customer-support-room'),
 
 
 ]

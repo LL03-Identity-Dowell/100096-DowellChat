@@ -24,7 +24,26 @@ python manage.py runserver
 
 Api_url = `https://100096.pythonanywhere.com/`
 
-### 1. fetch admin product list from database
+### 1. create user_profile admin
+
+_Get_ to `Api_url/create-user-profile/`
+
+- The `session_id` query parameter is required.
+
+* Response 200
+
+```json
+{
+  "status": 200,
+  "portfolio": {
+    "portfolio_name": "portfolio_name",
+    "userID": "userID",
+    "organization": "organization"
+  }
+}
+```
+
+### 2. fetch admin product list from database
 
 _Get_ to `Api_url/admin_product_list/`
 
@@ -36,7 +55,7 @@ _Get_ to `Api_url/admin_product_list/`
 }
 ```
 
-### 2. fetch client product list from database
+### 3. fetch client product list from database
 
 _Get_ to `Api_url/client_product_list/`
 
@@ -48,7 +67,7 @@ _Get_ to `Api_url/client_product_list/`
 }
 ```
 
-### 3. fetch list of rooms product from database
+### 4. fetch list of rooms product from database
 
 _Get_ to `Api_url/room_list/(?P<product>[0-9\w-]+)/(?P<organization_id>[0-9\w-]+)`
 
@@ -60,7 +79,7 @@ _Get_ to `Api_url/room_list/(?P<product>[0-9\w-]+)/(?P<organization_id>[0-9\w-]+
 }
 ```
 
-### 4. GET send_message from database
+### 5. GET send_message from database
 
 _Get_ to `Api_url/send_message/<int:pk>/` (room id)
 
@@ -87,7 +106,7 @@ _Get_ to `Api_url/send_message/<int:pk>/` (room id)
 }
 ```
 
-### 5. Post send_message to database
+### 6. Post send_message to database
 
 _Post_ to `Api_url/send_message/<int:pk>/` (room id)
 
@@ -122,6 +141,21 @@ _Post_ to `Api_url/send_message/<int:pk>/` (room id)
     }
   ],
   "room_pk": "room_pk"
+}
+```
+
+### 6. Delete Chat room to database
+
+_Get_ to `Api_url/delete-customer-support-room/`
+
+- The `session_id` query parameter is required.
+- The `product` query parameter is required.
+
+- Response 200
+
+```json
+{
+  "status": "Room deleted successfully"
 }
 ```
 
@@ -232,6 +266,21 @@ _Post_ to `Api_url/send/<int:pk>/` (room id)
     }
   ],
   "room_pk": "room_pk"
+}
+```
+
+### 6. Delete chat to database
+
+_Get_ to `Api_url/delete-customer-support-room/`
+
+- The `session_id` query parameter is required.
+- The `product` query parameter is required.
+
+- Response 200
+
+```json
+{
+  "status": "Room deleted successfully"
 }
 ```
 
@@ -355,5 +404,20 @@ _Post_ to `Api_url/send/<int:pk>/` (room id)
     }
   ],
   "room_pk": "room_pk"
+}
+```
+
+### 6. Delete room to database
+
+_Get_ to `Api_url/delete-customer-support-room/`
+
+- The `session_id` query parameter is required.
+- The `product` query parameter is required.
+
+- Response 200
+
+```json
+{
+  "status": "Room deleted successfully"
 }
 ```
