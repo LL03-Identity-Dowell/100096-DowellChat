@@ -512,7 +512,7 @@ def main_living_lab_support_page(request, *args, **kwargs):
 # Delete room api
 @csrf_exempt
 @dowell_login_required
-
+#sender side delete room API
 def delete_room(request, product):
     session_id = request.GET.get('session_id')
     product=request.GET.get('product')
@@ -540,12 +540,17 @@ def delete_room(request, product):
 
 @csrf_exempt
 @dowell_login_required
-def sender_side_delete_room_api(request):
+def receiver_side_delete_room_api(request, room_id):
     try:
+<<<<<<< HEAD
         session_id = request.GET.get('session_id')
         product = request.GET.get('product')
         room_id = request.GET.get('room_id')
 
+=======
+        room_id = request.GET.get('room_id')
+        #product = request.GET.get('product')
+>>>>>>> 01c0138b96e4cca27b9afba761995657012f993d
         # Check if 'dowell_user' key is present in the session
         if 'dowell_user' not in request.session:
             return JsonResponse({'status': 'Session error: dowell_user key not found'}, status=400)
@@ -553,11 +558,17 @@ def sender_side_delete_room_api(request):
         # Fetch room to be deleted
         d_user = request.session["dowell_user"]
     
+<<<<<<< HEAD
         portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"], organization=d_user["portfolio_info"][0]["org_id"])
         room = Room.objects.filter(id=room_id,sender_portfolio=portfolio, product=product,active=True).order_by('id').first()
+=======
+        # portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"], organization=d_user["portfolio_info"][0]["org_id"])
+        # room = Room.objects.filter(active=True, sender_portfolio=portfolio, room_id=room_id, ).order_by('id').first()
+        room= Room.objects.get(id=room_id, active=False )
+>>>>>>> 01c0138b96e4cca27b9afba761995657012f993d
         if room:
             # Call the delete room API
-            response = delete_room(request, product)
+            response = delete_room(request, room_id)
             if response.status_code == 200:
                 # Insert room details into MongoDB
                 field = {
@@ -586,6 +597,50 @@ def sender_side_delete_room_api(request):
     except (Portfolio.DoesNotExist, Room.DoesNotExist):
         return JsonResponse({'status': 'Room not found'}, status=404)
 
+def sender_side_delete_room_api(request, room):
+    try:
+        session_id = request.GET.get('session_id')
+        product = request.GET.get('product')
+        room = request.GET.get('room')
+        # Check if 'dowell_user' key is present in the session
+        if 'dowell_user' not in request.session:
+            return JsonResponse({'status': 'Session error: dowell_user key not found'}, status=400)
+
+        # Fetch room to be deleted
+        d_user = request.session["dowell_user"]
+    
+        portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"], organization=d_user["portfolio_info"][0]["org_id"])
+        room = Room.objects.filter(active=True, sender_portfolio=portfolio, product=product, room_name=room).order_by('id').first()
+        if room:
+            # Call the delete room API
+            response = delete_room(request, product)
+            if response.status_code == 200:
+                # Insert room details into MongoDB
+                field = {
+                    "evenId": get_event_id()['event_id'],
+                    "room_id": room.id,
+                    "actvie_room": room.active,
+                    "product": room.product,
+                    "sender_user": {
+                        "Portfolio name": room.sender_portfolio.portfolio_name,
+                        "session_id": room.sender_portfolio.session_id,
+                        "Organization": room.sender_portfolio.organization,
+                        "UserID": room.sender_portfolio.userID,
+                        "Dowell logged in": room.sender_portfolio.dowell_logged_in,
+                        "Is Staff": room.sender_portfolio.is_staff
+                    }
+                }
+                update_field = {
+                    "status": "nothing to update"
+                }
+                insert_response = dowellconnection(*chat, "insert", field, update_field)
+                return JsonResponse({'status': 'Room deleted successfully'})
+            else:
+                return JsonResponse({'status': 'Failed to delete room'})
+        else:
+            return JsonResponse({'status': 'Room not found'}, status=404)
+    except (Portfolio.DoesNotExist, Room.DoesNotExist):
+        return JsonResponse({'status': 'Room not found'}, status=404)
 
 
 #   @dowell_login_required
