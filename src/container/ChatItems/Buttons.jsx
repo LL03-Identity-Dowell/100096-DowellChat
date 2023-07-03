@@ -1,11 +1,21 @@
 import { useEffect, useContext, useState } from "react";
 import "./button.css";
+import { AppProvider } from "../ContextProvider/DataContext";
 import ProductContext from "../ContextProvider/DataContext";
+import { NavLink } from "react-router-dom";
+
 const Buttons = ({ onSetChatHeader }) => {
   const { productList, click, setClick, setChatHeader } =
     useContext(ProductContext);
+  // console.log(productList);
   const [isActive, setIsActive] = useState("");
   const [active, setActive] = useState();
+
+  useEffect(() => {
+    setChatHeader("Login");
+    setIsActive("Login");
+  }, []);
+
   const buttonStyles = (title) => {
     switch (title) {
       case "Login":
@@ -56,6 +66,7 @@ const Buttons = ({ onSetChatHeader }) => {
     switch (title) {
       case "Login":
         return {
+          // backgroundColor: "#90e7b5",
           opacity: "0.8",
         };
       case "Dowell-Mail":
@@ -82,15 +93,21 @@ const Buttons = ({ onSetChatHeader }) => {
   const handleClick = async (title) => {
     setChatHeader(title);
     setIsActive(!isActive, title);
+    // style(title);
+    // await getRooms();
   };
   const style = (title) => {
     switch (title) {
       case "Login":
         return {
+          // backgroundColor: "#90e7b5",
+          // backgroundColor: "white",
           opacity: "0.8",
         };
       case "Dowell-Mail":
         return {
+          // backgroundColor: "#90e7b5",
+          // backgroundColor: "white",
           opacity: "0.8",
         };
       case "Extension":
@@ -131,6 +148,7 @@ const Buttons = ({ onSetChatHeader }) => {
             productList.map((title, i) => {
               const { backgroundColor, color, border, outline } =
                 buttonStyles(title) ?? {};
+              const { opacity } = style(title) ?? {};
               return (
                 <button
                   key={title}
@@ -140,10 +158,12 @@ const Buttons = ({ onSetChatHeader }) => {
                     isActive == title &&
                     "opacity-50 border border-4 border-primary"
                   }`}
+                  // className={`btn btn-md ${isActive == title ? "active" : ""}`}
                   style={{
                     backgroundColor,
                     color,
                     border,
+                    // outline,
                   }}
                   onClick={(e) => {
                     handleClick(title);
@@ -152,7 +172,12 @@ const Buttons = ({ onSetChatHeader }) => {
                 >
                   {title}
                   {title === "DO-WELL-CSC" && (
-                    <span className="badge bg-primary">11</span>
+                    <span
+                      className="badge bg-primary"
+                      // style={{ padding: "0.2px 7px" }}
+                    >
+                      11
+                    </span>
                   )}
                 </button>
               );

@@ -2,7 +2,13 @@ import { createContext, useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { Loader } from "../spinner/loader";
-
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "react-query";
 const ProductContext = createContext();
 
 export const AppProvider = ({ children }) => {
@@ -11,7 +17,7 @@ export const AppProvider = ({ children }) => {
   const [click, setClick] = useState(null);
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState();
-  const [chatHeader, setChatHeader] = useState("");
+  const [chatHeader, setChatHeader] = useState("Login" | "");
   const [rooms, setRooms] = useState();
   const [userInfo, setUserInfo] = useState();
   const [userId, setUserId] = useState("" | null);
@@ -21,14 +27,13 @@ export const AppProvider = ({ children }) => {
   const [roomsId, setRoomsId] = useState();
   const [orgId, setOrgId] = useState("");
   const [Id, setId] = useState("");
-
+  const queryClient = new QueryClient();
   let [searchParams, setSearchParams] = useSearchParams();
 
   const sessionId = {
     session_id: "4sjl7vrpycwauvueewhqrme0u5vqnnmj",
     // session_id: "5p8do0ht7no4gyjo0w2984o4vj5dc2hs",
   };
-
   const params = Object.fromEntries([...searchParams]);
   useEffect(() => {
     const currentParams = Object.fromEntries([...searchParams]);
@@ -36,12 +41,14 @@ export const AppProvider = ({ children }) => {
   });
   useEffect(() => {
     const getSessionId = async () => {
+      setLoading(true);
       const res = await axios.post(
         "https://100093.pythonanywhere.com/api/userinfo/",
         searchParams
       );
       setOrgId(res?.data?.selected_product?.orgid);
     };
+    setLoading(false);
     getSessionId();
   }, [searchParams]);
   useEffect(() => {
@@ -52,20 +59,47 @@ export const AppProvider = ({ children }) => {
           session_id: Id,
         }
       );
-      setUserInfo(res?.data?.userinfo);
+      console.log("res", res);
+      // setUserInfo(res?.data?.userinfo);
     };
     getSessionIds();
-  }, [Id]);
+  }, [Id, room_Id]);
+
+  // const getNotifications = async () => {
+  //   const res = await axios.get(
+  //     "https://100092.pythonanywhere.com/api/v1/notifications/products/"
+  //   );
+  //   console.log("respomse", res);
+  // };
+  // const { status, data, error, isLoading } = useQuery(
+  //   {
+  //     queryKey: ["notifications"],
+  //   },
+  //   {
+  //     queryFn: getNotifications,
+  //   }
+  // );
+  useEffect(() => {
+    const getNotifications = async () => {
+      const res = await axios.get(
+        "https://100092.pythonanywhere.com/api/v1/notifications/products/"
+      );
+      console.log("respomse", res);
+    };
+    getNotifications();
+  }, []);
+  // console.log(data);
   // create Room UseEffect
   useEffect(() => {
     const createRooms = async () => {
       const res = await axios.get(
-        `https://100096.pythonanywhere.com/dowell-api/create-room/${chatHeader}/?${sessionId}`
+        `https://100096.pythonanywhere.com/create-user-profile/?session_id=4sjl7vrpycwauvueewhqrme0u5vqnnmj`
       );
-      console.log("createRoom response", res, res.status);
+      console.log("createRoom response", res);
+      setUserId(res?.data?.portfolio?.userID);
     };
     createRooms();
-  }, [sessionId]);
+  }, []);
 
   useEffect(() => {
     const getRooms = async (title) => {
@@ -73,7 +107,6 @@ export const AppProvider = ({ children }) => {
         const BASE_URL = `https://100096.pythonanywhere.com/room_list/${chatHeader}/${orgId}/`;
         setLoading(true);
         const res = await axios.get(BASE_URL);
-        setUserId(res?.data?.rooms?.[0]?.userinfo?.user_id);
         setRooms(res?.data);
         setLoading(false);
       } catch (error) {
@@ -83,20 +116,20 @@ export const AppProvider = ({ children }) => {
     getRooms();
   }, [chatHeader, orgId]);
 
-  useEffect(() => {
-    const url = `https://100096.pythonanywhere.com/send_message/${room_Id}/`;
-    const getMessages = async () => {
-      setLoading(true);
-      const res = await axios.get(url);
-      setId(res?.data?.messages?.[1]?.author?.session_id);
-      setMessages(res?.data);
-      setLoading(false);
-    };
-    getMessages();
-  }, [room_Id]);
+  // useEffect(() => {
+  //   const url = `https://100096.pythonanywhere.com/send_message/${room_Id}/`;
+  //   const getRoomMessage = async () => {
+  //     setLoading(true);
+  //     const res = await axios.get(url);
+  //     setMessages(res?.data);
+
+  //     setLoading(false);
+  //   };
+  //   getRoomMessage();
+  // }, [room_Id]);
 
   //create a usememo for the messages data
-  const memorizedMessages = useMemo(() => messages, [messages]);
+  // const memorizedMessages = useMemo(() => messages, [messages]);
   const memorizedRooms = useMemo(() => rooms, [rooms]);
 
   useEffect(() => {
@@ -139,7 +172,7 @@ export const AppProvider = ({ children }) => {
         sessionId,
         searchParams,
         loading,
-        memorizedMessages,
+        // memorizedMessages,
         memorizedRooms,
         orgId,
         userId,

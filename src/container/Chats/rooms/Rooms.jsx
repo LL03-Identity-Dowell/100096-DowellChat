@@ -15,12 +15,17 @@ const Rooms = ({ results }) => {
     loading,
     memorizedRooms,
   } = useContext(ProductContext);
-
+  // console.log("results", rooms);
   const [roomId, setRoomId] = useState();
-
+  // console.log(roomId);
   const setIds = (room_id) => {
+    // setRoomId(room_id);
     setRoom_Id(room_id);
+    // getRooms(room_Id);
   };
+  // useEffect(() => {
+  //   getMessage();
+  // }, []);
   return (
     <section className="my-3">
       <div

@@ -1,7 +1,8 @@
 import { useState, useContext } from "react";
 import user from "../../../assets/avatar.png";
-// import axios from "axios";
+import axios from "axios";
 import { Tooltip } from "react-tooltip";
+import { toast } from "react-hot-toast";
 import {
   FaRegPaperPlane,
   FaPaperPlane,
@@ -11,15 +12,16 @@ import {
   FaLink,
 } from "react-icons/fa";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
+import { useMutation, useQueryClient } from "react-query";
 import ProductContext from "../../ContextProvider/DataContext";
 import { HiOutlineHandThumbUp, HiHandThumbUp } from "react-icons/hi2";
 import InputBox from "./InputBox";
-import axios from "axios";
+// import axios from "axios";
+import { useQuery } from "react-query";
 const ReplyChat = () => {
   const {
     handleSendMessage,
     getMessages,
-    // setData,
     setMessages,
     messages,
     room_Id,
@@ -28,22 +30,11 @@ const ReplyChat = () => {
   } = useContext(ProductContext);
   const [input, setInput] = useState("");
   const [data, setData] = useState();
-  // const [messages, setMessages] = useState();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setData(input);
-    console.log("room id: ", room_Id);
-    setInput("");
-    // const user_id = "644f9d1e4baba28710c128ea";
-    const user_id = "644f9d1e4baba28710c128ea";
-    // const user_id = "5p8do0ht7no4gyjo0w2984o4vj5dc2hs";
-    // const user_id = 28;
-    // const user_id = "644f9d104baba28710c128e3";
-    // console.log("data to submit", {
-    //   message: input,
-    //   user_id: user_id,
-    //   side: true,
-    // });
+    setData("");
     const data = {
       // message: "input",
       message: input,
@@ -51,25 +42,30 @@ const ReplyChat = () => {
       message_type: "text/Image",
       org_id: orgId,
     };
-
-    axios
-      .post(`https://100096.pythonanywhere.com/send_message/${room_Id}/`, data)
-      .then((res) => {
-        // console.log(res, "post res//");
-        if (res?.status === 200 && res?.statusText === "OK") {
-          console.log("successful response", res);
-          const newMessage = res;
-          setMessages([...messages, newMessage]);
-        } else {
-          console.log("failed response", res?.data?.data?.message);
-        }
-        // console.log(res?.config?.data, "post newMessage//");
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+    mutate(data);
+    // axios.post(
+    //   `https://100096.pythonanywhere.com/send_message/${room_Id}/`,
+    //   data
+    // );
   };
-  console.log("messages", messages);
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation("message", {
+    mutationFn: (data) =>
+      axios.post(
+        `https://100096.pythonanywhere.com/send_message/${room_Id}/`,
+        data
+      ),
+    onSuccess: async (res) => {
+      queryClient.invalidateQueries("message");
+      toast.success("sent");
+      console.log("mutated response", res);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  let postReq = () => {};
   return (
     <div className="text-black mb-5 mb-md-5 mb-lg-5 mb-xl-5 mb-xxl-5">
       <div

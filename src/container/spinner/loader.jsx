@@ -14,10 +14,7 @@ export const Loader = () => {
 
   return (
     <div className="" style={{ position: "relative" }}>
-      <div
-        className=""
-        style={{ position: "absolute", left: "50px", right: "50px" }}
-      >
+      <div className="">
         <Lottie animationData={img} loop={true} style={style} />
       </div>
     </div>

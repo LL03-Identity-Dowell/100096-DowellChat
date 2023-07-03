@@ -58,6 +58,7 @@ const AboutDetails = ({ title, ux }) => {
               </li>
               <li style={{ color: "#94a3b8" }}>
                 <small>
+                  {/* <AiFillHome /> + Address */}
                   <HiHome className="fw-bold fs-5" /> +{" "}
                   <span className="" style={{ fontSize: "13px" }}>
                     {userInfo?.user_country}
@@ -79,6 +80,7 @@ const AboutDetails = ({ title, ux }) => {
               <li style={{ color: "#94a3b8" }}>
                 <FaRegThumbsUp className="fw-bold fs-6" />{" "}
                 {userInfo?.dowell_time}
+                {/* date from the api */}
               </li>
               <li style={{ color: "#94a3b8" }}>
                 <FaBriefcase className="fw-bold fs-6" /> Works at Graphic
@@ -87,6 +89,7 @@ const AboutDetails = ({ title, ux }) => {
               <li style={{ color: "#94a3b8" }}>
                 <FaGraduationCap className="fw-bold fs-4" /> <br /> Studied at
                 Harvard University Cambridge
+                {/* Place of work from the api */}
               </li>
               <li style={{ color: "#94a3b8" }}>
                 <FaLocationArrow className="fw-bold fs-6" /> From
