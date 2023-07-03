@@ -35,7 +35,6 @@ urlpatterns = [
     path('main-living-lab-support/', views.main_living_lab_support_page, name='main-living-lab-support-page'),
 
      # Delete APIs
-    path('delete-room/<str:product>/', views.delete_room, name='delete-room'),
     path('delete-room-sender-side/', views.sender_side_delete_room_api, name='delete-customer-support-room'),
     path('delete-customer-support-room/', views.receiver_side_delete_room_api, name='delete-customer-support-room'),
 

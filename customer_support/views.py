@@ -548,7 +548,7 @@ def delete_room(room):
 def receiver_side_delete_room_api(request):
     try:
         session_id = request.GET.get('session_id')
-        product = request.GET.get('product')
+        # product = request.GET.get('product')
         room_id = request.GET.get('room_id')
         print(room_id)
         #product = request.GET.get('product')
@@ -557,9 +557,9 @@ def receiver_side_delete_room_api(request):
             return JsonResponse({'status': 'Session error: dowell_user key not found'}, status=400)
 
         # Fetch room to be deleted
-        d_user = request.session["dowell_user"]
-        portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"], organization=d_user["portfolio_info"][0]["org_id"])
-        room = Room.objects.filter(id=room_id,sender_portfolio=portfolio, product=product,active=True).order_by('id').first()
+        # d_user = request.session["dowell_user"]
+        # portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"], organization=d_user["portfolio_info"][0]["org_id"])
+        room = Room.objects.filter(id=room_id, active=False).order_by('id').first()
         if room:
             # Call the delete room API
             response = delete_room(room)
@@ -593,11 +593,10 @@ def receiver_side_delete_room_api(request):
 
 @csrf_exempt
 @dowell_login_required
-def sender_side_delete_room_api(request, room):
+def sender_side_delete_room_api(request):
     try:
         session_id = request.GET.get('session_id')
         product = request.GET.get('product')
-        room_id = request.GET.get('room')
         # Check if 'dowell_user' key is present in the session
         if 'dowell_user' not in request.session:
             return JsonResponse({'status': 'Session error: dowell_user key not found'}, status=400)
@@ -606,7 +605,7 @@ def sender_side_delete_room_api(request, room):
         d_user = request.session["dowell_user"]
     
         portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"], organization=d_user["portfolio_info"][0]["org_id"])
-        room = Room.objects.filter(active=True, sender_portfolio=portfolio, product=product, id=room_id).order_by('id').first()
+        room = Room.objects.filter(active=True, sender_portfolio=portfolio, product=product).order_by('id').first()
         if room:
             # Call the delete room API
             response = delete_room(room)
