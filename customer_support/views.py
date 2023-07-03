@@ -542,30 +542,18 @@ def delete_room(request, product):
 @dowell_login_required
 def receiver_side_delete_room_api(request, room_id):
     try:
-<<<<<<< HEAD
         session_id = request.GET.get('session_id')
         product = request.GET.get('product')
         room_id = request.GET.get('room_id')
-
-=======
-        room_id = request.GET.get('room_id')
         #product = request.GET.get('product')
->>>>>>> 01c0138b96e4cca27b9afba761995657012f993d
         # Check if 'dowell_user' key is present in the session
         if 'dowell_user' not in request.session:
             return JsonResponse({'status': 'Session error: dowell_user key not found'}, status=400)
 
         # Fetch room to be deleted
         d_user = request.session["dowell_user"]
-    
-<<<<<<< HEAD
         portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"], organization=d_user["portfolio_info"][0]["org_id"])
         room = Room.objects.filter(id=room_id,sender_portfolio=portfolio, product=product,active=True).order_by('id').first()
-=======
-        # portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"], organization=d_user["portfolio_info"][0]["org_id"])
-        # room = Room.objects.filter(active=True, sender_portfolio=portfolio, room_id=room_id, ).order_by('id').first()
-        room= Room.objects.get(id=room_id, active=False )
->>>>>>> 01c0138b96e4cca27b9afba761995657012f993d
         if room:
             # Call the delete room API
             response = delete_room(request, room_id)

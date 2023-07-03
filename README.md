@@ -413,6 +413,7 @@ _Get_ to `Api_url/delete-customer-support-room/`
 
 - The `session_id` query parameter is required.
 - The `product` query parameter is required.
+- The `room_id` query parameter is required.
 
 - Response 200
 
