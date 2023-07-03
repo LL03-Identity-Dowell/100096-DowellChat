@@ -36,8 +36,8 @@ urlpatterns = [
 
      # Delete APIs
     path('delete-room/<str:product>/', views.delete_room, name='delete-room'),
-    path('delete-customer-support-room/', views.sender_side_delete_room_api, name='delete-customer-support-room'),
-    path('delete-customer-support-room/<int:room_id>/', views.receiver_side_delete_room_api, name='delete-customer-support-room'),
+    path('delete-room-sender-side/', views.sender_side_delete_room_api, name='delete-customer-support-room'),
+    path('delete-customer-support-room/', views.receiver_side_delete_room_api, name='delete-customer-support-room'),
 
 
 ]
