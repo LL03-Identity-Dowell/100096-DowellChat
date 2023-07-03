@@ -149,7 +149,7 @@ _Post_ to `Api_url/send_message/<int:pk>/` (room id)
 _Get_ to `Api_url/delete-customer-support-room/`
 
 - The `session_id` query parameter is required.
-- The `product` query parameter is required.
+- The `room_id` query parameter is required.
 
 - Response 200
 
@@ -271,7 +271,7 @@ _Post_ to `Api_url/send/<int:pk>/` (room id)
 
 ### 6. Delete chat to database
 
-_Get_ to `Api_url/delete-customer-support-room/`
+_Get_ to `Api_url/delete-room-sender-side/`
 
 - The `session_id` query parameter is required.
 - The `product` query parameter is required.
@@ -412,7 +412,6 @@ _Post_ to `Api_url/send/<int:pk>/` (room id)
 _Get_ to `Api_url/delete-customer-support-room/`
 
 - The `session_id` query parameter is required.
-- The `product` query parameter is required.
 - The `room_id` query parameter is required.
 
 - Response 200
