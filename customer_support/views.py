@@ -137,7 +137,7 @@ def customer_support_mobile_delete_room_API(request, *args, **kwargs):
             url = 'https://100014.pythonanywhere.com/api/userinfo/'
             response = requests.post(url, data={'session_id': session_id})
             if response.status_code == 200:
-                room = Room.objects.filter(id=request.GET['room_id'], active=False).order_by('id').first()
+                room = Room.objects.filter(id=request.GET['room_id']).order_by('id').first()
                 if room:
                     # Call the delete room API
                     response = delete_room(room)
