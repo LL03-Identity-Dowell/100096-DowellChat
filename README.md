@@ -271,7 +271,7 @@ _Post_ to `Api_url/send/<int:pk>/` (room id)
 
 ### 6. Delete chat to database
 
-_Get_ to `Api_url/delete-room-sender-side/`
+_Get_ to `Api_url/dowell-api/sender-delete-room/sales-agent/?session_id`
 
 - The `session_id` query parameter is required.
 - The `product` query parameter is required.
@@ -409,7 +409,7 @@ _Post_ to `Api_url/send/<int:pk>/` (room id)
 
 ### 6. Delete room to database
 
-_Get_ to `Api_url/delete-customer-support-room/`
+_Get_ to `Api_url/delete-customer-support-mobile/`
 
 - The `session_id` query parameter is required.
 - The `room_id` query parameter is required.
