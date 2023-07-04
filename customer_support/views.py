@@ -98,6 +98,78 @@ def create_room_API(request, *args, **kwargs):
 
 
 
+def sale_agent_delete_room_API(request, *args, **kwargs):
+    """
+    Views that are used for user that are not logged-in
+    mobile API view handle
+    """
+    if kwargs['product'].lower() != 'sales-agent':
+        return JsonResponse({'error': 'Unauthorized access prohibitted.'})
+
+    if len(request.GET['session_id']) < 8:
+        return JsonResponse({'error': 'request must contain 8 char long session_id.'})
+    session_id = request.GET.get("session_id", None)
+    if session_id:
+        try:
+            portfolio = Portfolio.objects.get(session_id=session_id)
+            room = Room.objects.filter(sender_portfolio__id=portfolio.id, product= kwargs['product'].lower()).order_by('id').first()
+            if room:
+                response = delete_room(room)
+                return JsonResponse({'status': 'Room deleted successfully'})
+            else:
+                return JsonResponse({'status': 'Failed to delete room'})
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+    else:
+        return JsonResponse({'error': 'Session id not found.'})
+
+
+def customer_support_mobile_delete_room_API(request, *args, **kwargs):
+    """
+    Views that are used for user that are not logged-in
+    mobile API view handle
+    """
+    if len(request.GET['session_id']) < 8:
+        return JsonResponse({'error': 'request must contain 8 char long session_id.'})
+    session_id = request.GET.get("session_id", None)
+    if session_id:
+        try:
+            url = 'https://100014.pythonanywhere.com/api/userinfo/'
+            response = requests.post(url, data={'session_id': session_id})
+            if response.status_code == 200:
+                room = Room.objects.filter(id=request.GET['room_id'], active=False).order_by('id').first()
+                if room:
+                    # Call the delete room API
+                    response = delete_room(room)
+                    if response.status_code == 200:
+                        # Insert room details into MongoDB
+                        field = {
+                            "evenId": get_event_id()['event_id'],
+                            "room_id": room.id,
+                            "actvie_room": room.active,
+                            "product": room.product,
+                            "sender_user": {
+                                "Portfolio name": room.sender_portfolio.portfolio_name,
+                                "session_id": room.sender_portfolio.session_id,
+                                "Organization": room.sender_portfolio.organization,
+                                "UserID": room.sender_portfolio.userID,
+                                "Dowell logged in": room.sender_portfolio.dowell_logged_in,
+                                "Is Staff": room.sender_portfolio.is_staff
+                            }
+                        }
+                        update_field = {
+                            "status": "nothing to update"
+                        }
+                        insert_response = dowellconnection(*chat, "insert", field, update_field)
+                        return JsonResponse({'status': 'Room deleted successfully'})
+                    else:
+                        return JsonResponse({'status': 'Failed to delete room'})
+                else:
+                    return JsonResponse({'status': 'Room not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+    else:
+        return JsonResponse({'error': 'Session id not found.'})
 
 @xframe_options_exempt
 def chat_box_view(request, *args, **kwargs):

@@ -15,6 +15,7 @@ urlpatterns = [
     re_path(r'^room_list/(?P<product>[0-9\w-]+)/(?P<organization_id>[0-9\w-]+)', views.room_list, name= 'room_list'),# room_list for provided product
 
     re_path(r'^dowell-api/create-room/(?P<product>[0-9\w-]+)/(?:session_id=(?P<session_id>[a-z0-9])/)?$', views.create_room_API, name= 'create-room-API'),    #    create room API without login -
+    re_path(r'^dowell-api/sender-delete-room/(?P<product>[0-9\w-]+)/(?:session_id=(?P<session_id>[a-z0-9])/)?$', views.sale_agent_delete_room_API, name= 'create-room-API'),
     re_path(r'^chat/(?P<product>[0-9\w-]+)/(?:session_id=(?P<session_id>[a-z0-9])/)?$', views.chat_box_view, name='chat-box'),  # login and extension
     path('send/<int:pk>/', views.send_message_api, name= 'send_message'), #for without login user
 
@@ -37,6 +38,8 @@ urlpatterns = [
      # Delete APIs
     path('delete-room-sender-side/', views.sender_side_delete_room_api, name='delete-customer-support-room'),
     path('delete-customer-support-room/', views.receiver_side_delete_room_api, name='delete-customer-support-room'),
+    path('delete-customer-support-mobile/', views.customer_support_mobile_delete_room_API, name='delete-customer-support-room'),
+
 
 
 ]
