@@ -23,6 +23,7 @@ const ProfileHead = ({ chatHeader }) => {
                 className=" rounded-circle"
                 width="60px"
                 height="60px"
+                alt="user"
               />
               <small
                 className="bg-success rounded position-absolute end-0 top-50 mt-3"
@@ -51,7 +52,7 @@ const ProfileHead = ({ chatHeader }) => {
               <small className="text-primary text-nowrap">Active now</small>
             </div>
           </figure>
-          <ChatIcons />
+          <ChatIcons producName={chatHeader} />
         </div>
       </div>
 

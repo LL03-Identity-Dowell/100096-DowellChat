@@ -11,8 +11,9 @@ const ChatSection = () => {
   const [chatHeader, setChatHeader] = useState("");
 
   const onSetChatHeader = (header) => setChatHeader(header);
+  console.log(chatHeader);
   return (
-    <div className="w-100 h-100 container-lg mw-75">
+    <div className="flex flex-column container-lg p-4 mw-75">
       {/* <ChatHeader /> */}
       <ChatHeader onSetChatHeader={onSetChatHeader} />
       {/* chats come here */}
@@ -23,7 +24,7 @@ const ChatSection = () => {
         <div className="d-flex myStyle flex-column flex-md-column flex-lg-row flex-xl-row flex-xxl-row ">
           <Scroll />
           {/* <SearchBar chatHeader={chatHeader} /> */}
-          <Profile />
+          <Profile productName={chatHeader} />
           {/* <ProfileHead chatHeader={chatHeader} /> */}
           {/* <ScrollBar /> */}
           {/* <ProfileHead /> */}

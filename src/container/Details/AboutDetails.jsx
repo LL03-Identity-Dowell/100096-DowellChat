@@ -24,7 +24,7 @@ const AboutDetails = ({ title, ux }) => {
   return (
     <div
       className="container"
-      style={{ marginBottom: "8rem", marginTop: "1rem" }}
+      style={{ marginBottom: "1rem", marginTop: "1rem" }}
     >
       <div className="lh-lg">
         <h5 className="mb-2 fs-6 fw-bold">{title}</h5>
@@ -36,6 +36,7 @@ const AboutDetails = ({ title, ux }) => {
                 <small>
                   <FaPhone className="fw-bold fs-6" /> +{" "}
                   <span className="" style={{ fontSize: "13px" }}>
+                    userName not found
                     {userInfo?.phone}
                   </span>
                 </small>

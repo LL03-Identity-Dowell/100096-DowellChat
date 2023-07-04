@@ -86,10 +86,13 @@
   border-radius: 500px;
 }
 .cardBody {
+  display: flex;
+  flex-wrap: wrap;
   background: var(--card-background);
   border: 1px solid var(--card-background);
   border-radius: 15px;
-  height: 92vh;
+  padding-top: 1rem;
+  /* height: auto; */
   /* background-color: rgb(169, 184, 195) 100%; */
 }
 .inputs {

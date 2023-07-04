@@ -31,12 +31,12 @@ const Message = ({ message }) => {
   };
 
   return (
-    <section
-      className="container"
+    <div
+      className="container flex w-full h-full"
       style={{
         chatStyle,
         // background: "purple",
-        paddingBottom: "100%",
+        // paddingBottom: "100%",
         paddingTop: "1.5rem",
       }}
     >
@@ -47,9 +47,7 @@ const Message = ({ message }) => {
               <div
                 key={id}
                 className={
-                  side
-                    ? "d-flex justify-content-end"
-                    : "d-flex justify-content-start"
+                  side ? "flex h-full justify-end" : "flex h-full justify-start"
                 }
               >
                 <div
@@ -87,7 +85,7 @@ const Message = ({ message }) => {
               </div>
             );
           })}
-    </section>
+    </div>
   );
 };
 

@@ -3,7 +3,20 @@ import { Tooltip } from "react-tooltip";
 import { FaTrashAlt, FaClipboardList, FaRegEnvelope } from "react-icons/fa";
 import { BsExclamationLg } from "react-icons/bs";
 import { CiMail } from "react-icons/ci";
-const ChatIcons = () => {
+import axios from "axios";
+const ChatIcons = ({ producName }) => {
+  const handleDeleteChat = async () => {
+    try {
+      console.log(producName);
+      const sessionId = "4sjl7vrpycwauvueewhqrme0u5vqnnmj";
+      const res = axios.get(
+        `https://100096.pythonanywhere.com/?session_id=${sessionId}&product=${producName}`
+      );
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <div className="mx-3">
       <div className="d-flex gap-3 justify-content-end">
@@ -28,6 +41,7 @@ const ChatIcons = () => {
           className="text-primary fs-6"
           data-tooltip-id="my-tooltip"
           data-tooltip-content="Delete conversation"
+          onClick={handleDeleteChat}
         >
           <FaTrashAlt />
           <Tooltip id="my-tooltip" />

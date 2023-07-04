@@ -7,7 +7,7 @@ const ScrollBar = ({ message }) => {
   return (
     <div>
       <div id="wrappers">
-        <div className="scrollbars" id="style-1">
+        <div className="flex force-overflow" id="style-1">
           <div className="force-overflow">
             {/* <ProfileHead /> */}
             <Message message={message} />

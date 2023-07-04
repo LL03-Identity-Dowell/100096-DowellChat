@@ -11,9 +11,7 @@ const Container = () => {
       <div className=" d-flex gap-2 justify-content-start justify-content-md-start justify-content-lg-start justify-content-xl-around justify-content-xxl-around  mx-1 mx-md-1 mx-lg-1 mx-xl-2 mx-xxl-5 mt-2">
         <ChatSection />
         {/* <ReplyChat /> */}
-        <div className="">
-          <DetailsSection />
-        </div>
+        <DetailsSection />
       </div>
     </div>
   );

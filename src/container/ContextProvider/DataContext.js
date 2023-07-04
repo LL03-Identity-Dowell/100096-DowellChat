@@ -121,7 +121,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     axios
-      .get(`https://100096.pythonanywhere.com/admin_product_list/`)
+      .get(`https://100096.pythonanywhere.com/product_list/`)
       .then((res) => {
         // console.log("getting products", productList);
         setProductList(res.data.product_list);
