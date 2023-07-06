@@ -724,7 +724,7 @@ def sender_side_delete_room_api(request):
 #     except Room.DoesNotExist:
 #         return JsonResponse({'rooms': []})
 
-
+@csrf_exempt
 def room_list(request, *args, **kwargs):
     try:
         product = kwargs['product'].lower()
