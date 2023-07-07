@@ -745,7 +745,11 @@ def room_list(request, *args, **kwargs):
                 if not r.active:
                     continue #return JsonResponse({'rooms': []})
 
+<<<<<<< HEAD
                 no_login = False
+=======
+                no_login = False;
+>>>>>>> 5eb86709b9c66e3a53b36b6e0eabf87666b614cb
                 response = { 'status_code': 500 }             
                 if product not in ['login', 'sales-agent', 'extension']:
                     url = 'https://100093.pythonanywhere.com/api/userinfo/'
