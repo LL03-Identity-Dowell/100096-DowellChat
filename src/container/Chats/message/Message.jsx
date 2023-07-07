@@ -47,8 +47,8 @@ const Message = ({ message }) => {
                 key={id}
                 className={
                   side
-                    ? "d-flex h-full justify-end"
-                    : "d-flex h-full justify-start"
+                    ? "d-flex w-full justify-end"
+                    : "d-flex w-full justify-start"
                 }
               >
                 <div

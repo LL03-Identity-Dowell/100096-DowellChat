@@ -49,17 +49,18 @@ export const AppProvider = ({ children }) => {
   }, [searchParams]);
   useEffect(() => {
     const getSessionIds = async () => {
-      const res = await axios.post(
-        "https://100093.pythonanywhere.com/api/userinfo/",
-        {
-          session_id: Id,
-        }
-      );
+      axios
+        .get(
+          `https://100096.pythonanywhere.com/create-user-profile/?session_id=${sessionId.session_id}`
+        )
+        .then((response) => {
+          setUserId(response.portfolio.userID);
+        });
       // setOrgId(res?.data?.selected_product?.orgid);
-      setUserInfo(res?.data?.userinfo);
+      // setUserInfo(res?.data?.userinfo);
     };
     getSessionIds();
-  }, [Id]);
+  }, [Id, sessionId.session_id]);
   // create Room UseEffect
   // useEffect(() => {
   //   const createRooms = async () => {
@@ -74,7 +75,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const getRooms = async (title) => {
       try {
-        const BASE_URL = `https://100096.pythonanywhere.com/room_list/${chatHeader}/${orgId}/`;
+        const BASE_URL = `https://100096.pythonanywhere.com/room_list1/${chatHeader}/${orgId}/`;
         setLoading(true);
         const res = await axios.get(BASE_URL);
 
@@ -84,7 +85,6 @@ export const AppProvider = ({ children }) => {
           "response from get rooms",
           res?.data?.rooms?.[0 | 1]?.userinfo?.user_id
         );
-        setUserId(res?.data?.rooms?.[0]?.userinfo?.user_id);
         setRooms(res?.data);
         setLoading(false);
 
@@ -151,6 +151,8 @@ export const AppProvider = ({ children }) => {
         roomList,
         click,
         setClick,
+        setId,
+        setMessages,
         chatHeader,
         setChatHeader,
         rooms,

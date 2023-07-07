@@ -47,10 +47,9 @@ const ReplyChat = () => {
       // message: "input",
       message: input,
       user_id: userId,
-      message_type: "text/Image",
+      message_type: "TEXT",
       org_id: orgId,
     };
-
     axios
       .post(`https://100096.pythonanywhere.com/send_message/${room_Id}/`, data)
       .then((res) => {
