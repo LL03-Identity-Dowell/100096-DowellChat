@@ -26,17 +26,16 @@ const Message = ({ message }) => {
         return null;
     }
   };
-  const chatStyle = {
-    paddingTop: "8rem",
-  };
 
   return (
     <div
-      className="container flex w-full h-full"
+      // className="appearance-none d-flex flex-column force-overflow"
       style={{
-        chatStyle,
-        // background: "purple",
-        // paddingBottom: "100%",
+        display: "flex",
+        flexDirection: "column",
+        height: "200px",
+        overflow: "auto",
+        marginBottom: "20px",
         paddingTop: "1.5rem",
       }}
     >
@@ -47,7 +46,9 @@ const Message = ({ message }) => {
               <div
                 key={id}
                 className={
-                  side ? "flex h-full justify-end" : "flex h-full justify-start"
+                  side
+                    ? "d-flex h-full justify-end"
+                    : "d-flex h-full justify-start"
                 }
               >
                 <div

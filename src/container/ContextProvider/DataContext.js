@@ -144,6 +144,7 @@ export const AppProvider = ({ children }) => {
   return (
     <ProductContext.Provider
       value={{
+        setProductList,
         productList,
         message,
         messages,
@@ -165,6 +166,7 @@ export const AppProvider = ({ children }) => {
         memorizedRooms,
         orgId,
         userId,
+        setLoading,
       }}
     >
       {children}

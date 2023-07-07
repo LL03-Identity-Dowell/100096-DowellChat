@@ -7,7 +7,7 @@ import Scroll from "./Chats/rooms/Scroll";
 import ScrollBar from "./Chats/message/ScrollBar";
 import Profile from "./Chats/message/Profile";
 
-const ChatSection = () => {
+const ChatSection = ({ pageName }) => {
   const [chatHeader, setChatHeader] = useState("");
 
   const onSetChatHeader = (header) => setChatHeader(header);
@@ -15,7 +15,7 @@ const ChatSection = () => {
   return (
     <div className="flex flex-column container-lg p-4 mw-75">
       {/* <ChatHeader /> */}
-      <ChatHeader onSetChatHeader={onSetChatHeader} />
+      <ChatHeader onSetChatHeader={onSetChatHeader} pageName={pageName} />
       {/* chats come here */}
       <div
         className="

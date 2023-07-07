@@ -3,12 +3,27 @@ import "./button.css";
 import { AppProvider } from "../ContextProvider/DataContext";
 import ProductContext from "../ContextProvider/DataContext";
 import { NavLink } from "react-router-dom";
-const Buttons = ({ onSetChatHeader }) => {
-  const { productList, click, setClick, setChatHeader } =
+import axios from "axios";
+const Buttons = ({ onSetChatHeader, pageName }) => {
+  const { productList, click, setClick, setChatHeader, setProductList } =
     useContext(ProductContext);
   // console.log(productList);
   const [isActive, setIsActive] = useState("");
   const [active, setActive] = useState();
+  const [productListForButtons, setProductListForButtons] =
+    useState(productList);
+
+  useEffect(() => {
+    if (pageName === "customerSupport") {
+      axios
+        .get("https://100096.pythonanywhere.com/client_product_list/")
+        .then((res) => {
+          setProductListForButtons(res.data.product_list);
+        });
+    } else {
+      setProductListForButtons(productList);
+    }
+  }, [pageName, productList]);
 
   //Button colors List
   const colorsList = [
@@ -173,8 +188,8 @@ const Buttons = ({ onSetChatHeader }) => {
           className="d-flex  flex-nowrap gap-3  text-nowrap pb-2"
           id="scroll"
         >
-          {productList &&
-            productList.map((title, i) => {
+          {productListForButtons &&
+            productListForButtons.map((title, i) => {
               const { backgroundColor, color, border, outline } =
                 buttonStyles(title) ?? {};
               const { opacity } = style(title) ?? {};

@@ -1,7 +1,7 @@
 import React from "react";
 import Buttons from "./Buttons";
 import HeaderButtons from "./HeaderButtons";
-const ChatHeader = ({ title, caption, onSetChatHeader }) => {
+const ChatHeader = ({ title, caption, onSetChatHeader, pageName }) => {
   return (
     <div className="p-4">
       {/* <div className="d-flex"></div> */}
@@ -13,7 +13,7 @@ const ChatHeader = ({ title, caption, onSetChatHeader }) => {
           </header>
           <HeaderButtons />
         </div>
-        <Buttons onSetChatHeader={onSetChatHeader} />
+        <Buttons onSetChatHeader={onSetChatHeader} pageName={pageName} />
         {/* <Buttons onSetChatHeader={onSetChatHeader} /> */}
       </div>
       <div

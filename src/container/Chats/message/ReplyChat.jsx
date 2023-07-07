@@ -32,7 +32,6 @@ const ReplyChat = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setData(input);
-    console.log("room id: ", room_Id);
     setInput("");
     // const user_id = "644f9d1e4baba28710c128ea";
     const user_id = "644f9d1e4baba28710c128ea";

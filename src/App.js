@@ -15,6 +15,7 @@ import { AppProvider } from "./container/ContextProvider/DataContext";
 import ProtectedRoutes from "./container/protected/protectedRoutes";
 import Home from "./container/home";
 import { useEffect } from "react";
+import CustomerSupportPage from "./container/customerSupportPage";
 function App() {
   // function handleSubmit(e) {
   //   e.preventDefault();
@@ -28,6 +29,7 @@ function App() {
         <Routes>
           <Route element={<ProtectedRoutes />}>
             <Route path="/" element={<Home />} />
+            <Route path="customerSupport" element={<CustomerSupportPage />} />
           </Route>
         </Routes>
       </AppProvider>
