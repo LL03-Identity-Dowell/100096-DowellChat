@@ -695,7 +695,6 @@ def sender_side_delete_room_api(request):
 def tempory_room_list(request, *args, **kwargs):
     try:
         product = kwargs['product'].lower()
-        print(product)
         organization_id = kwargs['organization_id']
         
         if product in ['login', 'sales-agent', 'extension']:
@@ -705,39 +704,37 @@ def tempory_room_list(request, *args, **kwargs):
         
         print('room API product:', product)
         
-        if rooms:
-            rm_list = []
-            
-            for r in rooms:
-                if not r.active:
-                    continue #return JsonResponse({'rooms': []})
+        rm_list = []
+        for r in rooms:
+            if not r.active:
+                continue
 
-                rm_list.append({
-                    'room_id': r.id,
-                    'room_name': r.room_name,
-                    'company': r.company,
-                    'r_session': r.room_id,
-                    'session_id': r.sender_portfolio.session_id
-                    
-                })
+            rm_list.append({
+                'room_id': r.id,
+                'room_name': r.room_name,
+                'company': r.company,
+                'r_session': r.room_id,
+                'session_id': r.sender_portfolio.session_id
+            })
         
-            if rm_list:
-                firstroom = rm_list[0]
-            else:
-                firstroom = {'room_id': None, 'room_name': '', 'company': ''}
-            
-            frm_id = firstroom['room_id'] if firstroom else None
-            messages = [jsonify_message_object(message) for message in Message.objects.filter(room_id=frm_id)]
-            
-            return JsonResponse({'rooms': rm_list, 'firstroom': firstroom, 'messages': messages})
+        if rm_list:
+            firstroom = rm_list[0]
+        else:
+            firstroom = {'room_id': None, 'room_name': '', 'company': ''}
         
+        frm_id = firstroom['room_id'] if firstroom else None
+        messages = [jsonify_message_object(message) for message in Message.objects.filter(room_id=frm_id)]
+        
+        return JsonResponse({'rooms': rm_list, 'firstroom': firstroom, 'messages': messages})
+    
+    except KeyError as e:
+        return JsonResponse({'rooms': [], 'error': str(e)}, status=400)
+    
+    except Room.DoesNotExist:
         return JsonResponse({'rooms': []})
     
-    except (KeyError, Room.DoesNotExist) as e:
-        return JsonResponse({'rooms': [], 'error': str(e)})
-    
     except Exception as e:
-        return JsonResponse({'error': str(e)})
+        return JsonResponse({'error': str(e)}, status=500)
 
 
 @csrf_exempt
