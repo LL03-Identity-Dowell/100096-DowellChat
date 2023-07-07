@@ -724,7 +724,7 @@ def sender_side_delete_room_api(request):
 #     except Room.DoesNotExist:
 #         return JsonResponse({'rooms': []})
 
-
+@csrf_exempt
 def room_list(request, *args, **kwargs):
     try:
         product = kwargs['product'].lower()
@@ -743,12 +743,17 @@ def room_list(request, *args, **kwargs):
             
             for r in rooms:
                 if not r.active:
-                    return JsonResponse({'rooms': []})
+                    continue #return JsonResponse({'rooms': []})
+
+                no_login = False
+                response = { 'status_code': 500 }             
+                if product not in ['login', 'sales-agent', 'extension']:
+                    url = 'https://100093.pythonanywhere.com/api/userinfo/'
+                    response = requests.post(url, data={'session_id': r.sender_portfolio.session_id})
+                else:
+                    no_login = True
                 
-                url = 'https://100093.pythonanywhere.com/api/userinfo/'
-                response = requests.post(url, data={'session_id': r.sender_portfolio.session_id})
-                
-                if response.status_code == 200:
+                if response.status_code == 200 or no_login:
                     response_data = response.json()
                     userinfo = response_data.get('userinfo', {})
                     userName = userinfo.get('username') or r.sender_portfolio.userID
@@ -794,8 +799,6 @@ def room_list(request, *args, **kwargs):
     
     except Exception as e:
         return JsonResponse({'error': str(e)})
-
-
 
 
 
