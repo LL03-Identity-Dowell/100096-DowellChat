@@ -44,6 +44,9 @@ urlpatterns = [
     path('delete-customer-support-room/', views.receiver_side_delete_room_api, name='delete-customer-support-room'),
     path('delete-customer-support-mobile/', views.customer_support_mobile_delete_room_API, name='delete-customer-support-room'),
 
+    path('user_protfolio/', views.portfolio_info, name='protfolio_info'),
+
+
 
 
 ]

@@ -759,41 +759,43 @@ def room_list(request, *args, **kwargs):
                     continue #return JsonResponse({'rooms': []})
 
                 no_login = False
-                response = { 'status_code': 500 }             
+                response = None        
                 if product not in ['login', 'sales-agent', 'extension']:
                     url = 'https://100093.pythonanywhere.com/api/userinfo/'
                     response = requests.post(url, data={'session_id': r.sender_portfolio.session_id})
                 else:
                     no_login = True
-                
-                if response.status_code == 200 or no_login:
-                    response_data = response.json()
-                    userinfo = response_data.get('userinfo', {})
-                    userName = userinfo.get('username') or r.sender_portfolio.userID
-                    profile_img = userinfo.get('profile_img', 'No profile image')
-                    email = userinfo.get("email", "example@gmail.com")
-                    userBrowser = userinfo.get("userBrowser","Chrome111")
-                    phone = userinfo.get("phone", "+ 08129337783")
-                    country= userinfo.get("country","country")
-                    user_id = userinfo.get('userID') or r.sender_portfolio.userID
+                try:
+                    if response.status_code == 200 or no_login:
+                        response_data = response.json()
+                        userinfo = response_data.get('userinfo', {})
+                        userName = userinfo.get('username') or r.sender_portfolio.userID
+                        profile_img = userinfo.get('profile_img', 'No profile image')
+                        email = userinfo.get("email", "example@gmail.com")
+                        userBrowser = userinfo.get("userBrowser","Chrome111")
+                        phone = userinfo.get("phone", "+ 08129337783")
+                        country= userinfo.get("country","country")
+                        user_id = userinfo.get('userID') or r.sender_portfolio.userID
 
 
-                    rm_list.append({
-                        'room_id': r.id,
-                        'room_name': r.room_name,
-                        'company': r.company,
-                        'r_session': r.room_id,
-                        'userinfo': {
-                            'userID': userName,
-                            'portfolio_name': r.sender_portfolio.portfolio_name,
-                            'profile_img': profile_img,
-                            "email": email,
-                            "userBrowser":userBrowser,
-                            "phone": phone,
-                            "country" : country,
-                            "user_id": user_id
-                        },
-                    })
+                        rm_list.append({
+                            'room_id': r.id,
+                            'room_name': r.room_name,
+                            'company': r.company,
+                            'r_session': r.room_id,
+                            'userinfo': {
+                                'userID': userName,
+                                'portfolio_name': r.sender_portfolio.portfolio_name,
+                                'profile_img': profile_img,
+                                "email": email,
+                                "userBrowser":userBrowser,
+                                "phone": phone,
+                                "country" : country,
+                                "user_id": user_id
+                            },
+                        })
+                except:
+                    pass
         
             if rm_list:
                 firstroom = rm_list[0]
@@ -814,6 +816,35 @@ def room_list(request, *args, **kwargs):
         return JsonResponse({'error': str(e)})
 
 
+
+@csrf_exempt
+def portfolio_info(request):
+    session_id = request.GET.get("session_id")
+
+    try:
+        portfolio = Portfolio.objects.get(session_id=session_id)
+        print(portfolio)
+        
+        return JsonResponse({
+            "status": 200,
+            "portfolio": {
+                "portfolio_name": portfolio.portfolio_name,
+                "userID": portfolio.userID,
+                "organization": portfolio.organization,
+                "is_staff": portfolio.is_staff,
+                "dowell logged in":portfolio.dowell_logged_in
+            }
+        })
+    except Portfolio.DoesNotExist:
+        return JsonResponse({
+            "status": 404,
+            "error": "Portfolio not found"
+        }, status=404)
+    except Exception as e:
+        return JsonResponse({
+            "status": 500,
+            "error": str(e)
+        }, status=500)
 
 
 
