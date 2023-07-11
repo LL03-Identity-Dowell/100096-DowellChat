@@ -400,7 +400,7 @@ def create_portfolio_mobile_API(request):
 
     if response["userinfo"]["username"]:
         try:
-            portfolio = Portfolio.objects.get(userID=response["userinfo"]["userID"], organization = response["portfolio_info"][0]["org_id"])
+            portfolio = Portfolio.objects.get(userID=response["userinfo"]["userID"], organization = response["portfolio_info"][0])
             portfolio.session_id = session_id
             portfolio.save()
         except:
@@ -436,6 +436,31 @@ def create_room_api__dowell_user(request, *args, **kwargs):
     """
     session_id = request.GET.get('session_id')
     d_user = request.session["dowell_user"]
+    print("Product get args: ", session_id, kwargs['product'].lower(), d_user)
+
+    portfolio = portfolio_control(d_user, session_id, False)
+    room, messages = room_control(portfolio, kwargs['product'].lower())
+
+    return JsonResponse({
+        'product': kwargs['product'].lower(),
+        'portfolio': portfolio.id,
+        'messages': [jsonify_message_object(message) for message in messages],
+        'room_pk': room.id,
+        'user_id': portfolio.userID
+    })
+
+
+
+def create_room_sales_agent(request, *args, **kwargs):
+    """
+    sender side API handling for dowell logged in users
+    url  = 100096.pythonanywhere.com/d-chat/<product>/?session_id=<session_id>
+    """
+    session_id = request.GET.get('session_id')
+    session_id = request.GET.get('session_id', None)
+    url = 'https://100014.pythonanywhere.com/api/userinfo/'
+    d_user = requests.post(url, data={'session_id': session_id})
+
     print("Product get args: ", session_id, kwargs['product'].lower(), d_user)
 
     portfolio = portfolio_control(d_user, session_id, False)
@@ -706,8 +731,8 @@ def tempory_room_list(request, *args, **kwargs):
         
         rm_list = []
         for r in rooms:
-            if not r.active:
-                continue
+            # if not r.active:
+            #     continue
 
             rm_list.append({
                 'room_id': r.id,
