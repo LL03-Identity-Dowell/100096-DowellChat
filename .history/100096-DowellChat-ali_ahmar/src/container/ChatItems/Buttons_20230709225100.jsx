@@ -14,10 +14,6 @@ const Buttons = ({ onSetChatHeader, pageName }) => {
     useState(productList);
 
   useEffect(() => {
-    setChatHeader("Login");
-    setIsActive("Login");
-  }, []);
-  useEffect(() => {
     if (pageName === "customerSupport") {
       axios
         .get("https://100096.pythonanywhere.com/client_product_list/")
