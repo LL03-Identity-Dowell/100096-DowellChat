@@ -7,7 +7,7 @@ app_name = 'customer_support'
 
 urlpatterns = [
     path('', views.index, name= 'index'),
-    path('test/', views.test, name= 'test'),     #(?:session_id=(?P<session_id>[a-z0-9])/)?$
+    path('test/', views.test, name= 'test'),     #(?:session_id=(?P<session_id>[a-z0-9])/)?$send_message
     path('dowell-mail/', views.dowell_mail_view, name='dowell-mail-chat'),     #(?:session_id=(?P<session_id>[a-z0-9])/)?$
     path('product_list/', views.product_list, name= 'product_list'),
     path('admin_product_list/', views.admin_product_list, name= 'admin_product_list'),
@@ -64,7 +64,7 @@ urlpatterns = [
     Muzahid
             - 12 GET (product-list/)
             - 20 POST 'create-portfolio-mobile/',
-            - 23 GET and POST (send_message )
+            - 30 GET and POST (send_message )
 
     product chat(workflow-ai, other)
             - 22 GET (d-chat/<product>/?session_id=jiisadijio8u9dujsf

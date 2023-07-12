@@ -161,6 +161,7 @@ def customer_support_mobile_delete_room_API(request, *args, **kwargs):
                             "status": "nothing to update"
                         }
                         insert_response = dowellconnection(*chat, "insert", field, update_field)
+                        room.delete()
                         return JsonResponse({'status': 'Room deleted successfully'})
                     else:
                         return JsonResponse({'status': 'Failed to delete room'})
@@ -657,6 +658,7 @@ def receiver_side_delete_room_api(request):
         # d_user = request.session["dowell_user"]
         # portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"], organization=d_user["portfolio_info"][0]["org_id"])
         room = Room.objects.filter(id=room_id, active=False).order_by('id').first()
+        print(room)
         if room:
             # Call the delete room API
             response = delete_room(room)
@@ -680,7 +682,8 @@ def receiver_side_delete_room_api(request):
                 "status":"nothing to update"
                 }
                 insert_response=dowellconnection(*chat, "insert", field, update_field)
-                room.delete()
+                delete_data=room.delete()
+                print(delete_data)
                 return JsonResponse({'status': 'Room deleted successfully'})
             else:
                 return JsonResponse({'status': 'Failed to delete room'})
