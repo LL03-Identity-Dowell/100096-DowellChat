@@ -680,6 +680,7 @@ def receiver_side_delete_room_api(request):
                 "status":"nothing to update"
                 }
                 insert_response=dowellconnection(*chat, "insert", field, update_field)
+                room.delete()
                 return JsonResponse({'status': 'Room deleted successfully'})
             else:
                 return JsonResponse({'status': 'Failed to delete room'})
