@@ -451,24 +451,24 @@ def create_room_api__dowell_user(request, *args, **kwargs):
     })
 
 
-
+@csrf_exempt
 def create_room_sales_agent(request, *args, **kwargs):
-    """
-    sender side API handling for dowell logged in users
-    url  = 100096.pythonanywhere.com/d-chat/<product>/?session_id=<session_id>
-    """
     session_id = request.GET.get('session_id')
     session_id = request.GET.get('session_id', None)
     url = 'https://100014.pythonanywhere.com/api/userinfo/'
-    d_user = requests.post(url, data={'session_id': session_id})
+    response = requests.post(url, data={'session_id': session_id})
+    d_user = response.json()  # Extract the JSON data from the response
 
-    print("Product get args: ", session_id, kwargs['product'].lower(), d_user)
+    product = d_user.get('userinfo', {}).get('product', '')
+
+    print(type(d_user))
+    print("Product get args: ", session_id, product, d_user)
 
     portfolio = portfolio_control(d_user, session_id, False)
-    room, messages = room_control(portfolio, kwargs['product'].lower())
+    room, messages = room_control(portfolio, product.lower())
 
     return JsonResponse({
-        'product': kwargs['product'].lower(),
+        'product': product.lower(),
         'portfolio': portfolio.id,
         'messages': [jsonify_message_object(message) for message in messages],
         'room_pk': room.id,
