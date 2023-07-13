@@ -1,11 +1,23 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import user from "../../assets/avatar.png";
 import AboutDetails from "./AboutDetails";
 import DetailsSectionButton from "./DetailsSectionButton";
 import ProductContext from "../ContextProvider/DataContext";
+import { useQuery } from "react-query";
 const DetailsSection = ({ title, about }) => {
-  const { userInfo } = useContext(ProductContext);
-  // console.log(userInfo, "from details section");
+  const { userInfo, getSessionIds, Id } = useContext(ProductContext);
+  // const { data, isLoading, error } = useQuery(
+  //   ["getSessionId", Id],
+  //   () => getSessionIds(Id),
+  //   [Id]
+  // );
+  useEffect(() => {
+    getSessionIds(Id);
+  }, [Id]);
+  // console.log("data", data);
+  // if (isLoading) return <div>Loading</div>;
+  // if (error) return <div>Request Failed</div>;
+  // console.log(data, "from details section");
   return (
     <div className="container w-100 d-none d-md-none d-lg-none d-xl-block d-xxl-block">
       <div className=" " style={{ width: "auto", height: "100%" }}>
@@ -38,7 +50,9 @@ const DetailsSection = ({ title, about }) => {
               <DetailsSectionButton />
             </div>
             {/* DETAILS */}
-            <AboutDetails />
+            <AboutDetails
+            // data={data}
+            />
           </div>
         </div>
       </div>

@@ -9,9 +9,10 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "react-query";
+import { Browser } from "phosphor-react";
 const ProductContext = createContext();
 
-export const AppProvider = ({ children }) => {
+export const AppProvider = ({ children }, session_id) => {
   const [productList, setProductList] = useState([]);
   const [roomList, setRoomList] = useState({});
   const [click, setClick] = useState(null);
@@ -23,7 +24,7 @@ export const AppProvider = ({ children }) => {
   const [userId, setUserId] = useState("" | null);
   const [room, setRoom] = useState([]);
   const [message, setMessage] = useState();
-  const [room_Id, setRoom_Id] = useState("");
+  const [room_Id, setRoom_Id] = useState("" | "221");
   const [roomsId, setRoomsId] = useState();
   const [orgId, setOrgId] = useState("");
   const [Id, setId] = useState("");
@@ -33,7 +34,14 @@ export const AppProvider = ({ children }) => {
   const sessionId = {
     session_id: "4sjl7vrpycwauvueewhqrme0u5vqnnmj",
     // session_id: "5p8do0ht7no4gyjo0w2984o4vj5dc2hs",
+    // session_id:''
+    // session_id:
+    //   ("session_id",
+    //   caches
+    //     .open("v1")
+    //     .then((Cache) => Cache.addAll(["5p8do0ht7no4gyjo0w2984o4vj5dc2hs"]))),
   };
+
   const params = Object.fromEntries([...searchParams]);
   useEffect(() => {
     const currentParams = Object.fromEntries([...searchParams]);
@@ -51,20 +59,31 @@ export const AppProvider = ({ children }) => {
     setLoading(false);
     getSessionId();
   }, [searchParams]);
-  useEffect(() => {
-    const getSessionIds = async () => {
-      const res = await axios.post(
-        "https://100093.pythonanywhere.com/api/userinfo/",
-        {
-          session_id: Id,
-        }
-      );
-      console.log("res", res);
-      // setUserInfo(res?.data?.userinfo);
-    };
-    getSessionIds();
-  }, [Id, room_Id]);
+  // useEffect(() => {
+  //   const getSessionIds = async () => {
+  //     const res = await axios.post(
+  //       "https://100093.pythonanywhere.com/api/userinfo/",
+  //       {
+  //         session_id: Id,
+  //       }
+  //     );
+  //     // console.log("res", res);
+  //     setUserInfo(res?.data?.userinfo);
+  //   };
+  //   getSessionIds();
+  // }, [Id, room_Id]);
+  const getSessionIds = async () => {
+    const res = await axios.post(
+      "https://100093.pythonanywhere.com/api/userinfo/",
+      {
+        session_id: Id,
+      }
+    );
+    console.log("res", res);
+    setUserInfo(res?.data?.userinfo);
+  };
 
+  // console.log("data from session_id", data);
   // const getNotifications = async () => {
   //   const res = await axios.get(
   //     "https://100092.pythonanywhere.com/api/v1/notifications/products/"
@@ -73,10 +92,10 @@ export const AppProvider = ({ children }) => {
   // };
   // const { status, data, error, isLoading } = useQuery(
   //   {
-  //     queryKey: ["notifications"],
+  //     queryKey: ["session_id"],
   //   },
   //   {
-  //     queryFn: getNotifications,
+  //     queryFn: () => axios.get(`https://localhost:3000/?=${sessionId}`),
   //   }
   // );
   useEffect(() => {
@@ -104,7 +123,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const getRooms = async (title) => {
       try {
-        const BASE_URL = `https://100096.pythonanywhere.com/room_list/${chatHeader}/${orgId}/`;
+        const BASE_URL = `https://100096.pythonanywhere.com/room_list1/${chatHeader}/${orgId}/`;
         setLoading(true);
         const res = await axios.get(BASE_URL);
         setRooms(res?.data);
@@ -174,8 +193,11 @@ export const AppProvider = ({ children }) => {
         loading,
         // memorizedMessages,
         memorizedRooms,
+        getSessionIds,
         orgId,
         userId,
+        Id,
+        setId,
       }}
     >
       {children}

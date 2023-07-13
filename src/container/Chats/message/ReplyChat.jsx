@@ -34,7 +34,6 @@ const ReplyChat = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setData(input);
-    setData("");
     const data = {
       // message: "input",
       message: input,
@@ -43,6 +42,8 @@ const ReplyChat = () => {
       org_id: orgId,
     };
     mutate(data);
+    setInput("");
+
     // axios.post(
     //   `https://100096.pythonanywhere.com/send_message/${room_Id}/`,
     //   data

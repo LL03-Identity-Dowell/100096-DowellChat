@@ -3,6 +3,7 @@ import "./button.css";
 import { AppProvider } from "../ContextProvider/DataContext";
 import ProductContext from "../ContextProvider/DataContext";
 import { NavLink } from "react-router-dom";
+import { useQuery } from "react-query";
 
 const Buttons = ({ onSetChatHeader }) => {
   const { productList, click, setClick, setChatHeader } =
@@ -12,10 +13,15 @@ const Buttons = ({ onSetChatHeader }) => {
   const [active, setActive] = useState();
 
   useEffect(() => {
-    setChatHeader("Login");
-    setIsActive("Login");
+    setChatHeader("Extension");
+    setIsActive("Extension");
   }, []);
+  // const { data, status } = useQuery(["message"], () => {
+  //   setChatHeader("Login");
+  //   setActive("Login");
+  // });
 
+  // console.log(data);
   const buttonStyles = (title) => {
     switch (title) {
       case "Login":
@@ -93,8 +99,6 @@ const Buttons = ({ onSetChatHeader }) => {
   const handleClick = async (title) => {
     setChatHeader(title);
     setIsActive(!isActive, title);
-    // style(title);
-    // await getRooms();
   };
   const style = (title) => {
     switch (title) {

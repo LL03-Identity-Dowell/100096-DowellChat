@@ -9,7 +9,7 @@ import { Loader } from "../../spinner/loader";
 import { useQuery } from "react-query";
 const Message = () => {
   const [message, setMessage] = useState();
-  const { rooms, messages, loading, memorizedMessages, room_Id } =
+  const { rooms, messages, loading, memorizedMessages, room_Id, setId } =
     useContext(ProductContext);
   const url = `https://100096.pythonanywhere.com/send_message/${room_Id}/`;
   const getRoomMessage = async () => {
@@ -33,6 +33,7 @@ const Message = () => {
     () => getRoomMessage(room_Id),
     [room_Id]
   );
+  setId(data?.messages?.[0]?.author?.session_id);
   // const { mutate } = useMutation();
   console.log("data", data);
   if (isLoading) return <div>Loading</div>;

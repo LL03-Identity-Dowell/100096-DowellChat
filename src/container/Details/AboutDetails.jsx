@@ -14,13 +14,13 @@ import { HiHome } from "react-icons/hi";
 import { AiFillHome } from "react-icons/ai";
 const AboutDetails = ({ title, ux }) => {
   const { userInfo } = useContext(ProductContext);
-  const data = [
-    {
-      phone: "Phone Number",
-      email: "Email",
-      web: "Website",
-    },
-  ];
+  // const data = [
+  //   {
+  //     phone: "Phone Number",
+  //     email: "Email",
+  //     web: "Website",
+  //   },
+  // ];
   return (
     <div
       className="container"
