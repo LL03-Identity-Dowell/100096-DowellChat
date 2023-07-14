@@ -336,6 +336,16 @@ def room_control(portfolio, product):
         )
         room.save()
     messages = Message.objects.filter(room=room)
+    if len(messages) == 0 :
+        Message.objects.create(
+            room=room,
+            message="Hey, How may I help you?",
+            author=portfolio,
+            read=True,
+            side=True,
+            message_type="TEXT"
+        )
+        messages = Message.objects.filter(room=room)
     return room, messages
 
 
@@ -466,6 +476,7 @@ def create_room_sales_agent(request, *args, **kwargs):
 
     portfolio = portfolio_control(d_user, session_id, False)
     room, messages = room_control(portfolio, product.lower())
+    
 
     return JsonResponse({
         'product': product.lower(),
