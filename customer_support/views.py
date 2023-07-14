@@ -162,7 +162,7 @@ def customer_support_mobile_delete_room_API(request, *args, **kwargs):
                         }
                         insert_response = dowellconnection(*chat, "insert", field, update_field)
                         delete_room=room.delete()
-                        return JsonResponse({'status': 'Room deleted successfully', "status":delete_room})
+                        return JsonResponse({'status': 'Room deleted successfully', "data":delete_room})
                     else:
                         return JsonResponse({'status': 'Failed to delete room'})
                 else:
