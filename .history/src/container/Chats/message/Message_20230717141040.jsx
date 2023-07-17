@@ -59,7 +59,6 @@ const Message = () => {
           height: "60px",
           marginTop: "70px",
           marginLeft: "300px",
-          marginRight: "30px",
         }}
       />
     );
@@ -67,7 +66,23 @@ const Message = () => {
   if (error) {
     console.log(error);
   }
+  const messageUser = (id) => {
+    switch (id) {
+      case id === 28:
+        return {
+          display: "flex",
+          justifyContent: "end",
+        };
+      case id === 29:
+        return {
+          display: "flex",
+          justifyContent: "start",
+        };
 
+      default:
+        return null;
+    }
+  };
   const chatStyle = {
     paddingTop: "8rem",
   };
@@ -82,58 +97,54 @@ const Message = () => {
         paddingTop: "1.5rem",
       }}
     >
-      {data ? (
-        data?.messages?.map(({ message, id, side }) => {
-          return (
-            <div
-              key={id}
-              className={
-                side
-                  ? "d-flex justify-content-end"
-                  : "d-flex justify-content-start"
-              }
-            >
+      {data?.messages?.length <= 0
+        ? console.log("no rooms available")
+        : data?.messages?.map(({ message, id, side }) => {
+            return (
               <div
-                id="chat1"
+                key={id}
                 className={
                   side
-                    ? "p-3 mb-4 style bg-primary"
-                    : "d-flex align-items-center bg-white text-muted"
+                    ? "d-flex justify-content-end"
+                    : "d-flex justify-content-start"
                 }
-                style={{
-                  width: "fit-content",
-                  maxWidth: "350px",
-                  // width: "350px",
-                }}
               >
-                {side ? null : (
-                  <img
-                    src={male_avatar}
-                    height="50px"
-                    width="50px"
-                    alt="male_avatar"
-                  />
-                )}
-                <p
-                  className="fs-6 small text-start mb-0 text-break"
+                <div
+                  id="chat1"
+                  className={
+                    side
+                      ? "p-3 mb-4 style bg-primary"
+                      : "d-flex align-items-center bg-white text-muted"
+                  }
                   style={{
-                    // width: "350px",
-                    // width: "fit-content",
+                    width: "fit-content",
                     maxWidth: "350px",
+                    // width: "350px",
                   }}
                 >
-                  {message}
-                </p>
+                  {side ? null : (
+                    <img
+                      src={male_avatar}
+                      height="50px"
+                      width="50px"
+                      alt="male_avatar"
+                    />
+                  )}
+                  <p
+                    className="fs-6 small text-start mb-0 text-break"
+                    style={{
+                      // width: "350px",
+                      // width: "fit-content",
+                      maxWidth: "350px",
+                    }}
+                  >
+                    {message}
+                  </p>
+                </div>
               </div>
-            </div>
-            // [message]
-          );
-        })
-      ) : (
-        <p className="text-black text-align-center text-muted fs-5">
-          No Messages Available
-        </p>
-      )}
+              // [message]
+            );
+          })}
     </section>
   );
 };

@@ -130,9 +130,7 @@ const Message = () => {
           );
         })
       ) : (
-        <p className="text-black text-align-center text-muted fs-5">
-          No Messages Available
-        </p>
+        <p className="text-black">No Messages Available</p>
       )}
     </section>
   );

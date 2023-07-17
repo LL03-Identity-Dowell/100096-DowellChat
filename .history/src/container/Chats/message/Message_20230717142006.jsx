@@ -82,7 +82,9 @@ const Message = () => {
         paddingTop: "1.5rem",
       }}
     >
-      {data ? (
+      {data?.rooms?.length && data?.messages?.length <= 0 ? (
+        <p className="text-black">No Messages Available</p>
+      ) : (
         data?.messages?.map(({ message, id, side }) => {
           return (
             <div
@@ -129,10 +131,6 @@ const Message = () => {
             // [message]
           );
         })
-      ) : (
-        <p className="text-black text-align-center text-muted fs-5">
-          No Messages Available
-        </p>
       )}
     </section>
   );

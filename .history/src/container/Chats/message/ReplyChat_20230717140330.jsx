@@ -75,7 +75,7 @@ const ReplyChat = () => {
       >
         <div className="card-body p-1 ">
           <div
-            className="d-flex flex-column flex-md-row flex-lg-row flex-xl-row flex-xxl-row w-100 justify-content-between"
+            className="d-flex flex-sm-column flex-md-row w-100 justify-content-between"
             // onSubmit={handleSubmit}
           >
             <InputBox input={input} setInput={setInput} />

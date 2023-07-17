@@ -75,13 +75,13 @@ const ReplyChat = () => {
       >
         <div className="card-body p-1 ">
           <div
-            className="d-flex flex-column flex-md-row flex-lg-row flex-xl-row flex-xxl-row w-100 justify-content-between"
+            className="d-flex w-100 justify-content-between"
             // onSubmit={handleSubmit}
           >
             <InputBox input={input} setInput={setInput} />
             <div className="d-flex align-items-center flex-column-reverse flex-md-row flex-lg-row flex-xl-row flex-xxl-row">
               <div
-                className="d-flex justify-content-end"
+                className="d-flex justify-content-end flex-row-reverse"
                 // style={{ marginBottom: "4rem" }}
               >
                 <button
