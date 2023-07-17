@@ -326,6 +326,7 @@ def portfolio_control(d_user, session_id, is_staff):
 
 def room_control(portfolio, product):
     room = Room.objects.filter(sender_portfolio__id=portfolio.id, product=product.lower(), company=portfolio.organization, active = True).order_by('id').first()
+    
     if not room :
         room = Room.objects.create(
             room_name=portfolio.portfolio_name,
@@ -336,6 +337,8 @@ def room_control(portfolio, product):
         )
         room.save()
     messages = Message.objects.filter(room=room)
+    '''
+  
     if len(messages) == 0 :
         Message.objects.create(
             room=room,
@@ -346,8 +349,43 @@ def room_control(portfolio, product):
             message_type="TEXT"
         )
         messages = Message.objects.filter(room=room)
+          '''
     return room, messages
 
+# Room Control Sales agent
+def room_control_sales_agent(portfolio, product, sub_product):
+    room = Room.objects.filter(sender_portfolio__id=portfolio.pk, product=product.lower(), sub_product=sub_product.lower(), company=portfolio.organization, active=True).order_by('id').first()
+    print(" this room: ", room)  # This actually prints the room
+    if room is None:
+        room = Room.objects.create(
+            room_name=portfolio.portfolio_name,
+            room_id=portfolio.session_id,
+            sender_portfolio=portfolio,
+            company=portfolio.organization,
+            product=product.lower(),
+            sub_product=sub_product.lower()
+        )
+        room.save()
+        print(" the room :", room)
+        messages = []  # Set an empty queryset for messages
+        if len(messages) == 0 :
+            Message.objects.create(
+                room=room,
+                message="Hey, How may I help you?",
+                author=portfolio,
+                read=True,
+                side=True,
+                message_type="TEXT"
+            )
+        messages = Message.objects.filter(room=room)
+    else:
+        messages = Message.objects.filter(room=room.id)
+        print(" messages: ", messages)  # Print the retrieved messages
+        
+    
+    return room, messages
+
+   
 
 
 
@@ -460,7 +498,7 @@ def create_room_api__dowell_user(request, *args, **kwargs):
         'user_id': portfolio.userID
     })
 
-
+'''
 @csrf_exempt
 def create_room_sales_agent(request, *args, **kwargs):
     session_id = request.GET.get('session_id')
@@ -486,6 +524,37 @@ def create_room_sales_agent(request, *args, **kwargs):
         'user_id': portfolio.userID
     })
 
+'''
+@csrf_exempt
+def create_room_sales_agent(request, *args, **kwargs):
+    session_id = request.GET.get('session_id')
+    session_id = request.GET.get('session_id', None)
+    url = 'https://100014.pythonanywhere.com/api/userinfo/'
+    response = requests.post(url, data={'session_id': session_id})
+    d_user = response.json()  # Extract the JSON data from the response
+    print(d_user)
+    
+
+    product = d_user.get('userinfo', {}).get('product', '')
+    print("Product: ", product)
+    sub_product = request.POST.get('sub_product', '')  # Extract the sub_product from the request
+    print("subproduct: ", sub_product)
+
+    #print(type(d_user))
+    #print("Product get args: ", session_id, product, d_user)
+
+    portfolio = portfolio_control(d_user, session_id, False)
+    print("portfolio: ", portfolio)
+    room, messages = room_control_sales_agent(portfolio, product.lower(), sub_product.lower())  # Call the updated room_control_sales_agent
+    print("room", room)
+    print("messages", messages)
+    return JsonResponse({
+        'product': product.lower(),
+        'portfolio': portfolio.id,
+        'messages': [jsonify_message_object(message) for message in messages],
+        'room_pk': room.id,
+        'user_id': portfolio.userID
+    })
 
 
 
