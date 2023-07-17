@@ -5,7 +5,7 @@ import DetailsSectionButton from "./DetailsSectionButton";
 import ProductContext from "../ContextProvider/DataContext";
 import { useQuery } from "react-query";
 const DetailsSection = ({ title, about }) => {
-  const { userInfo, Id, userInfoAlternate } = useContext(ProductContext);
+  const { userInfo, Id } = useContext(ProductContext);
   // const { data, isLoading, error } = useQuery(
   //   ["getSessionId", Id],
   //   () => getSessionIds(Id),
@@ -37,9 +37,7 @@ const DetailsSection = ({ title, about }) => {
                     className="fw-bold  text-nowrap"
                     style={{ fontSize: "18px" }}
                   >
-                    {userInfo
-                      ? userInfo?.username
-                      : userInfoAlternate?.username}
+                    {userInfo?.username}
                   </h3>
                   <a
                     href=""

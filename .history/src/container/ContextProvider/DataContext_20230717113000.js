@@ -164,7 +164,7 @@ export const AppProvider = ({ children }, session_id) => {
         const BASE_URL = `https://100096.pythonanywhere.com/room_list1/${chatHeader}/${orgId}/`;
         setLoading(true);
         const res = await axios.get(BASE_URL);
-        setRoomsId(res?.data?.rooms?.[0]?.room_id);
+        console.log("rooms", res?.data);
         // setRooms(res?.data);
         // setLoading(false);
       } catch (error) {
@@ -172,7 +172,7 @@ export const AppProvider = ({ children }, session_id) => {
       }
     };
     getRooms();
-  }, [chatHeader, orgId]);
+  }, [roomsId]);
 
   //create a usememo for the messages data
   // const memorizedMessages = useMemo(() => messages, [messages]);
@@ -219,7 +219,6 @@ export const AppProvider = ({ children }, session_id) => {
         Id,
         setId,
         userInfoAlternate,
-        roomsId,
       }}
     >
       {children}

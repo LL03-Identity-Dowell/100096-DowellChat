@@ -60,29 +60,19 @@ const Rooms = ({ results }, index) => {
   //   }
   // };
 
-  // useEffect(() => {
-  //   const getRooms = async () => {
-  //     const BASE_URL = `https://100096.pythonanywhere.com/room_list1/${chatHeader}/${orgId}/`;
-  //     setLoading(true);
-  //     const res = await axios.get(BASE_URL);
+  useEffect(() => {
+    const getRooms = async () => {
+      const BASE_URL = `https://100096.pythonanywhere.com/room_list1/${chatHeader}/${orgId}/`;
+      setLoading(true);
+      const res = await axios.get(BASE_URL);
 
-  //     // console.log(`res.data from messages${chatHeader}`, res?.data?.messages);
-  //     // console.log(`res.data from messages${chatHeader}`, res?.data);
-  //     setRooms(res?.data);
-  //     setLoading(false);
-  //   };
-  //   getRooms();
-  // }, [chatHeader, orgId, setLoading, setRooms]);
-  const getRooms = async () => {
-    const BASE_URL = `https://100096.pythonanywhere.com/room_list1/${chatHeader}/${orgId}/`;
-    setLoading(true);
-    const res = await axios.get(BASE_URL);
-    return res?.data;
-    // console.log(`res.data from messages${chatHeader}`, res?.data?.messages);
-    // console.log(`res.data from messages${chatHeader}`, res?.data);
-    // setRooms(res?.data);
-    // setLoading(false);
-  };
+      // console.log(`res.data from messages${chatHeader}`, res?.data?.messages);
+      // console.log(`res.data from messages${chatHeader}`, res?.data);
+      setRooms(res?.data);
+      setLoading(false);
+    };
+    getRooms();
+  }, [chatHeader, orgId, setLoading, setRooms]);
   const { data, isLoading, isSuccess } = useQuery(
     ["rooms", chatHeader, orgId],
     () => getRooms(orgId, chatHeader),
@@ -90,12 +80,12 @@ const Rooms = ({ results }, index) => {
   );
   // console.log("data fetched", data);
 
-  if (isLoading) {
-    return <Loader />;
-  }
-  if (isSuccess) {
-    console.log(data);
-  }
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
+  // if (isSuccess) {
+  //   console.log(data);
+  // }
 
   // console.log(roomId);
   const setIds = (room_id) => {
@@ -112,10 +102,10 @@ const Rooms = ({ results }, index) => {
         className="d-flex flex-column justify-content-start gap-4  rounded"
         // onClick={() => console.log("clicked")}
       >
-        {data?.rooms?.length <= 0 ? (
+        {rooms?.rooms?.length <= 0 ? (
           <h1 className="text-muted fs-5">No Rooms available</h1>
         ) : (
-          data?.rooms?.map(({ room_id, room_name }) => {
+          rooms?.rooms?.map(({ room_id, room_name }) => {
             return (
               <button
                 key={room_id}

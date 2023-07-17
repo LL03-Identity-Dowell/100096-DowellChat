@@ -13,7 +13,7 @@ import { BiWorld, BiLike } from "react-icons/bi";
 import { HiHome } from "react-icons/hi";
 import { AiFillHome } from "react-icons/ai";
 const AboutDetails = ({ title, ux }) => {
-  const { userInfo, userInfoAlternate } = useContext(ProductContext);
+  const { userInfo } = useContext(ProductContext);
   const data = [
     {
       phone: "Phone Number",
@@ -37,7 +37,7 @@ const AboutDetails = ({ title, ux }) => {
                   <FaPhone className="fw-bold fs-6" /> +{" "}
                   <span className="" style={{ fontSize: "13px" }}>
                     {/* userName not found */}
-                    {userInfo ? userInfo?.phone : userInfoAlternate?.phone}
+                    {userInfo?.phone}
                   </span>
                 </small>
               </li>
@@ -45,7 +45,7 @@ const AboutDetails = ({ title, ux }) => {
                 <small className="d-flex gap-2 align-items-center">
                   <FaRegEnvelope className="fw-bold fs-6" /> +{" "}
                   <span className="" style={{ fontSize: "13px" }}>
-                    {userInfo ? userInfo?.email : userInfoAlternate?.email}
+                    {userInfo?.email}
                   </span>
                 </small>
               </li>
@@ -53,9 +53,7 @@ const AboutDetails = ({ title, ux }) => {
                 <small className="d-flex gap-2 align-items-center">
                   <BiWorld className="fw-bold fs-5" /> +{" "}
                   <span className="" style={{ fontSize: "13px" }}>
-                    {userInfo
-                      ? userInfo?.userBrowser
-                      : userInfoAlternate?.userBrowser}
+                    {userInfo?.userBrowser}
                   </span>
                 </small>
               </li>
@@ -64,9 +62,7 @@ const AboutDetails = ({ title, ux }) => {
                   {/* <AiFillHome /> + Address */}
                   <HiHome className="fw-bold fs-5" /> +{" "}
                   <span className="" style={{ fontSize: "13px" }}>
-                    {userInfo
-                      ? userInfo?.user_country
-                      : userInfoAlternate?.user_country}
+                    {userInfo?.user_country}
                   </span>
                 </small>
               </li>
@@ -87,9 +83,7 @@ const AboutDetails = ({ title, ux }) => {
                 className="d-flex gap-2 align-items-center"
               >
                 <FaRegThumbsUp className="fw-bold fs-6" />{" "}
-                {userInfo
-                  ? userInfo?.dowell_time
-                  : userInfoAlternate?.dowell_time}
+                {userInfo?.dowell_time}
                 {/* date from the api */}
               </li>
               <li style={{ color: "#94a3b8" }}>
@@ -103,12 +97,7 @@ const AboutDetails = ({ title, ux }) => {
               </li>
               <li style={{ color: "#94a3b8" }}>
                 <FaLocationArrow className="fw-bold fs-6" /> From
-                <span>
-                  {" "}
-                  {userInfo
-                    ? userInfo?.user_country
-                    : userInfoAlternate?.user_country}
-                </span>
+                <span> {userInfo?.user_country}</span>
               </li>
             </ul>
           </div>

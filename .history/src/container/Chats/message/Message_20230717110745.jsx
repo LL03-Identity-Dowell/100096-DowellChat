@@ -10,28 +10,14 @@ import { useQuery } from "react-query";
 import { LoaderIcon } from "react-hot-toast";
 const Message = () => {
   const [message, setMessage] = useState();
-  const {
-    rooms,
-    messages,
-    loading,
-    memorizedMessages,
-    room_Id,
-    setId,
-    roomsId,
-  } = useContext(ProductContext);
+  const { rooms, messages, loading, memorizedMessages, room_Id, setId } =
+    useContext(ProductContext);
   const url = `https://100096.pythonanywhere.com/send_message/${room_Id}/`;
   const getRoomMessage = async () => {
     // setLoading(true);
-    if (room_Id) {
-      const res = await axios.get(url);
-      return res?.data;
-    } else {
-      const res = await axios.get(
-        `https://100096.pythonanywhere.com/send_message/${roomsId}/`
-      );
-      return res?.data;
-    }
+    const res = await axios.get(url);
     // console.log("response", res);
+    return res?.data;
     // setMessage(res?.data);
   };
   // useEffect(() => {
@@ -44,9 +30,9 @@ const Message = () => {
   //   getRoomMessage();
   // }, [room_Id]);
   const { status, data, error, isLoading } = useQuery(
-    ["message", room_Id, roomsId],
-    () => getRoomMessage(room_Id, roomsId),
-    [room_Id, roomsId]
+    ["message", room_Id],
+    () => getRoomMessage(room_Id),
+    [room_Id]
   );
   setId(data?.messages?.[0]?.author?.session_id);
   // const { mutate } = useMutation();
@@ -57,14 +43,10 @@ const Message = () => {
         style={{
           width: "60px",
           height: "60px",
-          marginTop: "70px",
-          marginLeft: "300px",
         }}
       />
     );
-  if (error) {
-    console.log(error);
-  }
+  if (error) return <div>Request Failed</div>;
   const messageUser = (id) => {
     switch (id) {
       case id === 28:
@@ -96,56 +78,54 @@ const Message = () => {
         paddingTop: "1.5rem",
       }}
     >
-      {data?.messages?.length <= 0 ? (
-        <p className="text-black">No Messages Available</p>
-      ) : (
-        data?.messages?.map(({ message, id, side }) => {
-          return (
-            <div
-              key={id}
-              className={
-                side
-                  ? "d-flex justify-content-end"
-                  : "d-flex justify-content-start"
-              }
-            >
+      {data?.messages?.length && rooms?.rooms?.length <= 0
+        ? null
+        : data?.messages?.map(({ message, id, side }) => {
+            return (
               <div
-                id="chat1"
+                key={id}
                 className={
                   side
-                    ? "p-3 mb-4 style bg-primary"
-                    : "d-flex align-items-center bg-white text-muted"
+                    ? "d-flex justify-content-end"
+                    : "d-flex justify-content-start"
                 }
-                style={{
-                  width: "fit-content",
-                  maxWidth: "350px",
-                  // width: "350px",
-                }}
               >
-                {side ? null : (
-                  <img
-                    src={male_avatar}
-                    height="50px"
-                    width="50px"
-                    alt="male_avatar"
-                  />
-                )}
-                <p
-                  className="fs-6 small text-start mb-0 text-break"
+                <div
+                  id="chat1"
+                  className={
+                    side
+                      ? "p-3 mb-4 style bg-primary"
+                      : "d-flex align-items-center bg-white text-muted"
+                  }
                   style={{
-                    // width: "350px",
-                    // width: "fit-content",
+                    width: "fit-content",
                     maxWidth: "350px",
+                    // width: "350px",
                   }}
                 >
-                  {message}
-                </p>
+                  {side ? null : (
+                    <img
+                      src={male_avatar}
+                      height="50px"
+                      width="50px"
+                      alt="male_avatar"
+                    />
+                  )}
+                  <p
+                    className="fs-6 small text-start mb-0 text-break"
+                    style={{
+                      // width: "350px",
+                      // width: "fit-content",
+                      maxWidth: "350px",
+                    }}
+                  >
+                    {message}
+                  </p>
+                </div>
               </div>
-            </div>
-            // [message]
-          );
-        })
-      )}
+              // [message]
+            );
+          })}
     </section>
   );
 };

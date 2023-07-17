@@ -9,7 +9,7 @@ import axios from "axios";
 import SearchBar from "../SearchBar";
 import ScrollBar from "./ScrollBar";
 const ProfileHead = ({ chatHeader }) => {
-  const { rooms, room_Id, roomsId } = useContext(ProductContext);
+  const { rooms, room_Id } = useContext(ProductContext);
   const [result, setResult] = useState([]);
 
   return (
@@ -45,7 +45,7 @@ const ProfileHead = ({ chatHeader }) => {
                 {room_Id ? (
                   <small className="fs-6 fw-bold">{room_Id}</small>
                 ) : (
-                  <small className="fs-6 fw-bold">{roomsId}</small>
+                  <small className="fs-6 fw-bold">42</small>
                 )}
               </small>
               <small className="text-primary text-nowrap">Active now</small>

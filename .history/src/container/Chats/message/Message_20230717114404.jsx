@@ -96,56 +96,99 @@ const Message = () => {
         paddingTop: "1.5rem",
       }}
     >
-      {data?.messages?.length <= 0 ? (
-        <p className="text-black">No Messages Available</p>
-      ) : (
-        data?.messages?.map(({ message, id, side }) => {
-          return (
-            <div
-              key={id}
-              className={
-                side
-                  ? "d-flex justify-content-end"
-                  : "d-flex justify-content-start"
-              }
-            >
+      {data?.messages?.length && rooms?.rooms?.length <= 0
+        ? data?.messages?.map(({ message, id, side }) => {
+            return (
               <div
-                id="chat1"
+                key={id}
                 className={
                   side
-                    ? "p-3 mb-4 style bg-primary"
-                    : "d-flex align-items-center bg-white text-muted"
+                    ? "d-flex justify-content-end"
+                    : "d-flex justify-content-start"
                 }
-                style={{
-                  width: "fit-content",
-                  maxWidth: "350px",
-                  // width: "350px",
-                }}
               >
-                {side ? null : (
-                  <img
-                    src={male_avatar}
-                    height="50px"
-                    width="50px"
-                    alt="male_avatar"
-                  />
-                )}
-                <p
-                  className="fs-6 small text-start mb-0 text-break"
+                <div
+                  id="chat1"
+                  className={
+                    side
+                      ? "p-3 mb-4 style bg-primary"
+                      : "d-flex align-items-center bg-white text-muted"
+                  }
                   style={{
-                    // width: "350px",
-                    // width: "fit-content",
+                    width: "fit-content",
                     maxWidth: "350px",
+                    // width: "350px",
                   }}
                 >
-                  {message}
-                </p>
+                  {side ? null : (
+                    <img
+                      src={male_avatar}
+                      height="50px"
+                      width="50px"
+                      alt="male_avatar"
+                    />
+                  )}
+                  <p
+                    className="fs-6 small text-start mb-0 text-break"
+                    style={{
+                      // width: "350px",
+                      // width: "fit-content",
+                      maxWidth: "350px",
+                    }}
+                  >
+                    {message}
+                  </p>
+                </div>
               </div>
-            </div>
-            // [message]
-          );
-        })
-      )}
+              // [message]
+            );
+          })
+        : data?.messages?.map(({ message, id, side }) => {
+            return (
+              <div
+                key={id}
+                className={
+                  side
+                    ? "d-flex justify-content-end"
+                    : "d-flex justify-content-start"
+                }
+              >
+                <div
+                  id="chat1"
+                  className={
+                    side
+                      ? "p-3 mb-4 style bg-primary"
+                      : "d-flex align-items-center bg-white text-muted"
+                  }
+                  style={{
+                    width: "fit-content",
+                    maxWidth: "350px",
+                    // width: "350px",
+                  }}
+                >
+                  {side ? null : (
+                    <img
+                      src={male_avatar}
+                      height="50px"
+                      width="50px"
+                      alt="male_avatar"
+                    />
+                  )}
+                  <p
+                    className="fs-6 small text-start mb-0 text-break"
+                    style={{
+                      // width: "350px",
+                      // width: "fit-content",
+                      maxWidth: "350px",
+                    }}
+                  >
+                    {message}
+                  </p>
+                </div>
+              </div>
+              // [message]
+            );
+          })}
     </section>
   );
 };

@@ -97,7 +97,7 @@ const Message = () => {
       }}
     >
       {data?.messages?.length <= 0 ? (
-        <p className="text-black">No Messages Available</p>
+        <p className="text-black my-6">No Messages Available</p>
       ) : (
         data?.messages?.map(({ message, id, side }) => {
           return (
