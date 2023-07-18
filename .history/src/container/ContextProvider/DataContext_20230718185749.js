@@ -49,17 +49,15 @@ export const AppProvider = ({ children }, session_id) => {
   });
   useEffect(() => {
     const getSessionId = async () => {
-      // setTimeout(() => setLoading(true), 5000);
       setLoading(true);
-      // setLoading(true);
       const res = await axios.post(
         "https://100093.pythonanywhere.com/api/userinfo/",
         searchParams
       );
       setUserInfoAlternate(res?.data?.userinfo);
       setOrgId(res?.data?.selected_product?.orgid);
-      setLoading(false);
     };
+    setLoading(false);
     getSessionId();
   }, [searchParams]);
   // useEffect(() => {
@@ -77,7 +75,6 @@ export const AppProvider = ({ children }, session_id) => {
   // }, [Id, room_Id]);
   useEffect(() => {
     const getSessionIds = async () => {
-      // setTimeout(() => setLoading(true), 5000);
       setLoading(true);
       if (Id) {
         const res = await axios.post(
@@ -95,8 +92,8 @@ export const AppProvider = ({ children }, session_id) => {
         setUserInfo(res?.data?.userinfo);
       }
       // console.log("res", res);
-      setLoading(false);
     };
+    setLoading(false);
     getSessionIds();
   }, [Id]);
 

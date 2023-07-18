@@ -109,8 +109,7 @@ const Rooms = ({ results }, index) => {
   return (
     <section className="my-3">
       <div
-        className="d-flex flex-column justify-content-start gap-4+
-          rounded"
+        className="d-flex flex-column justify-content-start gap-4  rounded"
         // onClick={() => console.log("clicked")}
       >
         {data?.rooms?.length <= 0 ? (

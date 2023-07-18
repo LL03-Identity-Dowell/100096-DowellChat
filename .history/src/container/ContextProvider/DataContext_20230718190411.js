@@ -49,9 +49,7 @@ export const AppProvider = ({ children }, session_id) => {
   });
   useEffect(() => {
     const getSessionId = async () => {
-      // setTimeout(() => setLoading(true), 5000);
       setLoading(true);
-      // setLoading(true);
       const res = await axios.post(
         "https://100093.pythonanywhere.com/api/userinfo/",
         searchParams
@@ -77,7 +75,6 @@ export const AppProvider = ({ children }, session_id) => {
   // }, [Id, room_Id]);
   useEffect(() => {
     const getSessionIds = async () => {
-      // setTimeout(() => setLoading(true), 5000);
       setLoading(true);
       if (Id) {
         const res = await axios.post(
@@ -98,7 +95,7 @@ export const AppProvider = ({ children }, session_id) => {
       setLoading(false);
     };
     getSessionIds();
-  }, [Id]);
+  }, [Id, loading]);
 
   // console.log("data from session_id", data);
   // const getNotifications = async () => {
