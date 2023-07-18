@@ -46,10 +46,7 @@ urlpatterns = [
 
     path('user_protfolio/', views.portfolio_info, name='protfolio_info'),
     path('create_room_sales_agent/', views.create_room_sales_agent, name='create_room_sales_agent'),
-
-
-
-
+    
 
 ]
 
