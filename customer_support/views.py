@@ -375,7 +375,7 @@ def room_control_sales_agent(portfolio, product, sub_product):
                 message="Hey, How may I help you?",
                 author=portfolio,
                 read=True,
-                side=True,
+                side=False,
                 message_type="TEXT"
             )
         messages = Message.objects.filter(room=room)
