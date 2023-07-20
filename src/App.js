@@ -33,8 +33,13 @@ function App() {
         <AppProvider>
           <Routes>
             <Route element={<ProtectedRoutes />}>
-              <Route path="/" element={<Home />} />
-              <Route path="customerSupport" element={<CustomerSupportPage />} />
+              <Route path="/">
+                <Route path="/customer-support" element={<Home />} />
+                <Route
+                  path="living-lab-chat"
+                  element={<CustomerSupportPage />}
+                />
+              </Route>
             </Route>
           </Routes>
         </AppProvider>
