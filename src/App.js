@@ -32,14 +32,12 @@ function App() {
         <Toaster />
         <AppProvider>
           <Routes>
-            <Route element={<ProtectedRoutes />}>
-              <Route path="/">
-                <Route path="/customer-support" element={<Home />} />
-                <Route
-                  path="living-lab-chat"
-                  element={<CustomerSupportPage />}
-                />
-              </Route>
+            <Route path="/" element={<ProtectedRoutes />}>
+              <Route path="/customer-support" element={<Home />} />
+              <Route
+                path="/living-lab-chat"
+                element={<CustomerSupportPage />}
+              />
             </Route>
           </Routes>
         </AppProvider>
