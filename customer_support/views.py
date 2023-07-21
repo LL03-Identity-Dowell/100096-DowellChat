@@ -528,34 +528,33 @@ def create_room_sales_agent(request, *args, **kwargs):
 '''
 @csrf_exempt
 def create_room_sales_agent(request, *args, **kwargs):
-    session_id = request.GET.get('session_id')
-    session_id = request.GET.get('session_id', None)
-    url = 'https://100014.pythonanywhere.com/api/userinfo/'
-    response = requests.post(url, data={'session_id': session_id})
-    d_user = response.json()  # Extract the JSON data from the response
-    print(d_user)
-    
+    if request.method == "POST":
+        session_id = request.POST.get('session_id', None)
+        url = 'https://100014.pythonanywhere.com/api/userinfo/'
+        response = requests.post(url, data={'session_id': session_id})
+        print(response)
+        d_user = response.json()  # Extract the JSON data from the response
+        print(d_user)
+        product = kwargs['product'].lower()
+        print("Product: ", product)
+        sub_product = request.POST.get('sub_product', '')  # Extract the sub_product from the request
+        print("subproduct: ", sub_product)
 
-    product = d_user.get('userinfo', {}).get('product', '')
-    print("Product: ", product)
-    sub_product = request.POST.get('sub_product', '')  # Extract the sub_product from the request
-    print("subproduct: ", sub_product)
+        #print(type(d_user))
+        #print("Product get args: ", session_id, product, d_user)
 
-    #print(type(d_user))
-    #print("Product get args: ", session_id, product, d_user)
-
-    portfolio = portfolio_control(d_user, session_id, False)
-    print("portfolio: ", portfolio)
-    room, messages = room_control_sales_agent(portfolio, product.lower(), sub_product.lower())  # Call the updated room_control_sales_agent
-    print("room", room)
-    print("messages", messages)
-    return JsonResponse({
-        'product': product.lower(),
-        'portfolio': portfolio.id,
-        'messages': [jsonify_message_object(message) for message in messages],
-        'room_pk': room.id,
-        'user_id': portfolio.userID
-    })
+        portfolio = portfolio_control(d_user, session_id, False)
+        print("portfolio: ", portfolio)
+        room, messages = room_control_sales_agent(portfolio, product.lower(), sub_product.lower())  # Call the updated room_control_sales_agent
+        print("room", room)
+        print("messages", messages)
+        return JsonResponse({
+            'product': product.lower(),
+            'portfolio': portfolio.id,
+            'messages': [jsonify_message_object(message) for message in messages],
+            'room_pk': room.id,
+            'user_id': portfolio.userID
+        })
 
 
 
@@ -599,7 +598,7 @@ def send_msg_api_3(request, pk):
                     message=message,
                     author=portfolio,
                     read=False,
-                    side=portfolio.is_staff,
+                    side= False if room.sender_portfolio == portfolio else True,
                     message_type=msg_type
                 )
                 msg.save()

@@ -45,7 +45,7 @@ urlpatterns = [
     path('delete-customer-support-mobile/', views.customer_support_mobile_delete_room_API, name='delete-customer-support-room'),
 
     path('user_protfolio/', views.portfolio_info, name='protfolio_info'),
-    path('create_room_sales_agent/', views.create_room_sales_agent, name='create_room_sales_agent'),
+    path('create_room_sales_agent/<str:product>/', views.create_room_sales_agent, name='create_room_sales_agent'),
     
 
 ]
