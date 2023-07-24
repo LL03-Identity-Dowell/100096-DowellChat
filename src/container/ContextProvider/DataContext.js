@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { Loader } from "../spinner/loader";
 import {
   useQuery,
@@ -33,14 +33,15 @@ export const AppProvider = ({ children }, session_id) => {
 
   const sessionId = {
     session_id: "4sjl7vrpycwauvueewhqrme0u5vqnnmj",
-    // session_id: "5p8do0ht7no4gyjo0w2984o4vj5dc2hs",
-    // session_id:''
-    // session_id:
-    //   ("session_id",
-    //   caches
-    //     .open("v1")
-    //     .then((Cache) => Cache.addAll(["5p8do0ht7no4gyjo0w2984o4vj5dc2hs"]))),
   };
+
+  useEffect(() => {
+    const param = window.location.href.split("?")[1];
+    sessionId.session_id = param;
+    // if (param.has("session_id")) {
+    //   // sessionId.session_id = param.get("session_id");
+    //   console.log("Helllo there", param.get("session_id"));
+  }, []);
 
   const params = Object.fromEntries([...searchParams]);
   useEffect(() => {

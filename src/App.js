@@ -40,6 +40,7 @@ function App() {
   };
   return (
     <QueryClientProvider client={queryClient}>
+<<<<<<< HEAD
       <div className="d-flex justify-content-center align-items-center">
         <div className="d-flex align-items-center ">
           {loading ? (
@@ -61,6 +62,21 @@ function App() {
             </div>
           )}
         </div>
+=======
+      <div className="container-lg w-100 ">
+        <Toaster />
+        <AppProvider>
+          <Routes>
+            <Route path="/" element={<ProtectedRoutes />}>
+              <Route path="/customer-support" element={<Home />} />
+              <Route
+                path="/living-lab-chat"
+                element={<CustomerSupportPage />}
+              />
+            </Route>
+          </Routes>
+        </AppProvider>
+>>>>>>> 7c1593e3fca1b9f915feefacb05fa832c0feaf6f
       </div>
     </QueryClientProvider>
   );
