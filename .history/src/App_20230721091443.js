@@ -18,7 +18,6 @@ import ProtectedRoutes from "./container/protected/protectedRoutes";
 import Home from "./container/home";
 import { useEffect, useState } from "react";
 import CustomerSupportPage from "./container/customerSupportPage";
-import { CustomLoader } from "./container/spinner/CustomLoader";
 function App() {
   const queryClient = new QueryClient();
   const [loading, setLoading] = useState(false);
@@ -28,23 +27,26 @@ function App() {
   //   let params = serializeFormQuery(e.target);
   //   setSearchParams(params);
   // }
-  useEffect(() => {
-    setPageLoad();
-  }, []);
+  useEffect(() => setPageLoad(), []);
   const setPageLoad = () => {
-    setLoading(true);
-    // setLoading(true);
-    console.log("hello");
-    setTimeout(() => setLoading(false), 10000);
-    // setLoading(false);
+    // setLoading(true)
+    setTimeout(setLoading(true), 5000);
+    setLoading(false);
   };
   return (
     <QueryClientProvider client={queryClient}>
-<<<<<<< HEAD
       <div className="d-flex justify-content-center align-items-center">
         <div className="d-flex align-items-center ">
           {loading ? (
-            <CustomLoader />
+            <LoaderIcon
+              style={{
+                width: "60px",
+                height: "60px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            />
           ) : (
             <div className="container-lg w-100 ">
               <Toaster />
@@ -62,23 +64,6 @@ function App() {
             </div>
           )}
         </div>
-=======
-      <div className="container-lg w-100 ">
-        <Toaster />
-        <AppProvider>
-          <Routes>
-            <Route element={<ProtectedRoutes />}>
-              <Route path="/">
-                <Route path="customer-support" element={<Home />} />
-                <Route
-                  path="living-lab-chat"
-                  element={<CustomerSupportPage />}
-                />
-              </Route>
-            </Route>
-          </Routes>
-        </AppProvider>
->>>>>>> 7c1593e3fca1b9f915feefacb05fa832c0feaf6f
       </div>
     </QueryClientProvider>
   );

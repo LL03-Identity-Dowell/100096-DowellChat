@@ -32,15 +32,13 @@ function App() {
     setPageLoad();
   }, []);
   const setPageLoad = () => {
+    // setLoading(true)
     setLoading(true);
-    // setLoading(true);
     console.log("hello");
-    setTimeout(() => setLoading(false), 10000);
-    // setLoading(false);
+    setLoading(false);
   };
   return (
     <QueryClientProvider client={queryClient}>
-<<<<<<< HEAD
       <div className="d-flex justify-content-center align-items-center">
         <div className="d-flex align-items-center ">
           {loading ? (
@@ -62,23 +60,6 @@ function App() {
             </div>
           )}
         </div>
-=======
-      <div className="container-lg w-100 ">
-        <Toaster />
-        <AppProvider>
-          <Routes>
-            <Route element={<ProtectedRoutes />}>
-              <Route path="/">
-                <Route path="customer-support" element={<Home />} />
-                <Route
-                  path="living-lab-chat"
-                  element={<CustomerSupportPage />}
-                />
-              </Route>
-            </Route>
-          </Routes>
-        </AppProvider>
->>>>>>> 7c1593e3fca1b9f915feefacb05fa832c0feaf6f
       </div>
     </QueryClientProvider>
   );
