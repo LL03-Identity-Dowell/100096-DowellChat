@@ -18,7 +18,6 @@ import ProtectedRoutes from "./container/protected/protectedRoutes";
 import Home from "./container/home";
 import { useEffect, useState } from "react";
 import CustomerSupportPage from "./container/customerSupportPage";
-import { CustomLoader } from "./container/spinner/CustomLoader";
 function App() {
   const queryClient = new QueryClient();
   const [loading, setLoading] = useState(false);
@@ -32,10 +31,9 @@ function App() {
     setPageLoad();
   }, []);
   const setPageLoad = () => {
+    // setLoading(true)
     setLoading(true);
-    // setLoading(true);
     console.log("hello");
-    setTimeout(() => setLoading(false), 10000);
     // setLoading(false);
   };
   return (
@@ -43,7 +41,20 @@ function App() {
       <div className="d-flex justify-content-center align-items-center">
         <div className="d-flex align-items-center ">
           {loading ? (
-            <CustomLoader />
+            <div className="bg-black">
+              <LoaderIcon
+                style={{
+                  width: "60px",
+                  height: "60px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  // background: "black",
+                  // minHeight: "screen",
+                  // color: "white",
+                }}
+              />
+            </div>
           ) : (
             <div className="container-lg w-100 ">
               <Toaster />

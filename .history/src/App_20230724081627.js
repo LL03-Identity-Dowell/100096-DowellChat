@@ -32,10 +32,9 @@ function App() {
     setPageLoad();
   }, []);
   const setPageLoad = () => {
+    // setLoading(true)
     setLoading(true);
-    // setLoading(true);
     console.log("hello");
-    setTimeout(() => setLoading(false), 10000);
     // setLoading(false);
   };
   return (

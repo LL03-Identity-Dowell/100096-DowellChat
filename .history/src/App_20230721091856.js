@@ -18,7 +18,6 @@ import ProtectedRoutes from "./container/protected/protectedRoutes";
 import Home from "./container/home";
 import { useEffect, useState } from "react";
 import CustomerSupportPage from "./container/customerSupportPage";
-import { CustomLoader } from "./container/spinner/CustomLoader";
 function App() {
   const queryClient = new QueryClient();
   const [loading, setLoading] = useState(false);
@@ -28,22 +27,26 @@ function App() {
   //   let params = serializeFormQuery(e.target);
   //   setSearchParams(params);
   // }
-  useEffect(() => {
-    setPageLoad();
-  }, []);
+  useEffect(() => setTimeout(setPageLoad(), 5000), []);
   const setPageLoad = () => {
+    // setLoading(true)
     setLoading(true);
-    // setLoading(true);
-    console.log("hello");
-    setTimeout(() => setLoading(false), 10000);
-    // setLoading(false);
+    setLoading(false);
   };
   return (
     <QueryClientProvider client={queryClient}>
       <div className="d-flex justify-content-center align-items-center">
         <div className="d-flex align-items-center ">
           {loading ? (
-            <CustomLoader />
+            <LoaderIcon
+              style={{
+                width: "60px",
+                height: "60px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            />
           ) : (
             <div className="container-lg w-100 ">
               <Toaster />

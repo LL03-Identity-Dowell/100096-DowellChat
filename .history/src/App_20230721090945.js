@@ -18,7 +18,6 @@ import ProtectedRoutes from "./container/protected/protectedRoutes";
 import Home from "./container/home";
 import { useEffect, useState } from "react";
 import CustomerSupportPage from "./container/customerSupportPage";
-import { CustomLoader } from "./container/spinner/CustomLoader";
 function App() {
   const queryClient = new QueryClient();
   const [loading, setLoading] = useState(false);
@@ -28,39 +27,42 @@ function App() {
   //   let params = serializeFormQuery(e.target);
   //   setSearchParams(params);
   // }
-  useEffect(() => {
-    setPageLoad();
-  }, []);
+  useEffect(() => setPageLoad(), []);
   const setPageLoad = () => {
-    setLoading(true);
-    // setLoading(true);
-    console.log("hello");
-    setTimeout(() => setLoading(false), 10000);
+    // setLoading(true)
+    setTimeout(setLoading(true), 10000);
     // setLoading(false);
   };
   return (
     <QueryClientProvider client={queryClient}>
       <div className="d-flex justify-content-center align-items-center">
-        <div className="d-flex align-items-center ">
-          {loading ? (
-            <CustomLoader />
-          ) : (
-            <div className="container-lg w-100 ">
-              <Toaster />
-              <AppProvider>
-                <Routes>
-                  <Route element={<ProtectedRoutes />}>
-                    <Route path="/" element={<Home />} />
-                    <Route
-                      path="customerSupport"
-                      element={<CustomerSupportPage />}
-                    />
-                  </Route>
-                </Routes>
-              </AppProvider>
-            </div>
-          )}
-        </div>
+        {loading ? (
+          <div className="d-flex align-items-center justify-content-center">
+            <LoaderIcon
+              style={{
+                width: "60px",
+                height: "60px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            />
+          </div>
+        ) : (
+          <div className="container-lg w-100 ">
+            <Toaster />
+            <AppProvider>
+              <Routes>
+                <Route element={<ProtectedRoutes />}>
+                  <Route path="/" element={<Home />} />
+                  <Route
+                    path="customerSupport"
+                    element={<CustomerSupportPage />}
+                  />
+                </Route>
+              </Routes>
+            </AppProvider>
+          </div>
+        )}
       </div>
     </QueryClientProvider>
   );
