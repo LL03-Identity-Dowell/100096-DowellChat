@@ -61,6 +61,26 @@ function App() {
             </div>
           )}
         </div>
+<<<<<<< HEAD
+=======
+=======
+      <div className="container-lg w-100 ">
+        <Toaster />
+        <AppProvider>
+          <Routes>
+            <Route element={<ProtectedRoutes />}>
+              <Route path="/">
+                <Route path="customer-support" element={<Home />} />
+                <Route
+                  path="living-lab-chat"
+                  element={<CustomerSupportPage />}
+                />
+              </Route>
+            </Route>
+          </Routes>
+        </AppProvider>
+>>>>>>> 7c1593e3fca1b9f915feefacb05fa832c0feaf6f
+>>>>>>> a840b047ce66c46ef4dfd367158f7ccd8a3d8311
       </div>
     </QueryClientProvider>
   );
