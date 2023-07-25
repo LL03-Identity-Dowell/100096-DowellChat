@@ -60,7 +60,7 @@ const AboutDetails = ({ title, ux }) => {
                 </small>
               </li>
               <li style={{ color: "#94a3b8" }}>
-                <small className="d-flex align-items-center gap-2">
+                <small className="d-flex align-items-center">
                   {/* <AiFillHome /> + Address */}
                   <HiHome className="fw-bold fs-5" /> +{" "}
                   <span className="" style={{ fontSize: "13px" }}>

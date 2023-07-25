@@ -124,7 +124,7 @@ const Rooms = ({ results }, index) => {
                   border: "none",
                   background: active ? style : "transparent",
                 }}
-                className="d-flex align-items-center gap-1"
+                className="d-flex align-items-center gap-2"
                 onClick={() => {
                   setIds(room_id);
                   // setActive(!active, room_id);

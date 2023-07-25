@@ -25,7 +25,7 @@ const DetailsSection = ({ title, about }) => {
         style={{ width: "auto", height: "100%", minWidth: "250px" }}
       >
         <div className="cardBody">
-          <div className="mx-2 my-4">
+          <div className="mx-0 my-4">
             <div
               className="d-flex gap-5  "
               style={{ borderBottom: "1px solid #7A7A7A" }}
@@ -37,7 +37,9 @@ const DetailsSection = ({ title, about }) => {
                     className="fw-bold  text-nowrap"
                     style={{ fontSize: "18px" }}
                   >
-                    {Id ? userInfo?.username : userInfoAlternate?.username}
+                    {userInfo
+                      ? userInfo?.username
+                      : userInfoAlternate?.username}
                   </h3>
                   <a
                     href=""

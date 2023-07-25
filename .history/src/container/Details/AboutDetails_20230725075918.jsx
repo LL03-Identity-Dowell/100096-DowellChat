@@ -60,11 +60,13 @@ const AboutDetails = ({ title, ux }) => {
                 </small>
               </li>
               <li style={{ color: "#94a3b8" }}>
-                <small className="d-flex align-items-center gap-2">
+                <small className="d-flex align-items-center">
                   {/* <AiFillHome /> + Address */}
                   <HiHome className="fw-bold fs-5" /> +{" "}
                   <span className="" style={{ fontSize: "13px" }}>
-                    {Id ? userInfo?.timezone : userInfoAlternate?.timezone}
+                    {Id
+                      ? userInfo?.user_country
+                      : userInfoAlternate?.user_country}
                   </span>
                 </small>
               </li>
@@ -79,7 +81,7 @@ const AboutDetails = ({ title, ux }) => {
         <h5 className="fs-6 fw-bold">{ux}</h5>
         <main>
           <div className="">
-            <ul className="p-0">
+            <ul>
               <li
                 style={{ color: "#94a3b8" }}
                 className="d-flex gap-2 align-items-center"

@@ -59,7 +59,7 @@ const Message = () => {
             style={{
               width: "60px",
               height: "60px",
-              marginTop: "70px",
+              // marginTop: "70px",
               // marginLeft: "300px",
               // marginRight: "30px",
             }}
