@@ -36,7 +36,7 @@ export const AppProvider = ({ children }, session_id) => {
   };
 
   useEffect(() => {
-    const param = window.location.href.split("?")[1].split("=")[1];
+    const param = window.location.href.split("?")[1];
     sessionId.session_id = param;
     // if (param.has("session_id")) {
     //   // sessionId.session_id = param.get("session_id");

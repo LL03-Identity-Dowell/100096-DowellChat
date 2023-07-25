@@ -37,7 +37,9 @@ const DetailsSection = ({ title, about }) => {
                     className="fw-bold  text-nowrap"
                     style={{ fontSize: "18px" }}
                   >
-                    {Id ? userInfo?.username : userInfoAlternate?.username}
+                    {userInfo
+                      ? userInfo?.username
+                      : userInfoAlternate?.username}
                   </h3>
                   <a
                     href=""

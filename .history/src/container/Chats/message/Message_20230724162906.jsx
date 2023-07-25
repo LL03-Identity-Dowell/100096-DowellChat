@@ -60,8 +60,8 @@ const Message = () => {
               width: "60px",
               height: "60px",
               marginTop: "70px",
-              // marginLeft: "300px",
-              // marginRight: "30px",
+              marginLeft: "300px",
+              marginRight: "30px",
             }}
           />
         </div>
