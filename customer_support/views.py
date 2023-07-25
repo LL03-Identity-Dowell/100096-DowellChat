@@ -589,16 +589,18 @@ def send_msg_api_3(request, pk):
 
     print("Send Message 3 : ", user_id , " - ", org_id, "message : ", message, request.POST)
     if user_id:
+
         if message :
             try:
                 msg_type = message_type if message_type else "TEXT"
                 portfolio = Portfolio.objects.get(userID=str(user_id), organization=str(org_id))
+                side = False if room.sender_portfolio == portfolio else True
                 msg = Message.objects.create(
                     room=room,
                     message=message,
                     author=portfolio,
                     read=False,
-                    side= False if room.sender_portfolio == portfolio else True,
+                    side=side,
                     message_type=msg_type
                 )
                 msg.save()
