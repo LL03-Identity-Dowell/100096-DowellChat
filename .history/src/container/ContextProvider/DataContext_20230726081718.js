@@ -12,7 +12,7 @@ import {
 import { Browser } from "phosphor-react";
 const ProductContext = createContext();
 
-export const AppProvider = ({ children }, session_id) => {
+export const AppProvider = ({ children }, session_id, split) => {
   const [roomList, setRoomList] = useState({});
   const [click, setClick] = useState(null);
   const [loading, setLoading] = useState(false);

@@ -6,9 +6,9 @@ export const CustomLoader = () => {
     <div
       className="bg-black"
       style={{
-        height: "100vh",
-        width: "100vw",
-        opacity: "0.5",
+        height: "screen",
+        width: "screen",
+        opacity: "50px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

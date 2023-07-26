@@ -7,8 +7,8 @@ export const CustomLoader = () => {
       className="bg-black"
       style={{
         height: "100vh",
-        width: "100vw",
-        opacity: "0.5",
+        width: "100vh",
+        opacity: "50px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

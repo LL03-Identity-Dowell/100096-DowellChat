@@ -42,24 +42,24 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className="d-flex justify-content-center align-items-center">
         <div className="d-flex align-items-center ">
-          {loading ? (
+          {/* {loading ? (
             <CustomLoader />
-          ) : (
-            <div className="container-lg w-100 ">
-              <Toaster />
-              <AppProvider>
-                <Routes>
-                  <Route element={<ProtectedRoutes />}>
-                    <Route path="/" element={<Home />} />
-                    <Route
-                      path="customerSupport"
-                      element={<CustomerSupportPage />}
-                    />
-                  </Route>
-                </Routes>
-              </AppProvider>
-            </div>
-          )}
+          ) : ( */}
+          <div className="container-lg w-100 ">
+            <Toaster />
+            <AppProvider>
+              <Routes>
+                <Route element={<ProtectedRoutes />}>
+                  <Route path="/" element={<Home />} />
+                  <Route
+                    path="customerSupport"
+                    element={<CustomerSupportPage />}
+                  />
+                </Route>
+              </Routes>
+            </AppProvider>
+          </div>
+          {/* )} */}
         </div>
         <span className="hidden">a840b047ce66c46ef4dfd367158f7ccd8a3d8311</span>
       </div>

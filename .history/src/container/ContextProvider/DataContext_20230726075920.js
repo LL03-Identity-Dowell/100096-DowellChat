@@ -12,7 +12,7 @@ import {
 import { Browser } from "phosphor-react";
 const ProductContext = createContext();
 
-export const AppProvider = ({ children }, session_id) => {
+export const AppProvider = ({ children }, session_id, split) => {
   const [roomList, setRoomList] = useState({});
   const [click, setClick] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -34,6 +34,14 @@ export const AppProvider = ({ children }, session_id) => {
   const sessionId = {
     session_id: "4sjl7vrpycwauvueewhqrme0u5vqnnmj",
   };
+
+  useEffect(() => {
+    const param = window.location.href.split("?")[1].split("=")[1];
+    sessionId.session_id = param;
+    // if (param.has("session_id")) {
+    //   // sessionId.session_id = param.get("session_id");
+    //   console.log("Helllo there", param.get("session_id"));
+  }, []);
 
   const params = Object.fromEntries([...searchParams]);
   useEffect(() => {

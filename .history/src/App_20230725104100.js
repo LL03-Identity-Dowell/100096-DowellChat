@@ -61,7 +61,7 @@ function App() {
             </div>
           )}
         </div>
-        <span className="hidden">a840b047ce66c46ef4dfd367158f7ccd8a3d8311</span>
+        a840b047ce66c46ef4dfd367158f7ccd8a3d8311
       </div>
     </QueryClientProvider>
   );
