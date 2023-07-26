@@ -28,9 +28,6 @@ function App() {
   //   let params = serializeFormQuery(e.target);
   //   setSearchParams(params);
   // }
-  useEffect(() => {
-    setPageLoad();
-  }, []);
   const setPageLoad = () => {
     setLoading(true);
     // setLoading(true);
@@ -38,6 +35,10 @@ function App() {
     setTimeout(() => setLoading(false), 10000);
     // setLoading(false);
   };
+  useEffect(() => {
+    setPageLoad();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="d-flex justify-content-center align-items-center">
@@ -61,10 +62,6 @@ function App() {
             </div>
           )}
         </div>
-<<<<<<< HEAD
-        <span className="hidden">a840b047ce66c46ef4dfd367158f7ccd8a3d8311</span>
-=======
->>>>>>> 116d33a4a27fa01b6cf0fe626b1cf513949449cb
       </div>
     </QueryClientProvider>
   );
