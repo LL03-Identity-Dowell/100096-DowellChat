@@ -31,7 +31,7 @@ const Container = ({ pageName = "default" }) => {
         {loading ? (
           <div className="d-flex" style={{ width: "500px" }}>
             <Skeleton
-              count={10}
+              count={5}
               height={90}
               width={300}
               containerClassName=""

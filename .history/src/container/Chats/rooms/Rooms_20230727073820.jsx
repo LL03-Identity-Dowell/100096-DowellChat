@@ -103,20 +103,7 @@ const Rooms = ({ results }, index) => {
         <Skeleton
           count={8}
           height={90}
-          width={300}
-          containerClassName=""
-          // style={{ width: "500px" }}
-        />
-      </div>
-    );
-  }
-  if (isLoading) {
-    return (
-      <div className="">
-        <Skeleton
-          count={8}
-          height={90}
-          width={300}
+          width={200}
           containerClassName=""
           // style={{ width: "500px" }}
         />

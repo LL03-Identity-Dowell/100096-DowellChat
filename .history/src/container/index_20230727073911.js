@@ -33,7 +33,7 @@ const Container = ({ pageName = "default" }) => {
             <Skeleton
               count={10}
               height={90}
-              width={300}
+              width={400}
               containerClassName=""
               style={{ width: "500px" }}
             />

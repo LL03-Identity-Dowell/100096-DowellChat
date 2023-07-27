@@ -10,8 +10,6 @@ import {
   Route,
   useSearchParams,
 } from "react-router-dom";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import "react-tooltip/dist/react-tooltip.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
@@ -37,7 +35,7 @@ function App() {
     setLoading(true);
     // setLoading(true);
     console.log("hello");
-    setTimeout(() => setLoading(false), 2000);
+    setTimeout(() => setLoading(false), 10000);
     // setLoading(false);
   };
   return (
@@ -45,15 +43,7 @@ function App() {
       <div className="d-flex justify-content-center align-items-center">
         <div className="d-flex align-items-center ">
           {loading ? (
-            <div className="">
-              <Skeleton
-                count={8}
-                height={120}
-                width={1500}
-                containerClassName=""
-                // style={{ width: "500px" }}
-              />
-            </div>
+            <CustomLoader />
           ) : (
             <div className="container-lg w-100 ">
               <Toaster />

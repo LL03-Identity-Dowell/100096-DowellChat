@@ -99,26 +99,13 @@ const Rooms = ({ results }, index) => {
 
   if (isLoading) {
     return (
-      <div className="">
+      <div className="d-flex" style={{ width: "500px" }}>
         <Skeleton
-          count={8}
+          count={10}
           height={90}
-          width={300}
+          width={100}
           containerClassName=""
-          // style={{ width: "500px" }}
-        />
-      </div>
-    );
-  }
-  if (isLoading) {
-    return (
-      <div className="">
-        <Skeleton
-          count={8}
-          height={90}
-          width={300}
-          containerClassName=""
-          // style={{ width: "500px" }}
+          style={{ width: "500px" }}
         />
       </div>
     );

@@ -29,13 +29,12 @@ const Container = ({ pageName = "default" }) => {
         <ChatSection pageName={pageName} />
         {/* <ReplyChat /> */}
         {loading ? (
-          <div className="d-flex" style={{ width: "500px" }}>
+          <div className="d-flex">
             <Skeleton
               count={10}
               height={90}
-              width={300}
-              containerClassName=""
-              style={{ width: "500px" }}
+              width={80}
+              containerClassName="flex-1"
             />
           </div>
         ) : (

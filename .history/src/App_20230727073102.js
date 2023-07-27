@@ -45,15 +45,7 @@ function App() {
       <div className="d-flex justify-content-center align-items-center">
         <div className="d-flex align-items-center ">
           {loading ? (
-            <div className="">
-              <Skeleton
-                count={8}
-                height={120}
-                width={1500}
-                containerClassName=""
-                // style={{ width: "500px" }}
-              />
-            </div>
+            <CustomLoader />
           ) : (
             <div className="container-lg w-100 ">
               <Toaster />

@@ -49,7 +49,7 @@ function App() {
               <Skeleton
                 count={8}
                 height={120}
-                width={1500}
+                width={2000}
                 containerClassName=""
                 // style={{ width: "500px" }}
               />
