@@ -667,7 +667,7 @@ def pop_up_api(request, *args, **kwargs):
 
 ADMIN_PRODUCT = ["Login", "Dowell-Mail", "Extension", "Living-Lab-Admin", "Sales-Agent"]
 
-PRODUCT_LIST = ["Workflow-AI", "Wifi-QR-Code", "Legalzard", "User-Experience-Live", "Social-Media-Automation", "Living-Lab-Scales", "Logo-Scan", "Team-Management", "Living-Lab-Monitoring", "Permutation-Calculator", "Secure-Repositories", "Secure-Data", "Customer-Experience", "DoWell-CSC", "Living-Lab-Chat"]
+PRODUCT_LIST = ["Sales-Agent-Login","Workflow-AI", "Wifi-QR-Code", "Legalzard", "User-Experience-Live", "Social-Media-Automation", "Living-Lab-Scales", "Logo-Scan", "Team-Management", "Living-Lab-Monitoring", "Permutation-Calculator", "Secure-Repositories", "Secure-Data", "Customer-Experience", "DoWell-CSC", "Living-Lab-Chat"]
 
 
 def product_list(request):
@@ -872,7 +872,8 @@ def tempory_room_list(request, *args, **kwargs):
                 'room_name': r.room_name,
                 'company': r.company,
                 'r_session': r.room_id,
-                'session_id': r.sender_portfolio.session_id
+                'session_id': r.sender_portfolio.session_id,
+                'sub_product':r.sub_product
             })
 
         if rm_list:
