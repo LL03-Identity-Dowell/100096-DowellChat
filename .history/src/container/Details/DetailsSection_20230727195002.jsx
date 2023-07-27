@@ -16,11 +16,6 @@ const DetailsSection = ({ title, about }) => {
   const { userInfo, Id, userInfoAlternate, searchParams } =
     useContext(ProductContext);
   const [loading, setLoading] = useState(false);
-  const loaderFetch = () => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
-  };
-  useEffect(() => loaderFetch(), [userInfo, userInfoAlternate]);
   // const { data, isLoading, error } = useQuery(
   //   ["getSessionId", Id],
   //   () => getSessionIds(Id),

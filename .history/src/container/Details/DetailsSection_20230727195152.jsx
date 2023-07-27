@@ -20,7 +20,7 @@ const DetailsSection = ({ title, about }) => {
     setLoading(true);
     setTimeout(() => setLoading(false), 2000);
   };
-  useEffect(() => loaderFetch(), [userInfo, userInfoAlternate]);
+  useEffect(() => loaderFetch());
   // const { data, isLoading, error } = useQuery(
   //   ["getSessionId", Id],
   //   () => getSessionIds(Id),

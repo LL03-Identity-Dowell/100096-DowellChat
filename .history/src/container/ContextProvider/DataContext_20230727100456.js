@@ -176,7 +176,7 @@ export const AppProvider = ({ children }, session_id, split) => {
 
   //create a usememo for the messages data
   // const memorizedMessages = useMemo(() => messages, [messages]);
-  // const memorizedRooms = useMemo(() => rooms, [rooms]);
+  const memorizedRooms = useMemo(() => rooms, [rooms]);
 
   // .get(`https://100096.pythonanywhere.com/admin_product_list/`)
 
@@ -210,7 +210,7 @@ export const AppProvider = ({ children }, session_id, split) => {
         searchParams,
         loading,
         // memorizedMessages,
-        // memorizedRooms,
+        memorizedRooms,
         // getSessionIds,
         searchParams,
         orgId,

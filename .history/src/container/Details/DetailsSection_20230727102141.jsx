@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import user from "../../assets/avatar.png";
 import AboutDetails from "./AboutDetails";
 import DetailsSectionButton from "./DetailsSectionButton";
@@ -15,12 +15,6 @@ import axios from "axios";
 const DetailsSection = ({ title, about }) => {
   const { userInfo, Id, userInfoAlternate, searchParams } =
     useContext(ProductContext);
-  const [loading, setLoading] = useState(false);
-  const loaderFetch = () => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
-  };
-  useEffect(() => loaderFetch(), [userInfo, userInfoAlternate]);
   // const { data, isLoading, error } = useQuery(
   //   ["getSessionId", Id],
   //   () => getSessionIds(Id),
@@ -33,45 +27,33 @@ const DetailsSection = ({ title, about }) => {
   // if (isLoading) return <div>Loading</div>;
   // if (error) return <div>Request Failed</div>;
   // console.log(data, "from details section");\
-  // const userInfoData = async () => {
-  //   if (Id) {
-  //     const res = await axios.post(
-  //       "https://100093.pythonanywhere.com/api/userinfo/",
-  //       {
-  //         session_id: Id,
-  //       }
-  //     );
-  //     console.log("userinofo data", res?.data);
-  //     return res?.data?.userinfo;
-  //   } else {
-  //     const res = await axios.post(
-  //       "https://100093.pythonanywhere.com/api/userinfo/",
-  //       {
-  //         session_id: "4sjl7vrpycwauvueewhqrme0u5vqnnmj",
-  //       }
-  //     );
-  //     console.log("userinfo data", res?.data);
-
-  //     return res?.data?.userinfo;
-  //   }
-  // };
-  // const { isLoading, data, loading } = useQuery(
-  //   ["userinfo", Id, searchParams],
-  //   () => userInfoData(Id, searchParams),
-  //   [Id, searchParams]
-  // );
-  // if (isLoading) {
-  //   <div className="d-flex" style={{ width: "500px" }}>
-  //     <Skeleton
-  //       count={10}
-  //       height={90}
-  //       width={300}
-  //       containerClassName=""
-  //       style={{ width: "500px" }}
-  //     />
-  //   </div>;
-  // }
-  return loading ? (
+  const userInfoData = async () => {
+    if (Id) {
+      const res = await axios.post(
+        "https://100093.pythonanywhere.com/api/userinfo/",
+        {
+          session_id: Id,
+        }
+      );
+      console.log("userinofo data", res?.data);
+      return res?.data?.userinfo;
+    } else {
+      const res = await axios.post(
+        "https://100093.pythonanywhere.com/api/userinfo/",
+        {
+          session_id: "4sjl7vrpycwauvueewhqrme0u5vqnnmj",
+        }
+      );
+      console.log("userinfo data", res?.data);
+      return res?.data?.userinfo;
+    }
+  };
+  const { isLoading, data, loading } = useQuery(
+    ["userinfo", Id, searchParams],
+    () => userInfoData(Id, searchParams),
+    [Id, searchParams]
+  );
+  if (isLoading) {
     <div className="d-flex" style={{ width: "500px" }}>
       <Skeleton
         count={10}
@@ -80,8 +62,9 @@ const DetailsSection = ({ title, about }) => {
         containerClassName=""
         style={{ width: "500px" }}
       />
-    </div>
-  ) : (
+    </div>;
+  }
+  return (
     <div className="container w-100 d-none d-md-none d-lg-none d-xl-block d-xxl-block">
       <div
         className=" "
@@ -100,7 +83,7 @@ const DetailsSection = ({ title, about }) => {
                     className="fw-bold  text-nowrap"
                     style={{ fontSize: "18px" }}
                   >
-                    {userInfo ? userInfo.username : userInfoAlternate?.username}
+                    {data?.username}
                   </h3>
                   <a
                     href=""

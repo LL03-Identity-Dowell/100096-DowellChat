@@ -158,25 +158,25 @@ export const AppProvider = ({ children }, session_id, split) => {
   //   };
   //   getRoomMessage();
   // }, [room_Id]);
-  useEffect(() => {
-    const getRooms = async (title) => {
-      try {
-        const BASE_URL = `https://100096.pythonanywhere.com/room_list1/${chatHeader}/${orgId}/`;
-        setLoading(true);
-        const res = await axios.get(BASE_URL);
-        setRoomsId(res?.data?.rooms?.[0]?.room_id);
-        // setRooms(res?.data);
-        // setLoading(false);
-      } catch (error) {
-        console.error("error", error);
-      }
-    };
-    getRooms();
-  }, [chatHeader, orgId]);
+  // useEffect(() => {
+  //   const getRooms = async (title) => {
+  //     try {
+  //       const BASE_URL = `https://100096.pythonanywhere.com/room_list1/${chatHeader}/${orgId}/`;
+  //       setLoading(true);
+  //       const res = await axios.get(BASE_URL);
+  //       setRoomsId(res?.data?.rooms?.[0]?.room_id);
+  //       // setRooms(res?.data);
+  //       // setLoading(false);
+  //     } catch (error) {
+  //       console.error("error", error);
+  //     }
+  //   };
+  //   getRooms();
+  // }, [chatHeader, orgId]);
 
   //create a usememo for the messages data
   // const memorizedMessages = useMemo(() => messages, [messages]);
-  // const memorizedRooms = useMemo(() => rooms, [rooms]);
+  const memorizedRooms = useMemo(() => rooms, [rooms]);
 
   // .get(`https://100096.pythonanywhere.com/admin_product_list/`)
 
@@ -210,7 +210,7 @@ export const AppProvider = ({ children }, session_id, split) => {
         searchParams,
         loading,
         // memorizedMessages,
-        // memorizedRooms,
+        memorizedRooms,
         // getSessionIds,
         searchParams,
         orgId,

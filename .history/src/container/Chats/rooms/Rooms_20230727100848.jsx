@@ -124,7 +124,7 @@ const Rooms = ({ results }, index) => {
     );
   }
   if (isSuccess) {
-    // console.log(data);
+    console.log(data);
   }
 
   // console.log(roomId);

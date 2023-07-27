@@ -115,7 +115,7 @@ export const AppProvider = ({ children }, session_id, split) => {
       const res = await axios.get(
         "https://100092.pythonanywhere.com/api/v1/notifications/products/"
       );
-      // console.log("respomse", res);
+      console.log("respomse", res);
     };
     getNotifications();
   }, []);
@@ -126,7 +126,7 @@ export const AppProvider = ({ children }, session_id, split) => {
       const res = await axios.get(
         `https://100096.pythonanywhere.com/create-user-profile/?session_id=4sjl7vrpycwauvueewhqrme0u5vqnnmj`
       );
-      // console.log("createRoom response", res);
+      console.log("createRoom response", res);
       setUserId(res?.data?.portfolio?.userID);
     };
     createRooms();
@@ -176,7 +176,7 @@ export const AppProvider = ({ children }, session_id, split) => {
 
   //create a usememo for the messages data
   // const memorizedMessages = useMemo(() => messages, [messages]);
-  // const memorizedRooms = useMemo(() => rooms, [rooms]);
+  const memorizedRooms = useMemo(() => rooms, [rooms]);
 
   // .get(`https://100096.pythonanywhere.com/admin_product_list/`)
 
@@ -210,9 +210,8 @@ export const AppProvider = ({ children }, session_id, split) => {
         searchParams,
         loading,
         // memorizedMessages,
-        // memorizedRooms,
+        memorizedRooms,
         // getSessionIds,
-        searchParams,
         orgId,
         setLoading,
         setRooms,

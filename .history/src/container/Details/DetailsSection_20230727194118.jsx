@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import user from "../../assets/avatar.png";
 import AboutDetails from "./AboutDetails";
 import DetailsSectionButton from "./DetailsSectionButton";
@@ -13,14 +13,8 @@ import Skeleton, {
 import "react-loading-skeleton/dist/skeleton.css";
 import axios from "axios";
 const DetailsSection = ({ title, about }) => {
-  const { userInfo, Id, userInfoAlternate, searchParams } =
+  const { userInfo, Id, userInfoAlternate, searchParams, loading } =
     useContext(ProductContext);
-  const [loading, setLoading] = useState(false);
-  const loaderFetch = () => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
-  };
-  useEffect(() => loaderFetch(), [userInfo, userInfoAlternate]);
   // const { data, isLoading, error } = useQuery(
   //   ["getSessionId", Id],
   //   () => getSessionIds(Id),
@@ -71,7 +65,7 @@ const DetailsSection = ({ title, about }) => {
   //     />
   //   </div>;
   // }
-  return loading ? (
+  return userInfo.loading ? (
     <div className="d-flex" style={{ width: "500px" }}>
       <Skeleton
         count={10}
