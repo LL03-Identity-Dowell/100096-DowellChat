@@ -311,6 +311,7 @@ def index(request):
 
 def portfolio_control(d_user, session_id, is_staff):
     try:
+        
         portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"], organization = d_user["portfolio_info"][0]["org_id"])
     except Portfolio.DoesNotExist:
         portfolio = Portfolio.objects.create(
@@ -375,7 +376,7 @@ def room_control_sales_agent(portfolio, product, sub_product):
                 message="Hey, How may I help you?",
                 author=portfolio,
                 read=True,
-                side=False,
+                side=True,
                 message_type="TEXT"
             )
         messages = Message.objects.filter(room=room)
@@ -529,20 +530,13 @@ def create_room_sales_agent(request, *args, **kwargs):
 @csrf_exempt
 def create_room_sales_agent(request, *args, **kwargs):
     if request.method == "POST":
-        session_id = request.POST.get('session_id', None)
+        data = json.loads(request.body)
+        session_id = data.get('session_id')
+        sub_product = data.get('sub_product', '')  # Extract the sub_product from the request
+        product = kwargs['product'].lower()
         url = 'https://100014.pythonanywhere.com/api/userinfo/'
         response = requests.post(url, data={'session_id': session_id})
-        print(response)
-        d_user = response.json()  # Extract the JSON data from the response
-        print(d_user)
-        product = kwargs['product'].lower()
-        print("Product: ", product)
-        sub_product = request.POST.get('sub_product', '')  # Extract the sub_product from the request
-        print("subproduct: ", sub_product)
-
-        #print(type(d_user))
-        #print("Product get args: ", session_id, product, d_user)
-
+        d_user = response.json()
         portfolio = portfolio_control(d_user, session_id, False)
         print("portfolio: ", portfolio)
         room, messages = room_control_sales_agent(portfolio, product.lower(), sub_product.lower())  # Call the updated room_control_sales_agent
@@ -588,9 +582,11 @@ def send_msg_api_3(request, pk):
             pass
 
     print("Send Message 3 : ", user_id , " - ", org_id, "message : ", message, request.POST)
+    import pdb;pdb.set_trace()
     if user_id:
         if message :
             try:
+                check_side = False if room.sender_portfolio.id == portfolio.id else True,
                 msg_type = message_type if message_type else "TEXT"
                 portfolio = Portfolio.objects.get(userID=str(user_id), organization=str(org_id))
                 msg = Message.objects.create(
@@ -598,7 +594,7 @@ def send_msg_api_3(request, pk):
                     message=message,
                     author=portfolio,
                     read=False,
-                    side= False if room.sender_portfolio == portfolio else True,
+                    side= check_side,
                     message_type=msg_type
                 )
                 msg.save()
@@ -618,7 +614,7 @@ def pop_up_api(request, *args, **kwargs):
 
 ADMIN_PRODUCT = ["Login", "Dowell-Mail", "Extension", "Living-Lab-Admin", "Sales-Agent"]
 
-PRODUCT_LIST = ["Workflow-AI", "Wifi-QR-Code", "Legalzard", "User-Experience-Live", "Social-Media-Automation", "Living-Lab-Scales", "Logo-Scan", "Team-Management", "Living-Lab-Monitoring", "Permutation-Calculator", "Secure-Repositories", "Secure-Data", "Customer-Experience", "DoWell-CSC", "Living-Lab-Chat"]
+PRODUCT_LIST = ["Sales-Agent-Login","Workflow-AI", "Wifi-QR-Code", "Legalzard", "User-Experience-Live", "Social-Media-Automation", "Living-Lab-Scales", "Logo-Scan", "Team-Management", "Living-Lab-Monitoring", "Permutation-Calculator", "Secure-Repositories", "Secure-Data", "Customer-Experience", "DoWell-CSC", "Living-Lab-Chat"]
 
 
 def product_list(request):
@@ -823,7 +819,8 @@ def tempory_room_list(request, *args, **kwargs):
                 'room_name': r.room_name,
                 'company': r.company,
                 'r_session': r.room_id,
-                'session_id': r.sender_portfolio.session_id
+                'session_id': r.sender_portfolio.session_id,
+                "sub_product":r.sub_product
             })
         
         if rm_list:
