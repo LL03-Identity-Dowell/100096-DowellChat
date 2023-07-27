@@ -311,7 +311,11 @@ def index(request):
 
 def portfolio_control(d_user, session_id, is_staff):
     try:
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 3c4dacae394e21da652cd83ef0bdde7c6cead2ee
         portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"], organization = d_user["portfolio_info"][0]["org_id"])
     except Portfolio.DoesNotExist:
         portfolio = Portfolio.objects.create(
@@ -328,7 +332,7 @@ def portfolio_control(d_user, session_id, is_staff):
 
 def room_control(portfolio, product):
     room = Room.objects.filter(sender_portfolio__id=portfolio.id, product=product.lower(), company=portfolio.organization, active = True).order_by('id').first()
-    
+
     if not room :
         room = Room.objects.create(
             room_name=portfolio.portfolio_name,
@@ -340,7 +344,7 @@ def room_control(portfolio, product):
         room.save()
     messages = Message.objects.filter(room=room)
     '''
-  
+
     if len(messages) == 0 :
         Message.objects.create(
             room=room,
@@ -383,11 +387,11 @@ def room_control_sales_agent(portfolio, product, sub_product):
     else:
         messages = Message.objects.filter(room=room.id)
         print(" messages: ", messages)  # Print the retrieved messages
-        
-    
+
+
     return room, messages
 
-   
+
 
 
 
@@ -516,7 +520,7 @@ def create_room_sales_agent(request, *args, **kwargs):
 
     portfolio = portfolio_control(d_user, session_id, False)
     room, messages = room_control(portfolio, product.lower())
-    
+
 
     return JsonResponse({
         'product': product.lower(),
@@ -553,8 +557,6 @@ def create_room_sales_agent(request, *args, **kwargs):
 
 
 
-
-
 @csrf_exempt
 def send_msg_api_3(request, pk):
     """
@@ -567,41 +569,106 @@ def send_msg_api_3(request, pk):
     portfolio = Portfolio.objects.none()
     print("PK :", pk)
     room = Room.objects.get(id=int(pk))
-    if request.method == "POST" :
-        message = request.POST.get('message')
-        user_id = request.POST.get('user_id')
-        message_type = request.POST.get('message_type')
-        org_id = request.POST.get('org_id')
+    print("the room found: ", room)
+
+    if request.method == "POST":
         try:
-            body = request.body.decode('utf8').replace("'", '"')
-            message = json.loads(body)['message']
-            user_id = json.loads(body)['user_id']
-            message_type = json.loads(body)['message_type']
-            org_id = json.loads(body)['org_id']
-        except:
+            body = json.loads(request.body.decode('utf-8'))
+            message = body.get('message')
+            user_id = body.get('user_id')
+            message_type = body.get('message_type')
+            org_id = body.get('org_id')
+        except (json.JSONDecodeError, KeyError):
             pass
 
+<<<<<<< HEAD
     print("Send Message 3 : ", user_id , " - ", org_id, "message : ", message, request.POST)
     import pdb;pdb.set_trace()
+=======
+        print("message: ", message)
+        print("user_id: ", user_id)
+        print("org_id: ", org_id)
+
+    print("Send Message 3 : ", user_id, " - ", org_id, "message : ", message, request.POST)
+
+>>>>>>> 3c4dacae394e21da652cd83ef0bdde7c6cead2ee
     if user_id:
-        if message :
+        if message:
             try:
                 check_side = False if room.sender_portfolio.id == portfolio.id else True,
                 msg_type = message_type if message_type else "TEXT"
                 portfolio = Portfolio.objects.get(userID=str(user_id), organization=str(org_id))
+                check_side = False if room.sender_portfolio.id == portfolio.id else True
                 msg = Message.objects.create(
                     room=room,
                     message=message,
                     author=portfolio,
                     read=False,
+<<<<<<< HEAD
                     side= check_side,
+=======
+                    side=check_side,
+>>>>>>> 3c4dacae394e21da652cd83ef0bdde7c6cead2ee
                     message_type=msg_type
                 )
                 msg.save()
             except Portfolio.DoesNotExist:
                 return JsonResponse({'Error': '404', 'messages': 'Wrong user_id, user Not found.'})
+
     messages = Message.objects.filter(room=room)
     return JsonResponse({'messages': [jsonify_message_object(message) for message in messages], 'room_pk': room.id})
+
+
+# @csrf_exempt
+# def send_msg_api_3(request, pk):
+#     """
+#     GET and POST message API handling for dowell logged in user
+#     """
+#     message = str()
+#     message_type = str()
+#     user_id = None
+#     org_id = None
+#     portfolio = Portfolio.objects.none()
+#     print("PK :", pk)
+#     room = Room.objects.get(id=int(pk))
+#     if request.method == "POST" :
+#         message = request.POST.get('message')
+#         user_id = request.POST.get('user_id')
+#         message_type = request.POST.get('message_type')
+#         org_id = request.POST.get('org_id')
+#         print("message",message),
+#         print("user_id",user_id),
+#         print("message_type",message_type),
+#         print("org_id",org_id),
+#         try:
+#             body = request.body.decode('utf8').replace("'", '"')
+#             message = json.loads(body)['message']
+#             user_id = json.loads(body)['user_id']
+#             message_type = json.loads(body)['message_type']
+#             org_id = json.loads(body)['org_id']
+#         except:
+#             pass
+
+#     print("Send Message 3 : ", user_id , " - ", org_id, "message : ", message, request.POST)
+#     if user_id:
+#         if message :
+#             try:
+#                 msg_type = message_type if message_type else "TEXT"
+#                 portfolio = Portfolio.objects.get(userID=str(user_id), organization=str(org_id))
+#                 sd = False if room.sender_portfolio == portfolio else True
+#                 msg = Message.objects.create(
+#                     room=room,
+#                     message=message,
+#                     author=portfolio,
+#                     read=False,
+#                     side=sd,
+#                     message_type=msg_type
+#                 )
+#                 msg.save()
+#             except Portfolio.DoesNotExist:
+#                 return JsonResponse({'Error': '404', 'messages': 'Wrong user_id, user Not found.'})
+#     messages = Message.objects.filter(room=room)
+#     return JsonResponse({'messages': [jsonify_message_object(message) for message in messages], 'room_pk': room.id})
 
 
 
@@ -669,7 +736,7 @@ def main_support_page(request, *args, **kwargs):
 
 def test3(request):
     var = support_context(dowell_user, request.session['session_id'], ADMIN_PRODUCT, False)
-    
+
 
 
 @dowell_login_required
@@ -704,7 +771,7 @@ def main_living_lab_support_page(request, *args, **kwargs):
 #             return JsonResponse({'status': 'Room not found'}, status=404)
 #     except (Portfolio.DoesNotExist, Room.DoesNotExist):
 #         return JsonResponse ({'status': 'Room not found'}, status=404)
-    
+
 
 def delete_room(room):
     try:
@@ -780,7 +847,7 @@ def sender_side_delete_room_api(request):
 
         # Fetch room to be deleted
         d_user = request.session["dowell_user"]
-    
+
         portfolio = Portfolio.objects.get(userID=d_user["userinfo"]["userID"], organization=d_user["portfolio_info"][0]["org_id"])
         room = Room.objects.filter(active=True, sender_portfolio=portfolio, product=product).order_by('id').first()
         if room:
@@ -801,14 +868,14 @@ def tempory_room_list(request, *args, **kwargs):
     try:
         product = kwargs['product'].lower()
         organization_id = kwargs['organization_id']
-        
+
         if product in ['login', 'sales-agent', 'extension']:
             rooms = Room.objects.filter(product=product).order_by("-id")
         else:
             rooms = Room.objects.filter(product=product, company=organization_id).order_by("-id")
-        
+
         print('room API product:', product)
-        
+
         rm_list = []
         for r in rooms:
             # if not r.active:
@@ -822,23 +889,23 @@ def tempory_room_list(request, *args, **kwargs):
                 'session_id': r.sender_portfolio.session_id,
                 "sub_product":r.sub_product
             })
-        
+
         if rm_list:
             firstroom = rm_list[0]
         else:
             firstroom = {'room_id': None, 'room_name': '', 'company': ''}
-        
+
         frm_id = firstroom['room_id'] if firstroom else None
         messages = [jsonify_message_object(message) for message in Message.objects.filter(room_id=frm_id)]
-        
+
         return JsonResponse({'rooms': rm_list, 'firstroom': firstroom, 'messages': messages})
-    
+
     except KeyError as e:
         return JsonResponse({'rooms': [], 'error': str(e)}, status=400)
-    
+
     except Room.DoesNotExist:
         return JsonResponse({'rooms': []})
-    
+
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
@@ -849,23 +916,23 @@ def room_list(request, *args, **kwargs):
         product = kwargs['product'].lower()
         print(product)
         organization_id = kwargs['organization_id']
-        
+
         if product in ['login', 'sales-agent', 'extension']:
             rooms = Room.objects.filter(product=product).order_by("-id")
         else:
             rooms = Room.objects.filter(product=product, company=organization_id).order_by("-id")
-        
+
         print('room API product:', product)
-        
+
         if rooms:
             rm_list = []
-            
+
             for r in rooms:
                 if not r.active:
                     continue #return JsonResponse({'rooms': []})
 
                 no_login = False
-                response = None        
+                response = None
                 if product not in ['login', 'sales-agent', 'extension']:
                     url = 'https://100093.pythonanywhere.com/api/userinfo/'
                     response = requests.post(url, data={'session_id': r.sender_portfolio.session_id})
@@ -902,22 +969,22 @@ def room_list(request, *args, **kwargs):
                         })
                 except:
                     pass
-        
+
             if rm_list:
                 firstroom = rm_list[0]
             else:
                 firstroom = {'room_id': None, 'room_name': '', 'company': ''}
-            
+
             frm_id = firstroom['room_id'] if firstroom else None
             messages = [jsonify_message_object(message) for message in Message.objects.filter(room_id=frm_id)]
-            
+
             return JsonResponse({'rooms': rm_list, 'firstroom': firstroom, 'messages': messages})
-        
+
         return JsonResponse({'rooms': []})
-    
+
     except (KeyError, Room.DoesNotExist) as e:
         return JsonResponse({'rooms': [], 'error': str(e)})
-    
+
     except Exception as e:
         return JsonResponse({'error': str(e)})
 
@@ -930,7 +997,7 @@ def portfolio_info(request):
     try:
         portfolio = Portfolio.objects.get(session_id=session_id)
         print(portfolio)
-        
+
         return JsonResponse({
             "status": 200,
             "portfolio": {
