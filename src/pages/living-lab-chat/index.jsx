@@ -204,7 +204,7 @@ export const LivingLabChat = () => {
                 </a>
               </div>
             </div>
-            <div className="pt-5 pl-4">
+            <div className="flex flex-col overflow-auto pt-5 pl-4">
               {rooms && rooms.length !== 0 ? (
                 rooms.map((room, index) => (
                   <Room

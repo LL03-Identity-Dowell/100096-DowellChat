@@ -52,7 +52,7 @@ export const Profile = ({ userInfo }) => {
             <span className="font-bold text-lg">About</span>
             <span className="text-[#94A3B8]">Added Details</span>
             <div className="flex flex-col mt-4 text-[#94A3B8]">
-              <div className="flex gap-3 items-center">
+              <div className="flex min-w-fit gap-3 items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -67,7 +67,7 @@ export const Profile = ({ userInfo }) => {
                 </svg>
                 <span>{userInfo?.phone}</span>
               </div>
-              <div className="flex gap-3 items-center">
+              <div className="flex min-w-fit gap-3 items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -80,7 +80,7 @@ export const Profile = ({ userInfo }) => {
 
                 <span>{userInfo?.email}</span>
               </div>
-              <div className="flex gap-3 items-center">
+              <div className="flex min-w-fit gap-3 items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -96,7 +96,7 @@ export const Profile = ({ userInfo }) => {
 
                 <span>{userInfo?.user_country}</span>
               </div>
-              <div className="flex gap-3 items-center">
+              <div className="flex min-w-fit gap-3 items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
@@ -117,7 +117,7 @@ export const Profile = ({ userInfo }) => {
           <div className="flex flex-col p-4">
             <span className="font-bold text-lg">UX Living Lab Profile</span>
             <div className="flex flex-col mt-4 text-[#94A3B8]">
-              <div className="flex gap-3 items-center">
+              <div className="flex min-w-fit gap-3 items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -135,7 +135,7 @@ export const Profile = ({ userInfo }) => {
 
                 <span>Like</span>
               </div>
-              <div className="flex gap-3 items-center">
+              <div className="flex min-w-fit gap-3 items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -153,7 +153,7 @@ export const Profile = ({ userInfo }) => {
 
                 <span>Work</span>
               </div>
-              <div className="flex gap-3 items-center">
+              <div className="flex min-w-fit gap-3 items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"

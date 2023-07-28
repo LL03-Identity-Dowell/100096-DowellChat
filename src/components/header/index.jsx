@@ -1,8 +1,10 @@
 export const Header = () => {
   return (
-    <div className="flex justify-between p-4">
+    <div className="flex h-fit justify-between p-4">
       <div className="flex flex-col gap-2">
-        <h1 className="text-[#0D7832] font-bold text-3xl">Chat Response</h1>
+        <h1 className="text-[#0D7832] font-bold lg:text-2xl md:text-2xl sm:text-xl">
+          Chat Response
+        </h1>
         <span>Respond to messages, set up automations and more</span>
       </div>
       <div className="flex gap-3">
