@@ -1,7 +1,7 @@
-export const Profile = ({ userInfo }) => {
+export const Profile = ({ userInfo, userDataStatus }) => {
   return (
     <div className="flex flex-col w-1/5 overflow-y-auto bg-[#F1F5F9] rounded-md mr-2 mt-2 shadow-md">
-      {userInfo ? (
+      {userInfo && userDataStatus ? (
         <>
           <div className="flex gap-2 items-center border-b-2 p-4">
             <img
@@ -172,29 +172,37 @@ export const Profile = ({ userInfo }) => {
         </>
       ) : (
         <>
-          <div className="flex mt-5 space-x-4">
-            <div className="h-16 w-16 rounded-full bg-gray-300 animate-pulse"></div>
-            <div className="flex-1 space-y-4">
-              <div className="h-4 bg-gray-300 rounded w-3/4 animate-pulse"></div>
-              <div className="h-4 bg-gray-300 rounded w-2/3 animate-pulse"></div>
-              <div className="h-4 bg-gray-300 rounded w-1/2 animate-pulse"></div>
+          {userDataStatus ? (
+            <>
+              <div className="flex mt-5 space-x-4">
+                <div className="h-16 w-16 rounded-full bg-gray-300 animate-pulse"></div>
+                <div className="flex-1 space-y-4">
+                  <div className="h-4 bg-gray-300 rounded w-3/4 animate-pulse"></div>
+                  <div className="h-4 bg-gray-300 rounded w-2/3 animate-pulse"></div>
+                  <div className="h-4 bg-gray-300 rounded w-1/2 animate-pulse"></div>
+                </div>
+              </div>
+              <div
+                role="status"
+                className="flex-1 space-y-4 animate-pulse mt-6 pl-3"
+              >
+                <div className="h-4 bg-gray-300 rounded w-3/4 animate-pulse"></div>
+                <div className="h-4 bg-gray-300 rounded w-2/3 animate-pulse"></div>
+                <div className="h-4 bg-gray-300 rounded w-3/4 animate-pulse"></div>
+                <div className="h-4 bg-gray-300 rounded w-1/2 animate-pulse"></div>
+                <div className="h-4 bg-gray-300 rounded w-2/3 animate-pulse"></div>
+                <div className="h-4 bg-gray-300 rounded w-3/4 animate-pulse"></div>
+                <div className="h-4 bg-gray-300 rounded w-2/3 animate-pulse"></div>
+                <div className="h-4 bg-gray-300 rounded w-2/3 animate-pulse"></div>
+                <div className="h-4 bg-gray-300 rounded w-1/2 animate-pulse"></div>
+                <div className="h-4 bg-gray-300 rounded w-3/4 animate-pulse"></div>
+              </div>
+            </>
+          ) : (
+            <div className="flex w-full h-full justify-center items-center">
+              <span>No User Found.</span>
             </div>
-          </div>
-          <div
-            role="status"
-            className="flex-1 space-y-4 animate-pulse mt-6 pl-3"
-          >
-            <div className="h-4 bg-gray-300 rounded w-3/4 animate-pulse"></div>
-            <div className="h-4 bg-gray-300 rounded w-2/3 animate-pulse"></div>
-            <div className="h-4 bg-gray-300 rounded w-3/4 animate-pulse"></div>
-            <div className="h-4 bg-gray-300 rounded w-1/2 animate-pulse"></div>
-            <div className="h-4 bg-gray-300 rounded w-2/3 animate-pulse"></div>
-            <div className="h-4 bg-gray-300 rounded w-3/4 animate-pulse"></div>
-            <div className="h-4 bg-gray-300 rounded w-2/3 animate-pulse"></div>
-            <div className="h-4 bg-gray-300 rounded w-2/3 animate-pulse"></div>
-            <div className="h-4 bg-gray-300 rounded w-1/2 animate-pulse"></div>
-            <div className="h-4 bg-gray-300 rounded w-3/4 animate-pulse"></div>
-          </div>
+          )}
         </>
       )}
     </div>

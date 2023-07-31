@@ -19,10 +19,12 @@ export const CustomerSupport = () => {
   const [userId, setUserId] = useState();
   const [rooms, setRooms] = useState();
   const [selectedRoomId, setSelectedRoomId] = useState("42");
+  const [roomSessionId, setRoomSessionId] = useState();
   const [sessionId, setSessionId] = useState();
   const [messages, setMessages] = useState();
   const [showPopUp, setShowPopUp] = useState(false);
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [userDataStatus, setuserDataStatus] = useState(true);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (window.location.href.includes("?")) {
@@ -40,7 +42,6 @@ export const CustomerSupport = () => {
       axios
         .post("https://100093.pythonanywhere.com/api/userinfo/", searchParams)
         .then((response) => {
-          setUserInfo(response.data.userinfo);
           setOrgId(response.data.selected_product.orgid);
         });
     }
@@ -56,9 +57,30 @@ export const CustomerSupport = () => {
         .then((response) => {
           setRooms(response.data.rooms);
           setSelectedRoomId(response.data.firstroom.room_id);
+          setRoomSessionId(response.data.firstroom.session_id);
         });
     }
   }, [orgId, productTitle]);
+
+  useEffect(() => {
+    if (roomSessionId) {
+      const formData = new FormData();
+      formData.append("session_id", roomSessionId);
+      axios
+        .post("https://100093.pythonanywhere.com/api/userinfo/", formData)
+        .then((response) => {
+          if (response.data.userinfo) {
+            setUserInfo(response.data.userinfo);
+            setuserDataStatus(true);
+          } else {
+            setuserDataStatus(false);
+          }
+        })
+        .catch((reason) => {
+          console.log(reason);
+        });
+    }
+  }, [roomSessionId]);
 
   useEffect(() => {
     if (sessionId) {
@@ -78,6 +100,7 @@ export const CustomerSupport = () => {
       .get(`https://100096.pythonanywhere.com/send_message/${roomId}`)
       .then((response) => {
         setMessages(response.data.messages);
+        console.log(response);
       });
   };
 
@@ -91,9 +114,9 @@ export const CustomerSupport = () => {
   }, [selectedRoomId]);
 
   return (
-    <div className="flex h-screen justify-around px-20 gap-2 pb-2">
-      <div className="flex w-full">
-        <div className="flex flex-col w-4/5 h-auto">
+    <div className="flex h-screen justify-around pt-4 gap-2 pb-2">
+      <div className="flex w-11/12">
+        <div className="flex flex-col w-4/5 pt-6 justify-evenly">
           <div className="flex flex-col">
             <Header />
             <div className="flex overflow-y-auto scrollbar-thin gap-4 pl-3">
@@ -191,6 +214,7 @@ export const CustomerSupport = () => {
                       roomId={room.room_id}
                       roomName={room.room_name}
                       fetchRoomMessages={getMessages}
+                      setRoomSessionId={setRoomSessionId}
                     />
                   ))
                 ) : (
@@ -244,7 +268,7 @@ export const CustomerSupport = () => {
             </div>
           </div>
         </div>
-        <Profile userInfo={userInfo} />
+        <Profile userInfo={userInfo} userDataStatus={userDataStatus} />
       </div>
       {showPopUp && (
         <PopUp

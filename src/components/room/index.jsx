@@ -1,9 +1,15 @@
 import roomProfileImage from "../../assets/images/avatar.png";
 
-export const Room = ({ roomId, roomName, fetchRoomMessages }) => {
+export const Room = ({
+  roomId,
+  roomName,
+  fetchRoomMessages,
+  setRoomSessionId,
+}) => {
   return (
     <div
       onClick={() => {
+        setRoomSessionId(roomName);
         fetchRoomMessages(roomId);
       }}
       className="flex min-w-fit items-center hover:cursor-pointer gap-3 mb-3"
