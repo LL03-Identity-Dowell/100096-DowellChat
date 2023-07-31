@@ -55,15 +55,22 @@ export const CustomerSupport = () => {
           `https://100096.pythonanywhere.com/room_list1/${productTitle}/${orgId}`
         )
         .then((response) => {
-          setRooms(response.data.rooms);
-          setSelectedRoomId(response.data.firstroom.room_id);
-          setRoomSessionId(response.data.firstroom.session_id);
+          if (response.data.rooms.length > 0) {
+            setRooms(response.data.rooms);
+            setSelectedRoomId(response.data.firstroom.room_id);
+            setRoomSessionId(response.data.firstroom.session_id);
+          } else {
+            setRooms(response.data.rooms);
+            setuserDataStatus(false);
+          }
         });
     }
   }, [orgId, productTitle]);
 
   useEffect(() => {
     if (roomSessionId) {
+      setUserInfo(null);
+      setuserDataStatus(true);
       const formData = new FormData();
       formData.append("session_id", roomSessionId);
       axios

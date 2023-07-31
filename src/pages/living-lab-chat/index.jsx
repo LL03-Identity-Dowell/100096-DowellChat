@@ -42,7 +42,7 @@ export const LivingLabChat = () => {
       axios
         .post("https://100093.pythonanywhere.com/api/userinfo/", searchParams)
         .then((response) => {
-          setUserInfo(response.data.userinfo);
+          // setUserInfo(response.data.userinfo);
           setOrgId(response.data.selected_product.orgid);
         })
         .catch((reason) => {
@@ -52,6 +52,8 @@ export const LivingLabChat = () => {
   }, [searchParams]);
   useEffect(() => {
     if (roomSessionId) {
+      setUserInfo(null);
+      setuserDataStatus(true);
       const formData = new FormData();
       formData.append("session_id", roomSessionId);
       axios
@@ -96,9 +98,14 @@ export const LivingLabChat = () => {
           `https://100096.pythonanywhere.com/room_list1/${productTitle}/${orgId}`
         )
         .then((response) => {
-          setRooms(response.data.rooms);
-          setSelectedRoomId(response.data.firstroom.room_id);
-          setRoomSessionId(response.data.firstroom.session_id);
+          if (response.data.rooms.length > 0) {
+            setRooms(response.data.rooms);
+            setSelectedRoomId(response.data.firstroom.room_id);
+            setRoomSessionId(response.data.firstroom.session_id);
+          } else {
+            setRooms(response.data.rooms);
+            setuserDataStatus(false);
+          }
         });
     }
   }, [orgId, productTitle]);
