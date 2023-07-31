@@ -20,7 +20,9 @@ export const LivingLabChat = () => {
   const [rooms, setRooms] = useState();
   const [selectedRoomId, setSelectedRoomId] = useState("42");
   const [sessionId, setSessionId] = useState();
+  const [roomSessionId, setRoomSessionId] = useState();
   const [messages, setMessages] = useState();
+  const [userDataStatus, setuserDataStatus] = useState(true);
   const [showPopUp, setShowPopUp] = useState(false);
   let [searchParams, setSearchParams] = useSearchParams();
 
@@ -48,6 +50,25 @@ export const LivingLabChat = () => {
         });
     }
   }, [searchParams]);
+  useEffect(() => {
+    if (roomSessionId) {
+      const formData = new FormData();
+      formData.append("session_id", roomSessionId);
+      axios
+        .post("https://100093.pythonanywhere.com/api/userinfo/", formData)
+        .then((response) => {
+          if (response.data.userinfo) {
+            setUserInfo(response.data.userinfo);
+            setuserDataStatus(true);
+          } else {
+            setuserDataStatus(false);
+          }
+        })
+        .catch((reason) => {
+          console.log(reason);
+        });
+    }
+  }, [roomSessionId]);
 
   // useEffect(() => {
   //   if (sessionId || roomSessionId) {
@@ -77,6 +98,7 @@ export const LivingLabChat = () => {
         .then((response) => {
           setRooms(response.data.rooms);
           setSelectedRoomId(response.data.firstroom.room_id);
+          setRoomSessionId(response.data.firstroom.session_id);
         });
     }
   }, [orgId, productTitle]);
@@ -212,6 +234,7 @@ export const LivingLabChat = () => {
                     roomId={room.room_id}
                     roomName={room.room_name}
                     fetchRoomMessages={getMessages}
+                    setRoomSessionId={setRoomSessionId}
                   />
                 ))
               ) : (
@@ -265,7 +288,7 @@ export const LivingLabChat = () => {
           </div>
         </div>
       </div>
-      <Profile userInfo={userInfo} />
+      <Profile userInfo={userInfo} userDataStatus={userDataStatus} />
       {showPopUp && (
         <PopUp
           setRooms={setRooms}
