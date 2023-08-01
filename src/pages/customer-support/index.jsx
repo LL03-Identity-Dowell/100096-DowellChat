@@ -275,7 +275,12 @@ export const CustomerSupport = () => {
             </div>
           </div>
         </div>
-        <Profile userInfo={userInfo} userDataStatus={userDataStatus} />
+        <Profile
+          userInfo={userInfo}
+          roomId={selectedRoomId}
+          roomSessionId={roomSessionId}
+          userDataStatus={userDataStatus}
+        />
       </div>
       {showPopUp && (
         <PopUp
