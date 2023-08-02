@@ -276,6 +276,7 @@ export const LivingLabChat = () => {
                       {
                         <Message
                           message={message.message}
+                          messageType={message.message_type}
                           color={message.side ? "bg-blue-600" : "bg-gray-300"}
                         />
                       }

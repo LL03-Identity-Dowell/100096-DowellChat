@@ -107,7 +107,6 @@ export const CustomerSupport = () => {
       .get(`https://100096.pythonanywhere.com/send_message/${roomId}`)
       .then((response) => {
         setMessages(response.data.messages);
-        console.log(response);
       });
   };
 
@@ -256,6 +255,7 @@ export const CustomerSupport = () => {
                         {
                           <Message
                             message={message.message}
+                            messageType={message.message_type}
                             color={message.side ? "bg-blue-600" : "bg-gray-300"}
                           />
                         }
