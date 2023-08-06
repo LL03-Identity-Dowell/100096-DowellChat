@@ -1,18 +1,19 @@
 import { Header } from "../../components/header";
 import { Profile } from "../../components/profile";
 import { Products } from "../../components/product_list";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import profileImage from "../../assets/images/avatar.png";
 import { Reply } from "../../components/reply";
-import { useSearchParams } from "react-router-dom";
 import { ChatHeader } from "../../components/chat-header";
 import axios from "axios";
 import { Room } from "../../components/room";
 import { Message } from "../../components/message";
 import { PopUp } from "../../components/pop-up";
 import { RoomLoader } from "../../components/room-loader";
+import DataContext from "../../context/data-context";
 
 export const LivingLabChat = () => {
+  const dataContext = useContext(DataContext);
   const [productTitle, setProductTitle] = useState("Sales-Agent-Login");
   const [userInfo, setUserInfo] = useState();
   const [orgId, setOrgId] = useState();
@@ -24,23 +25,23 @@ export const LivingLabChat = () => {
   const [messages, setMessages] = useState();
   const [userDataStatus, setuserDataStatus] = useState(true);
   const [showPopUp, setShowPopUp] = useState(false);
-  let [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    if (window.location.href.includes("?")) {
-      const param = window.location.href.split("?")[1].split("=")[1];
-      setSessionId(param);
-      const params = {
-        session_id: param,
-      };
-      setSearchParams(params);
+    if (dataContext.collectedData) {
+      sessionStorage.setItem("sessionId", dataContext.collectedData.sessionId);
+      setSessionId(dataContext.collectedData.sessionId);
+    } else {
+      console.log(sessionStorage.getItem("sessionId"));
+      setSessionId(sessionStorage.getItem("sessionId"));
     }
-  }, [setSearchParams]);
+  }, [dataContext.collectedData]);
 
   useEffect(() => {
-    if (searchParams) {
+    if (sessionId) {
+      const formData = new FormData();
+      formData.append("session_id", sessionId);
       axios
-        .post("https://100093.pythonanywhere.com/api/userinfo/", searchParams)
+        .post("https://100093.pythonanywhere.com/api/userinfo/", formData)
         .then((response) => {
           // setUserInfo(response.data.userinfo);
           setOrgId(response.data.selected_product.orgid);
@@ -49,7 +50,7 @@ export const LivingLabChat = () => {
           console.log(reason);
         });
     }
-  }, [searchParams]);
+  }, [sessionId]);
   useEffect(() => {
     if (roomSessionId) {
       setUserInfo(null);
