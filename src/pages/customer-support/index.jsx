@@ -282,7 +282,7 @@ export const CustomerSupport = () => {
           userDataStatus={userDataStatus}
         />
       </div>
-      {showPopUp && rooms && (
+      {showPopUp && rooms.length > 0 && (
         <PopUp
           setRooms={setRooms}
           roomId={selectedRoomId}

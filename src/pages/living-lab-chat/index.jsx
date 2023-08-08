@@ -279,7 +279,7 @@ export const LivingLabChat = () => {
         </div>
       </div>
       <Profile userInfo={userInfo} userDataStatus={userDataStatus} />
-      {showPopUp && rooms && (
+      {showPopUp && rooms.length > 0 && (
         <PopUp
           setRooms={setRooms}
           roomId={selectedRoomId}
