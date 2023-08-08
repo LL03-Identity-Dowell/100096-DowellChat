@@ -31,7 +31,6 @@ export const LivingLabChat = () => {
       sessionStorage.setItem("sessionId", dataContext.collectedData.sessionId);
       setSessionId(dataContext.collectedData.sessionId);
     } else {
-      console.log(sessionStorage.getItem("sessionId"));
       setSessionId(sessionStorage.getItem("sessionId"));
     }
   }, [dataContext.collectedData]);
@@ -72,24 +71,6 @@ export const LivingLabChat = () => {
         });
     }
   }, [roomSessionId]);
-
-  // useEffect(() => {
-  //   if (sessionId || roomSessionId) {
-  //     axios
-  //       .get(
-  //         `https://100096.pythonanywhere.com/create-user-profile/?session_id=${
-  //           roomSessionId ? roomSessionId : sessionId
-  //         }`
-  //       )
-  //       .then((response) => {
-  //         setUserInfo(response.data.userinfo);
-  //         setOrgId(response.data.portfolio.userID);
-  //       })
-  //       .catch((reason) => {
-  //         console.log(reason);
-  //       });
-  //   }
-  // }, [roomSessionId, sessionId]);
 
   useEffect(() => {
     if (productTitle && orgId) {
@@ -298,7 +279,7 @@ export const LivingLabChat = () => {
         </div>
       </div>
       <Profile userInfo={userInfo} userDataStatus={userDataStatus} />
-      {showPopUp && (
+      {showPopUp && rooms && (
         <PopUp
           setRooms={setRooms}
           roomId={selectedRoomId}

@@ -31,7 +31,6 @@ export const CustomerSupport = () => {
       sessionStorage.setItem("sessionId", dataContext.collectedData.sessionId);
       setSessionId(dataContext.collectedData.sessionId);
     } else {
-      console.log(sessionStorage.getItem("sessionId"));
       setSessionId(sessionStorage.getItem("sessionId"));
     }
   }, [dataContext.collectedData]);
@@ -283,7 +282,7 @@ export const CustomerSupport = () => {
           userDataStatus={userDataStatus}
         />
       </div>
-      {showPopUp && (
+      {showPopUp && rooms && (
         <PopUp
           setRooms={setRooms}
           roomId={selectedRoomId}
