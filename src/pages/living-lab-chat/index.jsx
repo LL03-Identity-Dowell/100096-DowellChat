@@ -11,6 +11,8 @@ import { Message } from "../../components/message";
 import { PopUp } from "../../components/pop-up";
 import { RoomLoader } from "../../components/room-loader";
 import DataContext from "../../context/data-context";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const LivingLabChat = () => {
   const dataContext = useContext(DataContext);
@@ -282,6 +284,9 @@ export const LivingLabChat = () => {
       {showPopUp && rooms.length > 0 && (
         <PopUp
           setRooms={setRooms}
+          notify={(toastMessage, toastType) => {
+            toast(toastMessage, { type: toastType });
+          }}
           roomId={selectedRoomId}
           productTitle={productTitle}
           orgId={orgId}
@@ -290,6 +295,7 @@ export const LivingLabChat = () => {
           setShowPopUp={setShowPopUp}
         />
       )}
+      <ToastContainer />
     </div>
   );
 };
