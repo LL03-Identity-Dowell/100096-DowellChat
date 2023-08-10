@@ -44,7 +44,7 @@ export const CustomerSupport = () => {
       axios
         .post("https://100093.pythonanywhere.com/api/userinfo/", formData)
         .then((response) => {
-          setOrgId(response.data.selected_product.orgid);
+          setOrgId(response?.data?.selected_product?.orgid);
         });
     }
   }, [sessionId]);
@@ -99,9 +99,12 @@ export const CustomerSupport = () => {
         )
         .then((response) => {
           setUserId(response.data?.portfolio?.userID);
+          if (orgId == null) {
+            setOrgId(response.data.portfolio.organization);
+          }
         });
     }
-  }, [sessionId]);
+  }, [orgId, sessionId]);
 
   const getMessages = (roomId) => {
     setSelectedRoomId(roomId);
