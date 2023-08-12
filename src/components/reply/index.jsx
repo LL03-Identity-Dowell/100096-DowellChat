@@ -9,7 +9,7 @@ export const Reply = ({ roomId, userId, orgId, setMessages }) => {
       const data = {
         message: message,
         user_id: userId,
-        message_type: "text/Image",
+        message_type: "TEXT",
         org_id: orgId,
       };
       axios
