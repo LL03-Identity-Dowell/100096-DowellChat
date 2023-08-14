@@ -12,7 +12,7 @@ export const Room = ({
         setRoomSessionId(roomName);
         fetchRoomMessages(roomId);
       }}
-      className="flex min-w-fit items-center hover:cursor-pointer gap-3 mb-3"
+      className={`flex min-w-fit items-center hover:cursor-pointer gap-3 mb-3`}
     >
       <div className="rounded-full w-12 h-12">
         <img src={roomProfileImage} alt="profile" />

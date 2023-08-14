@@ -279,6 +279,7 @@ export const LivingLabChat = () => {
                   orgId={orgId}
                   userId={userId}
                   setMessages={setMessages}
+                  rooms={rooms}
                 />
               </div>
             </div>

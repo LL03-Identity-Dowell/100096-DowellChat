@@ -249,7 +249,7 @@ export const CustomerSupport = () => {
                   setShowPopUp={setShowPopUp}
                 />
                 <div className="flex flex-col-reverse h-4/5 px-3 overflow-auto">
-                  {messages ? (
+                  {messages &&
                     messages.toReversed().map((message, index) => (
                       <div
                         key={index}
@@ -265,16 +265,15 @@ export const CustomerSupport = () => {
                           />
                         }
                       </div>
-                    ))
-                  ) : (
-                    <></>
-                  )}
+                    ))}
                 </div>
+
                 <Reply
                   roomId={selectedRoomId}
                   orgId={orgId}
                   userId={userId}
                   setMessages={setMessages}
+                  rooms={rooms}
                 />
               </div>
             </div>
