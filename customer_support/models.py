@@ -40,6 +40,7 @@ class Room(models.Model):
     company = models.CharField(max_length=200, blank=True, null=True)
     product = models.CharField(max_length=200, blank=True, null=True)
     sub_product = models.CharField(max_length=20, blank=True, null=True)
+    # sender_name = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self):
         return f'{self.product} - {self.room_name} - {self.company}'

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+import secrets
 
 # from customer_support.database_managment.connection import dowellconnection
 # from customer_support.database_managment.database import chat
@@ -1023,6 +1024,29 @@ def create_portfolio(request):
             "organization": p.organization
         }
     })
+
+@csrf_exempt
+def create_master_link(request):
+    if request.method == 'POST':
+        product_name = request.POST.get('your-name')
+        num_links = int(request.POST.get('your-surname'))
+        Listdata = []
+        for link in range(num_links):
+            random_string = secrets.token_hex(16)  # Generate a random string of 16 characters
+            portfolio, room, messages = no_login_portfolio_control(random_string, product_name.lower())
+            message_list = [jsonify_message_object(message) for message in messages]
+            Listdata.append({
+        'session_id': random_string,
+        'product': product_name.lower(),
+        'portfolio': portfolio,
+        'messages': message_list,
+        'room_pk': room
+        })
+        return JsonResponse(Listdata,safe=False)
+    else:
+
+        return render(request,'creaetmasterlink.html')
+
 
 
 '''

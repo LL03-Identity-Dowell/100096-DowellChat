@@ -46,6 +46,8 @@ urlpatterns = [
 
     path('user_protfolio/', views.portfolio_info, name='protfolio_info'),
     path('create_room_sales_agent/<str:product>/', views.create_room_sales_agent, name='create_room_sales_agent'),
+    path('create_master_link', views.create_master_link, name='create_master_link'),
+
     
 
 ]
