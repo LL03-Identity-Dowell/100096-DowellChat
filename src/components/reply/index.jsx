@@ -4,37 +4,64 @@ import { useState, useRef } from "react";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
 
 export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(undefined);
   const [showPicker, setShowPicker] = useState(false);
   const fileInputRef = useRef(null);
 
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result.split(",")[1];
+        resolve(base64String);
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   const sendMessage = (message, type) => {
     if (message !== "" && rooms.length !== 0) {
-      const formData = new FormData();
+      let data = {};
       if (type === "IMAGE") {
-        formData.append("message", message);
-        formData.append("user_id", userId);
-        formData.append("message_type", type);
-        formData.append("org_id", orgId);
-      }
-      const data = {
-        message: message,
-        user_id: userId,
-        message_type: type,
-        org_id: orgId,
-      };
-      axios
-        .post(
-          `https://100096.pythonanywhere.com/send_message/${roomId}/`,
-          type === "IMAGE" ? formData : data
-        )
-        .then((response) => {
-          setMessages(response.data.messages);
-          setMessage("");
+        fileToBase64(message).then((response) => {
+          data = {
+            message: response,
+            user_id: userId,
+            message_type: type,
+            org_id: orgId,
+          };
+          axios
+            .post(
+              `https://100096.pythonanywhere.com/send_message/${roomId}/`,
+              data
+            )
+            .then((response) => {
+              setMessages(response.data.messages);
+              setMessage("");
+            });
         });
+      } else {
+        data = {
+          message: message,
+          user_id: userId,
+          message_type: type,
+          org_id: orgId,
+        };
+        axios
+          .post(
+            `https://100096.pythonanywhere.com/send_message/${roomId}/`,
+            data
+          )
+          .then((response) => {
+            setMessages(response.data.messages);
+            setMessage("");
+          });
+      }
     } else {
       rooms.length === 0
         ? toast("No Room Selected!", { type: "warning" })
@@ -48,8 +75,6 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
-      // Perform any additional actions here, such as uploading the file to a server
-      console.log("Selected File:", selectedFile);
       sendMessage(selectedFile, "IMAGE");
     }
   };
@@ -68,7 +93,10 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
         }}
       />
       <div className="flex gap-5">
-        <div className="relative hover:cursor-pointer">
+        <div
+          className="relative hover:cursor-pointer"
+          onClick={handleButtonClick}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -83,15 +111,15 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
               d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
             />
           </svg>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
         </div>
 
-        <div
-          className="relative hover:cursor-pointer"
-          onClick={() => {
-            console.log("hello");
-            handleButtonClick();
-          }}
-        >
+        <div className="relative hover:cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -106,12 +134,6 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
               d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
             />
           </svg>
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
         </div>
 
         <div
