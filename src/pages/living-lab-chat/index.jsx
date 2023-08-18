@@ -134,6 +134,9 @@ export const LivingLabChat = () => {
           <div>
             <Header />
             <div className="flex overflow-y-auto scrollbar-thin gap-4 pl-3">
+              <span className="hidden">
+                {sessionStorage.getItem("sessionId")}
+              </span>
               <Products
                 pageName="customer-support"
                 setProductTitle={setProductTitle}

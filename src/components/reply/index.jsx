@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
@@ -9,17 +9,28 @@ import { toast } from "react-toastify";
 export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
   const [message, setMessage] = useState("");
   const [showPicker, setShowPicker] = useState(false);
+  const fileInputRef = useRef(null);
 
-  const sendMessage = (message) => {
+  const sendMessage = (message, type) => {
     if (message !== "" && rooms.length !== 0) {
+      const formData = new FormData();
+      if (type === "IMAGE") {
+        formData.append("message", message);
+        formData.append("user_id", userId);
+        formData.append("message_type", type);
+        formData.append("org_id", orgId);
+      }
       const data = {
         message: message,
         user_id: userId,
-        message_type: "TEXT",
+        message_type: type,
         org_id: orgId,
       };
       axios
-        .post(`https://100096.pythonanywhere.com/send_message/${roomId}/`, data)
+        .post(
+          `https://100096.pythonanywhere.com/send_message/${roomId}/`,
+          type === "IMAGE" ? formData : data
+        )
         .then((response) => {
           setMessages(response.data.messages);
           setMessage("");
@@ -28,6 +39,18 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
       rooms.length === 0
         ? toast("No Room Selected!", { type: "warning" })
         : toast("Please Enter Message", { type: "warning" });
+    }
+  };
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      // Perform any additional actions here, such as uploading the file to a server
+      console.log("Selected File:", selectedFile);
+      sendMessage(selectedFile, "IMAGE");
     }
   };
   const handleShowEmojiPicker = () => {
@@ -45,7 +68,7 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
         }}
       />
       <div className="flex gap-5">
-        <a href="# ">
+        <div className="relative hover:cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -60,9 +83,15 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
               d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
             />
           </svg>
-        </a>
+        </div>
 
-        <a href="# ">
+        <div
+          className="relative hover:cursor-pointer"
+          onClick={() => {
+            console.log("hello");
+            handleButtonClick();
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -77,7 +106,13 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
               d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
             />
           </svg>
-        </a>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+        </div>
 
         <div
           className="relative hover:cursor-pointer"
@@ -136,7 +171,7 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
         <div
           className="hover:cursor-pointer"
           onClick={() => {
-            sendMessage(message);
+            sendMessage(message, "TEXT");
           }}
         >
           <svg

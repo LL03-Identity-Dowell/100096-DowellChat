@@ -131,6 +131,9 @@ export const CustomerSupport = () => {
           <div className="flex flex-col">
             <Header />
             <div className="flex overflow-y-auto scrollbar-thin gap-4 pl-3">
+              <span className="hidden">
+                {sessionStorage.getItem("sessionId")}
+              </span>
               <Products
                 pageName="living-lab-chat"
                 setProductTitle={setProductTitle}
