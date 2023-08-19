@@ -10,11 +10,12 @@ from customer_support.database_managment.database import chat
 from customer_support.database_managment.connection import dowellconnection
 from django.urls import reverse
 
-from .models import Portfolio, Room, Message
+from .models import Portfolio, Room, Message, RoomEvent
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from functools import wraps
 import json
 import requests
+
 
 from django.views.decorators.clickjacking import xframe_options_exempt
 
@@ -41,21 +42,25 @@ def jsonify_message_object(mess_obj):
     )
 
 
-def no_login_portfolio_control(_id, product):
+def no_login_portfolio_control(_id, product, org="LOGIN_OR_OUTER"):
     """ Without login """
     _id = _id.replace("-", "").replace(":","").replace(".","").replace(" ","")
     try:
         portfolio = Portfolio.objects.get(session_id=_id)
     except Portfolio.DoesNotExist:
         portfolio = Portfolio.objects.create( portfolio_name=_id, session_id=_id)
+    if org != "LOGIN_OR_OUTER":
+        room = Room.objects.filter(sender_portfolio__id=portfolio.id, product=product.lower(), company=org).order_by('id').first()
+    else:
+        room = Room.objects.filter(sender_portfolio__id=portfolio.id, product=product.lower()).order_by('id').first()
 
-    room = Room.objects.filter(sender_portfolio__id=portfolio.id, product=product.lower()).order_by('id').first()
     if not room :
         room = Room.objects.create(
             room_name=portfolio.portfolio_name,
             room_id= portfolio.session_id,
             sender_portfolio=portfolio,
-            product=product.lower()
+            product=product.lower(),
+            company=org
         )
         room.save()
 
@@ -340,8 +345,7 @@ def room_control(portfolio, product):
         )
         room.save()
     messages = Message.objects.filter(room=room)
-    '''
-
+    
     if len(messages) == 0 :
         Message.objects.create(
             room=room,
@@ -352,7 +356,11 @@ def room_control(portfolio, product):
             message_type="TEXT"
         )
         messages = Message.objects.filter(room=room)
-          '''
+        
+
+    if len(messages == 1):
+        room.delete()
+
     return room, messages
 
 # Room Control Sales agent
@@ -678,8 +686,12 @@ def product_list(request):
 def admin_product_list(request):
     return JsonResponse({"product_list": [*ADMIN_PRODUCT]})
 
-def client_product_list(request):
-    return JsonResponse({"product_list": [*PRODUCT_LIST]})
+def client_product_list(request, *args, **kwargs):
+    events = []
+    if kwargs['organization']:
+        events = [ev.event_name.title() for ev in RoomEvent.objects.filter(organization=kwargs['organization'])]
+
+    return JsonResponse({"product_list": [*events , *PRODUCT_LIST]})
 
 
 def support_room_control(product, org, company_filter):
@@ -687,7 +699,7 @@ def support_room_control(product, org, company_filter):
     messages = Message.objects.none()
     for room in rooms:
         messages = Message.objects.filter(room=room)
-        if len(messages) <= 1:
+        if len(messages) < 1 and not room.generated_by_QR:
             room.delete()
 
     if company_filter:
@@ -721,19 +733,22 @@ def admin_support_page_view(request, *args, **kwargs):
 def main_support_page(request, *args, **kwargs):
     return render(request, 'customer_support_chat_1.html', support_context(request.session["dowell_user"], request.session['session_id'], ADMIN_PRODUCT, False))
 
-def test3(request):
-    var = support_context(dowell_user, request.session['session_id'], ADMIN_PRODUCT, False)
-
-
 
 @dowell_login_required
 def living_lab_support_view(request, *args, **kwargs):
     return redirect(reverse('customer_support:main-living-lab-support-page'))
 
 def main_living_lab_support_page(request, *args, **kwargs):
-    return render(request, 'customer_support_chat_1.html', support_context(request.session["dowell_user"], request.session['session_id'], PRODUCT_LIST, True))
+    events = []
+    org = '639414286b1ad005bb1ab194'#request.session["dowell_user"]["portfolio_info"][0]["org_id"]
+    if org:
+        events = [ev.event_name.title() for ev in RoomEvent.objects.filter(organization=org)]
+    return render(request, 'customer_support_chat_1.html', support_context(request.session["dowell_user"], request.session['session_id'], [*events, *PRODUCT_LIST], True))
 
 
+
+def test3(request):
+    var = support_context(dowell_user, request.session['session_id'], ADMIN_PRODUCT, False)
 
 # DELETE APIs
 
@@ -904,7 +919,12 @@ def room_list(request, *args, **kwargs):
         print(product)
         organization_id = kwargs['organization_id']
 
-        if product in ['login', 'sales-agent', 'extension']:
+
+        evs = RoomEvent.objects.filter(organization=organization_id)
+        prdcts = ['login', 'sales-agent', 'extension', *[e.event_name.lower() for e in evs]]
+
+
+        if product in prdcts:
             rooms = Room.objects.filter(product=product).order_by("-id")
         else:
             rooms = Room.objects.filter(product=product, company=organization_id).order_by("-id")
@@ -920,7 +940,7 @@ def room_list(request, *args, **kwargs):
 
                 no_login = False
                 response = None
-                if product not in ['login', 'sales-agent', 'extension']:
+                if product not in evs:
                     url = 'https://100093.pythonanywhere.com/api/userinfo/'
                     response = requests.post(url, data={'session_id': r.sender_portfolio.session_id})
                 else:
@@ -978,7 +998,7 @@ def room_list(request, *args, **kwargs):
 
 
 @csrf_exempt
-def portfolio_info(request):
+def portfolio_info_(request):
     session_id = request.GET.get("session_id")
 
     try:
@@ -1025,27 +1045,140 @@ def create_portfolio(request):
         }
     })
 
+
+
+
+
+
+def save_links_2mgdb(company_id, links, job_name):
+    url = "https://www.qrcodereviews.uxlivinglab.online/api/v3/qr-code/"
+    
+    payload = {
+        "qrcode_type": "Link",
+        "quantity": 1,
+        "company_id": company_id,
+        "links": links,
+        "document_name":job_name
+    }
+    response = requests.post(url, json=payload)
+
+    return response.text
+
+
+
+def set_finalize(linkid):
+    #print(linkid)
+    url = f"https://www.qrcodereviews.uxlivinglab.online/api/v3/masterlink/?link_id={linkid}"
+    payload = {
+        "is_finalized": True,
+    }
+    response = requests.put(url, json=payload)
+    #print(response)
+    #print(response.text)
+    return response.text
+
+def set_viewed(linkid):
+    #   print(linkid)
+    url = f"https://www.qrcodereviews.uxlivinglab.online/api/v3/masterlink/?link_id={linkid}"
+    payload = {
+        "is_viewed": True,
+    }
+    response = requests.put(url, json=payload)    #print(response)    #print(response.text)
+    return response.text
+
+
+
+
+
+
+
+def convert_to_httpURL(_id__, event, company):
+    return f'https://100096.pythonanywhere.com/api/v3/init/{company}/{event}/{_id__}/' 
+
+
+
+@dowell_login_required
+def public_link_login(request, *args, **kwargs):
+    return JsonResponse(request.session["dowell_user"])    # return redirect('customer_support:public_link_handle')
+
+
 @csrf_exempt
 def create_master_link(request):
+    # TO__DO : connect client admin 
+    company_id = '639414286b1ad005bb1ab194'
+    QR_ids = [secrets.token_hex(16) for i in range(3)]  # Generate a random string of 16 characters
+    
     if request.method == 'POST':
-        product_name = request.POST.get('your-name')
-        num_links = int(request.POST.get('your-surname'))
         Listdata = []
-        for link in range(num_links):
-            random_string = secrets.token_hex(16)  # Generate a random string of 16 characters
-            portfolio, room, messages = no_login_portfolio_control(random_string, product_name.lower())
-            message_list = [jsonify_message_object(message) for message in messages]
-            Listdata.append({
-        'session_id': random_string,
-        'product': product_name.lower(),
-        'portfolio': portfolio,
-        'messages': message_list,
-        'room_pk': room
-        })
-        return JsonResponse(Listdata,safe=False)
-    else:
+        event_name = '-'.join(request.POST.get('event-name').split(' '))
 
-        return render(request,'creaetmasterlink.html')
+        r_event = RoomEvent.objects.filter(event_name=event_name, organization=company_id).first()
+        if r_event:
+            r_event.room_count += len(QR_ids)
+        else:
+            r_event = RoomEvent.objects.create(event_name=event_name, room_count=len(QR_ids), organization=company_id)        #   num_links = int(request.POST.get('your-surname'))
+        
+        clickable_links = list()
+        for qr_hash in QR_ids:
+            _,room,_ = no_login_portfolio_control(qr_hash, r_event.event_name.lower(), org=company_id)  #   message_list = [jsonify_message_object(message) for message in messages]
+            rm_link = convert_to_httpURL(qr_hash, r_event.event_name.lower(), company_id)
+
+            rm = Room.objects.get(id=room)
+            rm.generated_by_QR = True
+            rm.rm_link = rm_link
+            rm.save()
+
+            Listdata.append({
+                'session_id': qr_hash,
+                'product': r_event.event_name.lower(),      #'portfolio': portfolio,  #'messages': message_list,
+                'room_pk': room,
+                'rm_link': rm_link
+            })
+            clickable_links.append({
+                "link": rm_link,
+                "is_opened": False,
+                "is_finalized": False
+            })
+
+        
+        # Requesting QR server for registration of links 
+        save_response = json.loads(save_links_2mgdb(company_id, clickable_links, r_event.event_name.lower()))
+
+        
+        for qr_l in save_response["qrcodes"][0]["links"]:
+            lk = qr_l['response']            
+            for clink in Listdata:
+                if lk['link'] == clink['rm_link']:
+                    rm = Room.objects.get(id=clink['room_pk'])
+                    rm.link_id = str(lk['link_id'])
+                    rm.save()
+
+
+        return render(
+            request, 
+            'public_link.html', 
+            {
+                'e':event_name, 
+                'public_links': Listdata, 
+                'saved_response': save_response['response'],
+                'link_list': save_response['qrcodes'][0]['links']
+            }
+        )
+    else:  
+        rooms = Room.objects.filter(company=company_id, generated_by_QR=True)
+        return render(request,'creaetmasterlink.html', {'rm_s': rooms, 'QR_ids': QR_ids})
+
+
+
+
+def public_chat_link(request, *args, **kwargs):
+    _, room_id, _ = no_login_portfolio_control(kwargs['link_id'], kwargs['event'].lower(), org=kwargs['company'])
+    rm = Room.objects.get(id=room_id)
+    set_viewd_response = set_viewed(rm.link_id)
+
+    rm.is_opened = True
+    rm.save()
+    return render(request, "public_chat.html", {'event': kwargs['event'], 'session_id': kwargs['link_id'], 'set_viewd_response':set_viewd_response})
 
 
 

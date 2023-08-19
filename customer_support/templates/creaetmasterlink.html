@@ -14,85 +14,93 @@
       body {
         background: #fafbfb;
       }
-
-      /* FOOTER STYLES
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-      .page-footer {
-        position: fixed;
-        right: 0;
-        bottom: 50px;
-        display: flex;
-        align-items: center;
-        padding: 5px;
-        z-index: 1;
-      }
-
-      .page-footer a {
-        display: flex;
-        margin-left: 4px;
-      }
     </style>
   </head>
   <body>
     <div class="container my-5">
       <div class="row justify-content-center">
         <div class="col-lg-9">
-          <h1 class="mb-3">Contact Us</h1>
-          <form
-            action="{% url 'customer_support:create_master_link' %}"
-            method="post"
-          >
-            {% csrf_token %}
+          <h1 class="mb-3">Public Link Handle</h1>
+          {% if QR_ids|length > 0 %}
+            <p>Available public ids</p>
+            
+            {% for qr in QR_ids %}
+              - {{ qr }}<br>
+            {% endfor %}
+            <br>
 
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="your-name" class="form-label">Product Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="your-name"
-                  name="your-name"
-                  required
-                />
-              </div>
-              <div class="col-md-6">
-                <label for="your-surname" class="form-label"
-                  >Number of links</label
-                >
-                <input
-                  type="number"
-                  class="form-control"
-                  id="your-surname"
-                  name="your-surname"
-                  required
-                />
-              </div>
-              <div class="col-12">
-                <div class="row">
-                  <div class="col-md-6">
-                    <button type="submit" class="btn btn-dark w-100 fw-bold">
-                      Send
-                    </button>
+            <form
+              action="{% url 'customer_support:create_master_link' %}"
+              method="post"
+            >
+              {% csrf_token %}
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="event-name" class="form-label">Event Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="event-name"
+                    name="event-name"
+                    required
+                  />
+                </div>
+                
+                <div class="col-12">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <button type="submit" class="btn btn-dark w-100 fw-bold">
+                        Generate links
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </form>
+            </form>
+          {% else %}
+            <p> No public IDs available.</p>
+          {% endif %}
+
         </div>
       </div>
+      <br><br>
+            <p>Previously generated public links. </p>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Event</th>
+                    <th>Link</th>
+                    <th>Opened</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  {% for rm in rm_s %}
+                    <tr 
+                      {% if rm.is_opened %}
+                         class="table-dark"
+                      {% else %}
+                        class="table-light"
+                      {% endif %}
+                    >
+                      <td>{{rm.id}}</td>
+                      <td>{{rm.product}}</td>
+                      <td>{{rm.rm_link}}</td>
+                      <td>{{rm.is_opened}}</td>
+                    </tr> 
+
+                  {% endfor %}     
+                  
+                </tbody>
+              </table>
+
+
+
     </div>
 
-    <footer class="page-footer">
-      <span>made by </span>
-      <a href="https://georgemartsoukos.com/" target="_blank">
-        <img
-          width="24"
-          height="24"
-          src="https://assets.codepen.io/162656/george-martsoukos-small-logo.svg"
-          alt="George Martsoukos logo"
-        />
-      </a>
-    </footer>
+    
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
