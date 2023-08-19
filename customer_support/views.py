@@ -1032,7 +1032,7 @@ def create_master_link(request):
         num_links = int(request.POST.get('your-surname'))
         Listdata = []
         for link in range(num_links):
-            random_string = secrets.token_hex(16)  # Generate a random string of 16 characters
+            random_string = secrets.token_hex(16)
             portfolio, room, messages = no_login_portfolio_control(random_string, product_name.lower())
             message_list = [jsonify_message_object(message) for message in messages]
             Listdata.append({
@@ -1044,7 +1044,6 @@ def create_master_link(request):
         })
         return JsonResponse(Listdata,safe=False)
     else:
-
         return render(request,'creaetmasterlink.html')
 
 
