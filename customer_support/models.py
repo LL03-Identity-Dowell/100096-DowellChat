@@ -18,6 +18,15 @@ def p_name():
     return User.objects.make_random_password(length=5)
 
 
+
+class RoomEvent(models.Model):
+    event_name = models.CharField(max_length=50)
+    room_count = models.IntegerField()
+    organization = models.CharField(max_length=200, blank=False, null=False)
+    qr_genrate_id = models.CharField(max_length=200, blank=True, null=True)
+
+
+
 class Portfolio(models.Model):
     portfolio_name = models.CharField(max_length=200, default=p_name())
     is_staff = models.BooleanField(default=False)
@@ -35,11 +44,15 @@ class Room(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     room_name = models.CharField(max_length=200, blank=True, null=True)
     room_id = models.CharField(max_length=200, blank=True, null=True)
+    link_id = models.CharField(max_length=500, blank=True, null=True)
     active = models.BooleanField(default=True)
     sender_portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, blank=True, null=True)
     company = models.CharField(max_length=200, blank=True, null=True)
     product = models.CharField(max_length=200, blank=True, null=True)
     sub_product = models.CharField(max_length=20, blank=True, null=True)
+    rm_link = models.URLField(max_length=200, default="https://100096.pythonanywhere.com")
+    generated_by_QR = models.BooleanField(default=False)
+    is_opened = models.BooleanField(default=False)
     # sender_name = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self):

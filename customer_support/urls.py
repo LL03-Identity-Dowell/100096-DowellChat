@@ -11,7 +11,7 @@ urlpatterns = [
     path('dowell-mail/', views.dowell_mail_view, name='dowell-mail-chat'),     #(?:session_id=(?P<session_id>[a-z0-9])/)?$
     path('product_list/', views.product_list, name= 'product_list'),
     path('admin_product_list/', views.admin_product_list, name= 'admin_product_list'),
-    path('client_product_list/', views.client_product_list, name= 'client_product_list'),
+    path('client_product_list/<str:organization>/', views.client_product_list, name= 'client_product_list'),
     #re_path(r'^room_list/(?P<product>[0-9\w-]+)/(?P<organization_id>[0-9\w-]+)', views.room_list, name= 'room_list'),# room_list for provided product
     re_path(r'^room_list/(?P<product>[\w\s-]+)/(?P<organization_id>[0-9\w-]+)', views.room_list, name= 'room_list'),# room_list for provided product
     re_path(r'^room_list1/(?P<product>[\w\s-]+)/(?P<organization_id>[0-9\w-]+)', views.tempory_room_list, name= 'room_list'),# room_list for provided product
@@ -44,9 +44,13 @@ urlpatterns = [
     path('delete-customer-support-room/', views.receiver_side_delete_room_api, name='delete-customer-support-room'),
     path('delete-customer-support-mobile/', views.customer_support_mobile_delete_room_API, name='delete-customer-support-room'),
 
-    path('user_protfolio/', views.portfolio_info, name='protfolio_info'),
+    path('user_protfolio/', views.portfolio_info_, name='protfolio_info'),
     path('create_room_sales_agent/<str:product>/', views.create_room_sales_agent, name='create_room_sales_agent'),
-    path('create_master_link', views.create_master_link, name='create_master_link'),
+    
+
+    path('public-link-login/', views.public_link_login, name='public-link'),
+    path('create_master_link/', views.create_master_link, name='create_master_link'),
+    path('api/v3/init/<str:company>/<str:event>/<str:link_id>/', views.public_chat_link, name='public-chat-link'),
 
     
 
