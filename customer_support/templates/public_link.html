@@ -25,6 +25,7 @@
                     {% for qr_l in link_list %}
                         {% if l.rm_link == qr_l.link%}
                         <li>{{l.room_pk}} - {{l.rm_link}} - {{qr_l.is_opened}} - {{qr_l.is_finalized}}</li>
+                        {% endif %}
                     {% endfor %}
                 {% endfor %}
                 </ul>
