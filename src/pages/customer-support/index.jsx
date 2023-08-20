@@ -21,7 +21,7 @@ export const CustomerSupport = () => {
   const [orgId, setOrgId] = useState();
   const [userId, setUserId] = useState();
   const [rooms, setRooms] = useState();
-  const [selectedRoomId, setSelectedRoomId] = useState("42");
+  const [selectedRoomId, setSelectedRoomId] = useState("Room ID");
   const [roomSessionId, setRoomSessionId] = useState();
   const [sessionId, setSessionId] = useState();
   const [messages, setMessages] = useState(undefined);
@@ -63,6 +63,7 @@ export const CustomerSupport = () => {
             setRoomSessionId(response.data.firstroom.session_id);
           } else {
             setRooms(response.data.rooms);
+            setSelectedRoomId("Room ID");
             setMessages([]);
             setuserDataStatus(false);
           }
@@ -118,13 +119,13 @@ export const CustomerSupport = () => {
   };
 
   useEffect(() => {
-    if (selectedRoomId && selectedRoomId !== "42") {
+    if (selectedRoomId && selectedRoomId !== "Room ID") {
       getMessages(selectedRoomId);
     } else {
       setMessages(undefined);
-      setSelectedRoomId("42");
+      setSelectedRoomId("Room ID");
     }
-  }, [selectedRoomId]);
+  }, [selectedRoomId, productTitle]);
 
   return (
     <div className="flex h-screen justify-around pt-4 gap-2 pb-2">
@@ -140,6 +141,7 @@ export const CustomerSupport = () => {
                 pageName="living-lab-chat"
                 setProductTitle={setProductTitle}
                 selectedProduct={productTitle}
+                orgId={orgId}
               />
             </div>
           </div>
@@ -276,11 +278,11 @@ export const CustomerSupport = () => {
                       ))}
                     </div>
                   ) : (
-                    <div class="flex h-full min-w-max items-center justify-center text-center">
+                    <div className="flex h-full min-w-max items-center justify-center text-center">
                       <div role="status">
                         <svg
                           aria-hidden="true"
-                          class="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                          className="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
                           viewBox="0 0 100 101"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"

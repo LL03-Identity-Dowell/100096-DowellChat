@@ -6,6 +6,7 @@ export const Products = ({
   pageName = "customer-support",
   setProductTitle,
   selectedProduct,
+  orgId,
 }) => {
   const [productList, setProductList] = useState([]);
   //Button colors List
@@ -42,20 +43,22 @@ export const Products = ({
     "#6B8E23",
   ];
   useEffect(() => {
-    if (pageName === "customer-support") {
-      axios
-        .get("https://100096.pythonanywhere.com/client_product_list/")
-        .then((res) => {
-          setProductList(res.data.product_list);
-        });
-    } else {
-      axios
-        .get(`https://100096.pythonanywhere.com/admin_product_list/`)
-        .then((res) => {
-          setProductList(res.data.product_list);
-        });
+    if (orgId) {
+      if (pageName === "customer-support") {
+        axios
+          .get(`https://100096.pythonanywhere.com/client_product_list/${orgId}`)
+          .then((res) => {
+            setProductList(res.data.product_list);
+          });
+      } else {
+        axios
+          .get(`https://100096.pythonanywhere.com/admin_product_list/`)
+          .then((res) => {
+            setProductList(res.data.product_list);
+          });
+      }
     }
-  }, [pageName]);
+  }, [orgId, pageName]);
   return (
     <>
       {productList.map((item, index) => (
