@@ -31,6 +31,7 @@ export const CustomerSupport = () => {
   useEffect(() => {
     if (dataContext.collectedData) {
       sessionStorage.setItem("sessionId", dataContext.collectedData.sessionId);
+      sessionStorage.setItem("id", dataContext.collectedData.id);
       setSessionId(dataContext.collectedData.sessionId);
     } else {
       setSessionId(sessionStorage.getItem("sessionId"));
