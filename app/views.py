@@ -24,7 +24,14 @@ class room_service(APIView):
         else:
             return self.handle_error(request)
         
+    def get(self, request):
+        type_request = request.GET.get('type')
 
+        if type_request == "get_room_by_id":
+            return self.get_room_by_id(request)
+        else:
+            return self.handle_error(request)
+        
     """CREATE ROOM SERVICE"""
     def create_room(self, request):
         user_id = request.data.get('user_id')
@@ -76,22 +83,34 @@ class room_service(APIView):
 
     """GET ROOM BY SERVER SIDE""" 
     def get_rooms_by_workspace_id(self, request):
-        workspace_id = request.GET.get('workspace_id')  
-        product_name = request.data.get('product_name')
+        workspace_id = request.GET.get('workspace_id')
 
-        filed = {
-            "workspace_id": workspace_id,
-            "product_name": product_name
+        field = {
+            "workspace_id": workspace_id
         }
 
-        response = json.loads(dowellconnection(*room_services, "fetch", filed, update_field= None))
+        response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None))
         return Response({
             "success": True,
             "message": "Room deatils based on workspace id",
             "response": response["data"],
         })
     
-    
+    """GET ROOM BY ID"""
+    def get_room_by_id(self, request):
+        room_id = request.GET.get('room_id')
+
+        field = {
+            "_id": room_id
+        }
+
+        response = json.loads(dowellconnection(*room_services, "find", field, update_field= None))
+        return Response({
+            "success": True,
+            "message": "Room deatils based on workspace id",
+            "response": response["data"],
+        })
+
     """HANDLE ERROR"""
     def handle_error(self, request): 
         return Response({
