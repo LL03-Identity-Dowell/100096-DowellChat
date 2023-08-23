@@ -509,6 +509,24 @@ def create_room_api__dowell_user(request, *args, **kwargs):
         'user_id': portfolio.userID
     })
 
+
+# def create_room_api__dowell_user(request, *args, **kwargs):
+#     session_id = request.GET.get('session_id')
+#     d_user = request.GET.get("dowell_user")
+#     print("Product get args: ", session_id, kwargs['product'].lower(), d_user)
+
+#     portfolio = portfolio_control(d_user, session_id, False)
+#     room, messages = room_control(portfolio, kwargs['product'].lower())
+
+#     return JsonResponse({
+#         'product': kwargs['product'].lower(),
+#         'portfolio': portfolio.id,
+#         'messages': [jsonify_message_object(message) for message in messages],
+#         'room_pk': room.id,
+#         'user_id': portfolio.userID
+#     })
+
+
 '''
 @csrf_exempt
 def create_room_sales_agent(request, *args, **kwargs):
@@ -1110,22 +1128,6 @@ def create_master_link(request):
     
     if request.method == 'POST':
         Listdata = []
-<<<<<<< HEAD
-        for link in range(num_links):
-            random_string = secrets.token_hex(16)
-            portfolio, room, messages = no_login_portfolio_control(random_string, product_name.lower())
-            message_list = [jsonify_message_object(message) for message in messages]
-            Listdata.append({
-        'session_id': random_string,
-        'product': product_name.lower(),
-        'portfolio': portfolio,
-        'messages': message_list,
-        'room_pk': room
-        })
-        return JsonResponse(Listdata,safe=False)
-    else:
-        return render(request,'creaetmasterlink.html')
-=======
         event_name = '-'.join(request.POST.get('event-name').split(' '))
 
         r_event = RoomEvent.objects.filter(event_name=event_name, organization=company_id).first()
@@ -1195,7 +1197,6 @@ def public_chat_link(request, *args, **kwargs):
     rm.is_opened = True
     rm.save()
     return render(request, "public_chat.html", {'event': kwargs['event'], 'session_id': kwargs['link_id'], 'set_viewd_response':set_viewd_response})
->>>>>>> 8ba0c98350412bf0f651d8edfb91c8421e773ebb
 
 
 

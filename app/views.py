@@ -21,6 +21,8 @@ class room_service(APIView):
             return self.create_room(request)
         elif type_request == "get_rooms_by_workspace_id":
             return self.get_rooms_by_workspace_id(request)
+        elif type_request == "update_message_room":
+            return self.update_message_room(request)
         else:
             return self.handle_error(request)
         
@@ -104,10 +106,29 @@ class room_service(APIView):
             "_id": room_id
         }
 
+        print(room_id)
         response = json.loads(dowellconnection(*room_services, "find", field, update_field= None))
         return Response({
             "success": True,
             "message": "Room deatils based on workspace id",
+            "response": response["data"],
+        })
+    
+    """update message ROOM BY ID"""
+    
+    def update_message_room(self,request,):
+        room_id = request.GET.get('room_id')
+        message = request.data.get('message')
+
+        field = {
+            "_id": room_id,
+        }
+        update_field = message
+
+        response = json.loads(dowellconnection(*room_services, "update", field, update_field= update_field))
+        return Response({
+            "success": True,
+            "message": "Message updated successfully",
             "response": response["data"],
         })
 
@@ -118,3 +139,4 @@ class room_service(APIView):
             "message": "Invalid request type"
         }, status=status.HTTP_400_BAD_REQUEST)
     
+
