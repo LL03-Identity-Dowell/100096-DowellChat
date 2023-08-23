@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "notifications",
     "channels",
     "customer_support",
+    'rest_framework',
+    "app"
 ]
 
 MIDDLEWARE = [
