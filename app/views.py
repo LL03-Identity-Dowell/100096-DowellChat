@@ -13,13 +13,11 @@ class health_check(APIView):
         return Response("if your are seeing this then , server is !down",status=status.HTTP_200_OK)
 
 @method_decorator(csrf_exempt, name='dispatch')
-class room_service(APIView):
+class RoomService(APIView):
     def post(self, request):
         type_request = request.GET.get('type')
-
-        if type_request == "create_room":
-            return self.create_room(request)
-        elif type_request == "get_rooms_by_workspace_id":
+        
+        if type_request == "get_rooms_by_workspace_id":
             return self.get_rooms_by_workspace_id(request)
         elif type_request == "update_message_room":
             return self.update_message_room(request)
@@ -35,12 +33,9 @@ class room_service(APIView):
             return self.handle_error(request)
         
     """CREATE ROOM SERVICE"""
-    def create_room(self, request):
-        user_id = request.data.get('user_id')
-        workspace_id = request.data.get('workspace_id')
-        product_name = request.data.get('product_name')
-        portfolio_name = request.data.get('portfolio_name')
-        message = request.data.get('message')
+    def create_room(self, user_id, workspace_id, product_name,portfolio_name):
+    
+        message = {"receiver":'How may I help you'}
 
         data = {
             "user_id": user_id,
@@ -65,12 +60,12 @@ class room_service(APIView):
             }
             response =  json.loads(dowellconnection(*room_services, "insert", field, update_field=None))
             if response["isSuccess"]:
-                return Response({
+                return {
                     "success": True,
                     "message": "Room created successfully",
                     "inserted_id": response["inserted_id"],
                     "response": field
-                })
+                }
             else:
                 return Response({
                     "success": False,
@@ -100,7 +95,7 @@ class room_service(APIView):
     
     """GET ROOM BY ID"""
     def get_room_by_id(self, request):
-        room_id = request.GET.get('room_id')
+        room_id = request.data.get('room_id')
 
         field = {
             "_id": room_id
@@ -140,3 +135,90 @@ class room_service(APIView):
         }, status=status.HTTP_400_BAD_REQUEST)
     
 
+class RoomController(RoomService):
+    def post(self, request):
+        user_id = request.data.get('user_id')
+        workspace_id = request.data.get('workspace_id')
+        product_name = request.data.get('product_name')
+        portfolio_name = request.data.get('portfolio_name')
+        
+        response = self.roomFilter(user_id, workspace_id, product_name, portfolio_name)
+        print(response)
+        if response:
+            return Response({
+                "success": True,
+                "message": "Room filter successfully",
+                "inserted_id": response[0]["_id"],
+                "response": response[0]
+            })
+        else:
+            response = self.create_room(user_id, workspace_id, product_name, portfolio_name)
+            print(response)
+            if response["success"]:
+                return Response({
+                    "success": True,
+                    "message": "Room created successfully",
+                    "inserted_id": response["inserted_id"],
+                    "response": response['response']
+                })
+            else:
+                return Response({
+                    "success": False,
+                    "message": "Failed to create room",
+                })
+    
+
+    def roomFilter(self,user_id, workspace_id, product_name, portfolio_name):
+        field = {
+            "user_id": user_id,
+            'workspace_id': workspace_id,
+            'product_name': product_name,
+            'portfolio_name': portfolio_name,
+            'is_active': True
+        }
+
+        response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None))
+        return response["data"]
+
+
+class RoomList(APIView):
+    def get(self, request):
+        workspace_id = request.GET.get('workspace_id')
+        product_name= request.GET.get('product_name')
+
+
+        field = {
+            "workspace_id": workspace_id,
+            "product_name": product_name
+        }
+
+        response_data = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None))
+        if 'data' in response_data and len(response_data['data']) > 0:
+            last_id = response_data['data'][-1]["_id"]
+            last_room_response =  self.get_room_by_id(last_id)
+            print (last_room_response)
+            return Response({
+            "success": True,
+            "message": "Room deatils based on workspace id",
+            "response": response_data["data"],
+            "last_room_details": last_room_response["response"]
+        })
+        else:
+            
+            return Response({
+            "success": False,
+            "message": "Room not found on workspace id",
+        })
+    def get_room_by_id(self, room_id):
+
+        field = {
+            "_id": room_id
+        }
+
+        print(room_id)
+        response = json.loads(dowellconnection(*room_services, "find", field, update_field= None))
+        return{
+            "success": True,
+            "message": "Room deatils based on workspace id",
+            "response": response["data"],
+        }
