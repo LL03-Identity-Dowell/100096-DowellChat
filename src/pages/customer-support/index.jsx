@@ -17,97 +17,35 @@ import "react-toastify/dist/ReactToastify.css";
 export const CustomerSupport = () => {
   const dataContext = useContext(DataContext);
   const [productTitle, setProductTitle] = useState("Login");
-  const [userInfo, setUserInfo] = useState();
-  const [orgId, setOrgId] = useState();
-  const [userId, setUserId] = useState();
   const [rooms, setRooms] = useState();
   const [selectedRoomId, setSelectedRoomId] = useState("Room ID");
-  const [roomSessionId, setRoomSessionId] = useState();
-  const [sessionId, setSessionId] = useState();
   const [messages, setMessages] = useState(undefined);
   const [showPopUp, setShowPopUp] = useState(false);
-  const [userDataStatus, setuserDataStatus] = useState(true);
 
   useEffect(() => {
     if (dataContext.collectedData) {
       sessionStorage.setItem("sessionId", dataContext.collectedData.sessionId);
       sessionStorage.setItem("id", dataContext.collectedData.id);
-      setSessionId(dataContext.collectedData.sessionId);
-    } else {
-      setSessionId(sessionStorage.getItem("sessionId"));
     }
   }, [dataContext.collectedData]);
 
   useEffect(() => {
-    if (sessionId) {
-      const formData = new FormData();
-      formData.append("session_id", sessionId);
-      axios
-        .post("https://100093.pythonanywhere.com/api/userinfo/", formData)
-        .then((response) => {
-          setOrgId(response?.data?.selected_product?.orgid);
-        });
-    }
-  }, [sessionId]);
-
-  useEffect(() => {
-    if (productTitle && orgId) {
-      setRooms(undefined);
-      axios
-        .get(
-          `https://100096.pythonanywhere.com/room_list1/${productTitle}/${orgId}`
-        )
-        .then((response) => {
-          if (response.data.rooms.length > 0) {
-            setRooms(response.data.rooms);
-            setSelectedRoomId(response.data.firstroom.room_id);
-            setRoomSessionId(response.data.firstroom.session_id);
-          } else {
-            setRooms(response.data.rooms);
-            setSelectedRoomId("Room ID");
-            setMessages([]);
-            setuserDataStatus(false);
-          }
-        });
-    }
-  }, [orgId, productTitle]);
-
-  useEffect(() => {
-    if (roomSessionId) {
-      setUserInfo(null);
-      setuserDataStatus(true);
-      const formData = new FormData();
-      formData.append("session_id", roomSessionId);
-      axios
-        .post("https://100093.pythonanywhere.com/api/userinfo/", formData)
-        .then((response) => {
-          if (response.data.userinfo) {
-            setUserInfo(response.data.userinfo);
-            setuserDataStatus(true);
-          } else {
-            setuserDataStatus(false);
-          }
-        })
-        .catch((reason) => {
-          console.log(reason);
-        });
-    }
-  }, [roomSessionId]);
-
-  useEffect(() => {
-    if (sessionId) {
-      axios
-        .get(
-          `https://100096.pythonanywhere.com/create-user-profile/?session_id=${sessionId}`
-        )
-        .then((response) => {
-          setUserId(response.data?.portfolio?.userID);
-          if (orgId == null) {
-            setOrgId(response.data.portfolio.organization);
-          }
-        });
-    }
-  }, [orgId, sessionId]);
+    setRooms(undefined);
+    axios
+      .get(
+        `https://100096.pythonanywhere.com/room_list1/${productTitle}/${dataContext.collectedData.orgId}`
+      )
+      .then((response) => {
+        if (response.data.rooms.length > 0) {
+          setRooms(response.data.rooms);
+          setSelectedRoomId(response.data.firstroom.room_id);
+        } else {
+          setRooms(response.data.rooms);
+          setSelectedRoomId("Room ID");
+          setMessages([]);
+        }
+      });
+  }, [dataContext.collectedData.orgId, productTitle]);
 
   const getMessages = (roomId) => {
     setSelectedRoomId(roomId);
@@ -142,7 +80,6 @@ export const CustomerSupport = () => {
                 pageName="living-lab-chat"
                 setProductTitle={setProductTitle}
                 selectedProduct={productTitle}
-                orgId={orgId}
               />
             </div>
           </div>
@@ -233,7 +170,6 @@ export const CustomerSupport = () => {
                       roomId={room.room_id}
                       roomName={room.room_name}
                       fetchRoomMessages={getMessages}
-                      setRoomSessionId={setRoomSessionId}
                     />
                   ))
                 ) : (
@@ -304,8 +240,6 @@ export const CustomerSupport = () => {
 
                 <Reply
                   roomId={selectedRoomId}
-                  orgId={orgId}
-                  userId={userId}
                   setMessages={setMessages}
                   rooms={rooms}
                 />
@@ -313,12 +247,7 @@ export const CustomerSupport = () => {
             </div>
           </div>
         </div>
-        <Profile
-          userInfo={userInfo}
-          roomId={selectedRoomId}
-          roomSessionId={roomSessionId}
-          userDataStatus={userDataStatus}
-        />
+        <Profile roomId={selectedRoomId} />
       </div>
       {showPopUp && rooms.length > 0 && (
         <PopUp
@@ -328,8 +257,6 @@ export const CustomerSupport = () => {
           }}
           roomId={selectedRoomId}
           productTitle={productTitle}
-          orgId={orgId}
-          sessionId={sessionId}
           setSelectedRoomId={setSelectedRoomId}
           setShowPopUp={setShowPopUp}
         />

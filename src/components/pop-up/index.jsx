@@ -1,27 +1,31 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
+import DataContext from "../../context/data-context";
 
 export const PopUp = ({
   setRooms,
   notify,
   roomId,
-  orgId,
-  sessionId,
+  // orgId,
+  // sessionId,
   setSelectedRoomId,
   setShowPopUp,
 }) => {
+  const dataContext = useContext(DataContext);
   const [isLoading, setIsLoading] = useState(false);
   const handleRoomDelete = () => {
     setIsLoading(true);
     axios
       .get(
-        `https://100096.pythonanywhere.com/delete-customer-support-room/?session_id=${sessionId}&room_id=${roomId}`
+        `https://100096.pythonanywhere.com/delete-customer-support-room/?session_id=${dataContext.collectedData.sessionId}&room_id=${roomId}`
       )
       .then(() => {
         // toast("Room Deleted Successfully!");
         notify("Room Deleted Successfully!", "success");
         axios
-          .get(`https://100096.pythonanywhere.com/room_list1/Login/${orgId}`)
+          .get(
+            `https://100096.pythonanywhere.com/room_list1/Login/${dataContext.collectedData.orgId}`
+          )
           .then((response) => {
             setRooms(response.data.rooms);
             setSelectedRoomId(response.data.firstroom.room_id);

@@ -1,13 +1,14 @@
 import { Button } from "../button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import DataContext from "../../context/data-context";
 
 export const Products = ({
   pageName = "customer-support",
   setProductTitle,
   selectedProduct,
-  orgId,
 }) => {
+  const dataContext = useContext(DataContext);
   const [productList, setProductList] = useState([]);
   //Button colors List
   const colorsList = [
@@ -43,22 +44,22 @@ export const Products = ({
     "#6B8E23",
   ];
   useEffect(() => {
-    if (orgId) {
-      if (pageName === "customer-support") {
-        axios
-          .get(`https://100096.pythonanywhere.com/client_product_list/${orgId}`)
-          .then((res) => {
-            setProductList(res.data.product_list);
-          });
-      } else {
-        axios
-          .get(`https://100096.pythonanywhere.com/admin_product_list/`)
-          .then((res) => {
-            setProductList(res.data.product_list);
-          });
-      }
+    if (pageName === "customer-support") {
+      axios
+        .get(
+          `https://100096.pythonanywhere.com/client_product_list/${dataContext.collectedData.orgId}`
+        )
+        .then((res) => {
+          setProductList(res.data.product_list);
+        });
+    } else {
+      axios
+        .get(`https://100096.pythonanywhere.com/admin_product_list/`)
+        .then((res) => {
+          setProductList(res.data.product_list);
+        });
     }
-  }, [orgId, pageName]);
+  }, [dataContext.collectedData.orgId, pageName]);
   return (
     <>
       {productList.map((item, index) => (

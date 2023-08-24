@@ -20,20 +20,19 @@ export const FirstLoadComponent = () => {
       ) {
         navigate(`/${pageName}`, { replace: true });
         setCustomerSupportEligible(true);
-        return;
+        return true;
       } else if (
         portfolio_info[i].product === "Living Lab Chat" &&
         pageName === "living-lab-chat"
       ) {
         navigate(`/${pageName}`, { replace: true });
         setLivingLabChatEligible(true);
-        return;
-      } else {
-        setCustomerSupportEligible(false);
-        setLivingLabChatEligible(false);
-        window.location.href = "https://100014.pythonanywhere.com/en/";
+        return true;
       }
     }
+    setCustomerSupportEligible(false);
+    setLivingLabChatEligible(false);
+    window.location.href = "https://100014.pythonanywhere.com/en/";
   };
 
   const getUserData = (sessionId, id) => {
@@ -48,7 +47,20 @@ export const FirstLoadComponent = () => {
         .then((response) => {
           console.log(response.data);
           if (response.data.portfolio_info) {
-            checkProduct(response.data.portfolio_info);
+            if (checkProduct(response.data.portfolio_info)) {
+              const collectedData = {
+                userName: response.data.userinfo.username,
+                sessionId: sessionId,
+                id: id,
+                email: response.data.userinfo.email,
+                profileImage: response.data.userinfo.profile_img,
+                orgId: response.data.userinfo.client_admin_id,
+                userId: response.data.userinfo.userID,
+                phone: response.data.userinfo.phone,
+                userCountry: response.data.userinfo.user_country,
+              };
+              dataContext.setCollectedData(collectedData);
+            }
           } else {
             window.location.href = "https://100014.pythonanywhere.com/en/";
           }
@@ -61,7 +73,21 @@ export const FirstLoadComponent = () => {
         .then((response) => {
           console.log(response.data);
           if (response.data.portfolio_info) {
-            checkProduct(response.data.portfolio_info);
+            if (checkProduct(response.data.portfolio_info)) {
+              const collectedData = {
+                userName: response.data.userinfo.username,
+                sessionId: sessionId,
+                id: id,
+                email: response.data.userinfo.email,
+                profileImage: response.data.userinfo.profile_img,
+                orgId: response.data.userinfo.client_admin_id,
+                userId: response.data.userinfo.userID,
+                phone: response.data.userinfo.phone,
+                userCountry: response.data.userinfo.user_country,
+                timezone: response.data.userinfo.timezone,
+              };
+              dataContext.setCollectedData(collectedData);
+            }
           } else {
             window.location.href = "https://100014.pythonanywhere.com/en/";
           }

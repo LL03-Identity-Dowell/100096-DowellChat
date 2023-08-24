@@ -17,99 +17,35 @@ import "react-toastify/dist/ReactToastify.css";
 export const LivingLabChat = () => {
   const dataContext = useContext(DataContext);
   const [productTitle, setProductTitle] = useState("Sales-Agent-Login");
-  const [userInfo, setUserInfo] = useState();
-  const [orgId, setOrgId] = useState();
-  const [userId, setUserId] = useState();
   const [rooms, setRooms] = useState();
   const [selectedRoomId, setSelectedRoomId] = useState("Room ID");
-  const [sessionId, setSessionId] = useState();
-  const [roomSessionId, setRoomSessionId] = useState();
   const [messages, setMessages] = useState(undefined);
-  const [userDataStatus, setuserDataStatus] = useState(true);
   const [showPopUp, setShowPopUp] = useState(false);
 
   useEffect(() => {
     if (dataContext.collectedData) {
       sessionStorage.setItem("sessionId", dataContext.collectedData.sessionId);
-      setSessionId(dataContext.collectedData.sessionId);
-    } else {
-      setSessionId(sessionStorage.getItem("sessionId"));
+      sessionStorage.setItem("id", dataContext.collectedData.id);
     }
   }, [dataContext.collectedData]);
 
   useEffect(() => {
-    if (sessionId) {
-      const formData = new FormData();
-      formData.append("session_id", sessionId);
-      axios
-        .post("https://100093.pythonanywhere.com/api/userinfo/", formData)
-        .then((response) => {
-          // setUserInfo(response.data.userinfo);
-          setOrgId(response?.data?.selected_product?.orgid);
-        })
-        .catch((reason) => {
-          console.log(reason);
-        });
-    }
-  }, [sessionId]);
-  useEffect(() => {
-    if (roomSessionId) {
-      setUserInfo(null);
-      setuserDataStatus(true);
-      const formData = new FormData();
-      formData.append("session_id", roomSessionId);
-      axios
-        .post("https://100093.pythonanywhere.com/api/userinfo/", formData)
-        .then((response) => {
-          if (response.data.userinfo) {
-            setUserInfo(response.data.userinfo);
-            setuserDataStatus(true);
-          } else {
-            setuserDataStatus(false);
-          }
-        })
-        .catch((reason) => {
-          console.log(reason);
-        });
-    }
-  }, [roomSessionId]);
-
-  useEffect(() => {
-    if (productTitle && orgId) {
-      setRooms(undefined);
-      axios
-        .get(
-          `https://100096.pythonanywhere.com/room_list1/${productTitle}/${orgId}`
-        )
-        .then((response) => {
-          if (response.data.rooms.length > 0) {
-            setRooms(response.data.rooms);
-            setSelectedRoomId(response.data.firstroom.room_id);
-            setRoomSessionId(response.data.firstroom.session_id);
-          } else {
-            setRooms(response.data.rooms);
-            setSelectedRoomId("Room ID");
-            setMessages([]);
-            setuserDataStatus(false);
-          }
-        });
-    }
-  }, [orgId, productTitle]);
-
-  useEffect(() => {
-    if (sessionId) {
-      axios
-        .get(
-          `https://100096.pythonanywhere.com/create-user-profile/?session_id=${sessionId}`
-        )
-        .then((response) => {
-          setUserId(response.data?.portfolio?.userID);
-          if (orgId == null) {
-            setOrgId(response.data.portfolio.organization);
-          }
-        });
-    }
-  }, [orgId, sessionId]);
+    setRooms(undefined);
+    axios
+      .get(
+        `https://100096.pythonanywhere.com/room_list1/${productTitle}/${dataContext.collectedData.orgId}`
+      )
+      .then((response) => {
+        if (response.data.rooms.length > 0) {
+          setRooms(response.data.rooms);
+          setSelectedRoomId(response.data.firstroom.room_id);
+        } else {
+          setRooms(response.data.rooms);
+          setSelectedRoomId("Room ID");
+          setMessages([]);
+        }
+      });
+  }, [dataContext.collectedData.orgId, productTitle]);
 
   const getMessages = (roomId) => {
     setSelectedRoomId(roomId);
@@ -144,7 +80,6 @@ export const LivingLabChat = () => {
                 pageName="customer-support"
                 setProductTitle={setProductTitle}
                 selectedProduct={productTitle}
-                orgId={orgId}
               />
             </div>
           </div>
@@ -236,7 +171,6 @@ export const LivingLabChat = () => {
                       roomId={room.room_id}
                       roomName={room.room_name}
                       fetchRoomMessages={getMessages}
-                      setRoomSessionId={setRoomSessionId}
                     />
                   ))
                 ) : (
@@ -306,8 +240,6 @@ export const LivingLabChat = () => {
                 </div>
                 <Reply
                   roomId={selectedRoomId}
-                  orgId={orgId}
-                  userId={userId}
                   setMessages={setMessages}
                   rooms={rooms}
                 />
@@ -315,12 +247,7 @@ export const LivingLabChat = () => {
             </div>
           </div>
         </div>
-        <Profile
-          userInfo={userInfo}
-          roomId={selectedRoomId}
-          roomSessionId={roomSessionId}
-          userDataStatus={userDataStatus}
-        />
+        <Profile roomId={selectedRoomId} />
       </div>
 
       {showPopUp && rooms.length > 0 && (
@@ -331,8 +258,6 @@ export const LivingLabChat = () => {
           }}
           roomId={selectedRoomId}
           productTitle={productTitle}
-          orgId={orgId}
-          sessionId={sessionId}
           setSelectedRoomId={setSelectedRoomId}
           setShowPopUp={setShowPopUp}
         />

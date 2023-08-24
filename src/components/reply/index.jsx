@@ -1,11 +1,14 @@
 import axios from "axios";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+
+import DataContext from "../../context/data-context";
 
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { toast } from "react-toastify";
 
-export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
+export const Reply = ({ roomId, setMessages, rooms }) => {
+  const dataContext = useContext(DataContext);
   const [message, setMessage] = useState(undefined);
   const [showPicker, setShowPicker] = useState(false);
   const fileInputRef = useRef(null);
@@ -31,9 +34,9 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
         fileToBase64(message).then((response) => {
           data = {
             message: response,
-            user_id: userId,
+            user_id: dataContext.collectedData.userId,
             message_type: type,
-            org_id: orgId,
+            org_id: dataContext.collectedData.orgId,
           };
           axios
             .post(
@@ -48,9 +51,9 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
       } else {
         data = {
           message: message,
-          user_id: userId,
+          user_id: dataContext.collectedData.userId,
           message_type: type,
-          org_id: orgId,
+          org_id: dataContext.collectedData.orgId,
         };
         axios
           .post(
