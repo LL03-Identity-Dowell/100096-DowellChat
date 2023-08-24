@@ -7,13 +7,11 @@ import Lottie from "lottie-react";
 import loader from "../../assets/images/loader.json";
 import { toast } from "react-toastify";
 
-export const Reply = ({ roomId, userId, orgId, setMessages, rooms,status,statusChecking }) => {
-  console.log(status,'status')
+export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
   const [message, setMessage] = useState(undefined);
   const [showPicker, setShowPicker] = useState(false);
   const [loading,setLoading] = useState(false)
   const fileInputRef = useRef(null);
-  console.log(loading)
 
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -32,10 +30,9 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms,status,statusC
 
   const sendMessage = (message, type) => {
     if (message !== "" && rooms.length !== 0) {
-      // setLoading(true)
-      statusChecking(true)
       let data = {};
       if (type === "IMAGE") {
+        setLoading(true)
         fileToBase64(message).then((response) => {
           data = {
             message: response,

@@ -8,7 +8,7 @@ import loader from "../../assets/images/loader.json";
 import { toast } from "react-toastify";
 
 export const Reply = ({ roomId, userId, orgId, setMessages, rooms,status,statusChecking }) => {
-  console.log(status,'status')
+  console.log(status)
   const [message, setMessage] = useState(undefined);
   const [showPicker, setShowPicker] = useState(false);
   const [loading,setLoading] = useState(false)
@@ -32,8 +32,7 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms,status,statusC
 
   const sendMessage = (message, type) => {
     if (message !== "" && rooms.length !== 0) {
-      // setLoading(true)
-      statusChecking(true)
+      setLoading(true)
       let data = {};
       if (type === "IMAGE") {
         fileToBase64(message).then((response) => {

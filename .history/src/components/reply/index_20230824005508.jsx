@@ -7,14 +7,20 @@ import Lottie from "lottie-react";
 import loader from "../../assets/images/loader.json";
 import { toast } from "react-toastify";
 
-export const Reply = ({ roomId, userId, orgId, setMessages, rooms,status,statusChecking }) => {
-  console.log(status,'status')
+export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
   const [message, setMessage] = useState(undefined);
   const [showPicker, setShowPicker] = useState(false);
   const [loading,setLoading] = useState(false)
   const fileInputRef = useRef(null);
-  console.log(loading)
-
+  const style = {
+    width:200,
+    height:200,
+    position:'absolute',
+    top:'50%',
+    bottom:'50%',
+    left:'50%',
+    right:'50%',
+  }
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -28,12 +34,14 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms,status,statusC
       reader.readAsDataURL(file);
     });
   }
-
+  const shimmer = () => {
+    return (
+      <div className="h-[400px] bg-blue-800 w-[500px] animate-pulse"></div>
+    )
+  }
 
   const sendMessage = (message, type) => {
     if (message !== "" && rooms.length !== 0) {
-      // setLoading(true)
-      statusChecking(true)
       let data = {};
       if (type === "IMAGE") {
         fileToBase64(message).then((response) => {
@@ -53,10 +61,10 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms,status,statusC
                 // return <div className="h-96 bg-gray-300 rounded-lg w-[300px] animate-pulse"></div>
                 console.log('loading')
               }
-              // else{
-              //   setMessages(response.data.messages)
-              //   setMessage("");
-              // }
+              else{
+                setMessages(response.data.messages)
+                setMessage("");
+              }
             });
         });
       } else {
