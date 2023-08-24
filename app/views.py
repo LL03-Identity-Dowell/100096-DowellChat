@@ -21,6 +21,8 @@ class RoomService(APIView):
             return self.get_rooms_by_workspace_id(request)
         elif type_request == "update_message_room":
             return self.update_message_room(request)
+        elif type_request == "delete_room":
+            return self.delete_room(request)
         else:
             return self.handle_error(request)
         
@@ -59,6 +61,7 @@ class RoomService(APIView):
                 "is_active": True,
             }
             response =  json.loads(dowellconnection(*room_services, "insert", field, update_field=None))
+            print("response",response)
             if response["isSuccess"]:
                 return {
                     "success": True,
@@ -67,10 +70,10 @@ class RoomService(APIView):
                     "response": field
                 }
             else:
-                return Response({
+                return{
                     "success": False,
                     "message": "Failed to create room",
-                })
+                }
         else:
             return Response({
                 "success": False,
@@ -80,10 +83,10 @@ class RoomService(APIView):
 
     """GET ROOM BY SERVER SIDE""" 
     def get_rooms_by_workspace_id(self, request):
-        workspace_id = request.GET.get('workspace_id')
+        org_id = request.GET.get('org_id')
 
         field = {
-            "workspace_id": workspace_id
+            "workspace_id": org_id
         }
 
         response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None))
@@ -112,19 +115,37 @@ class RoomService(APIView):
     """update message ROOM BY ID"""
     
     def update_message_room(self,request,):
-        room_id = request.GET.get('room_id')
-        message = request.data.get('message')
-
+        room_id = request.data.get('room_id')
+        message_data = request.data.get('message_data')
         field = {
             "_id": room_id,
         }
-        update_field = message
-
+        update_field = {
+            "message": message_data
+        }       
         response = json.loads(dowellconnection(*room_services, "update", field, update_field= update_field))
         return Response({
             "success": True,
             "message": "Message updated successfully",
-            "response": response["data"],
+            "response": response,
+        })
+    
+    """Delete message ROOM BY ID"""
+    
+    def delete_room(self,request,):
+        room_id = request.data.get('room_id')
+        message_data = request.data.get('is_active')
+        field = {
+            "_id": room_id,
+        }
+        update_field = {
+            "is_active": message_data
+        }       
+        response = json.loads(dowellconnection(*room_services, "update", field, update_field= update_field))
+        return Response({
+            "success": True,
+            "message": "Room deleted successfully",
+            "response": response,
         })
 
     """HANDLE ERROR"""
