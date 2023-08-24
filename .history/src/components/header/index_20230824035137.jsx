@@ -1,8 +1,9 @@
 import React from "react";
-import CustomPopUp from "../pop-up/custom";
+import { PopUp } from "../pop-up";
 export const Header = ({rooms}) => {
   const [active,setActive] = React.useState(false)
-  const handlePopUp = () => {
+  const handlePopSubmit = (e) =>  {
+    e.preventDefault()
     setActive(!active)
   }
   return (
@@ -16,7 +17,7 @@ export const Header = ({rooms}) => {
       <div className="flex gap-3">
         <button
           className="flex gap-1 bg-[#E9EFF3] p-2 items-center justify-center rounded-md h-12 w-32 btn"
-          onClick={handlePopUp}
+          onClick={() => setActive(!active)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -51,11 +52,7 @@ export const Header = ({rooms}) => {
           </svg>
         </button>
       </div>
-      {
-        active ? <div className="absolute">
-          <CustomPopUp showPopup={handlePopUp} rooms={rooms}/>
-        </div> : null
-      }
+      <PopUp/>
     </div>
   );
 };

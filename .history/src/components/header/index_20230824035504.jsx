@@ -1,7 +1,11 @@
 import React from "react";
-import CustomPopUp from "../pop-up/custom";
+import { PopUp } from "../pop-up";
 export const Header = ({rooms}) => {
   const [active,setActive] = React.useState(false)
+  const handlePopSubmit = (e) =>  {
+    e.preventDefault()
+    setActive(!active)
+  }
   const handlePopUp = () => {
     setActive(!active)
   }
@@ -52,9 +56,7 @@ export const Header = ({rooms}) => {
         </button>
       </div>
       {
-        active ? <div className="absolute">
-          <CustomPopUp showPopup={handlePopUp} rooms={rooms}/>
-        </div> : null
+        active ? <PopUp close={handlePopUp}/> : null
       }
     </div>
   );

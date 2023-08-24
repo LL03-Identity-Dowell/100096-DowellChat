@@ -1,43 +1,13 @@
-import { useState } from "react";
-import axios from "axios";
+import React from 'react'
 
-export const PopUp = ({
-  setRooms,
-  notify,
-  roomId,
-  orgId,
-  sessionId,
-  setSelectedRoomId,
-  setShowPopUp,
-  
-}) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const handleRoomDelete = () => {
-    setIsLoading(true);
-    axios
-      .get(
-        `https://100096.pythonanywhere.com/delete-customer-support-room/?session_id=${sessionId}&room_id=${roomId}`
-      )
-      .then(() => {
-        notify("Room Deleted Successfully!", "success");
-        axios
-          .get(`https://100096.pythonanywhere.com/room_list1/Login/${orgId}`)
-          .then((response) => {
-            setRooms(response.data.rooms);
-            setSelectedRoomId(response.data.firstroom.room_id);
-          });
-        setIsLoading(false);
-        setShowPopUp(false);
-      })
-      .catch((reason) => {
-        notify(reason.response.data.status, "error");
-        setShowPopUp(false);
-        setIsLoading(false);
-      });
-  };
+const CustomPopUp = (isLoading) => {
+    const [active,setActive] = React.useState(false)
+    const handlePopUp = () => {
+        setActive(!active)
+      }
   return (
-    <>
-      <div className="fixed top-0 bottom-0 left-0 right-0">
+    <div>
+       <div className="fixed top-0 bottom-0 left-0 right-0">
         {isLoading ? (
           <div className="flex fixed w-[480px] justify-center items-center bg-gray-100 rounded-lg top-1/2 left-1/2 h-56 max-w-96 shadow-lg -translate-x-1/2 -translate-y-1/2">
             <svg
@@ -65,15 +35,13 @@ export const PopUp = ({
             <div className="flex justify-evenly items-center w-[30rem]">
               <button
                 className="bg-blue-500 text-white px-4 py-2 w-36 rounded-md shadow-md "
-                onClick={() => {
-                  setShowPopUp(false);
-                }}
+                onClick={handlePopUp}
               >
                 Cancel
               </button>
               <button
                 className="bg-red-400 text-white px-4 py-2 w-36 rounded-md shadow-md"
-                onClick={handleRoomDelete}
+                // onClick={handleRoomDelete}
               >
                 Delete
               </button>
@@ -81,6 +49,8 @@ export const PopUp = ({
           </div>
         )}
       </div>
-    </>
-  );
-};
+    </div>
+  )
+}
+
+export default CustomPopUp

@@ -19,6 +19,7 @@ export const PopUp = ({
         `https://100096.pythonanywhere.com/delete-customer-support-room/?session_id=${sessionId}&room_id=${roomId}`
       )
       .then(() => {
+        // toast("Room Deleted Successfully!");
         notify("Room Deleted Successfully!", "success");
         axios
           .get(`https://100096.pythonanywhere.com/room_list1/Login/${orgId}`)
@@ -30,6 +31,7 @@ export const PopUp = ({
         setShowPopUp(false);
       })
       .catch((reason) => {
+        // toast("Something went wrong!", { type: "error" });
         notify(reason.response.data.status, "error");
         setShowPopUp(false);
         setIsLoading(false);

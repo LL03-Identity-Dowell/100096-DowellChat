@@ -312,7 +312,7 @@ export const CustomerSupport = () => {
                   setMessages={setMessages}
                   rooms={rooms}
                   status={loading}
-                  setLoading={setLoading}
+                  statusChecking={setLoading}
                 />
               </div>
             </div>

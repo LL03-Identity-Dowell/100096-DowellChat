@@ -52,7 +52,7 @@ export const Reply = ({
               setLoading(true);
               setMessages(response.data.messages);
               setMessage("");
-              setTimeout(() => setLoading(false), 3000);
+              setTimeout(() => setLoading(true), 3000);
             });
         });
       } else {

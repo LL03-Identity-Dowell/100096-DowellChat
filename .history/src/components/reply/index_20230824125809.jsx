@@ -11,11 +11,12 @@ export const Reply = ({
   setMessages,
   rooms,
   status,
-  setLoading,
+  statusChecking,
 }) => {
+  console.log(status, "status");
   const [message, setMessage] = useState(undefined);
   const [showPicker, setShowPicker] = useState(false);
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
   function fileToBase64(file) {
@@ -52,7 +53,7 @@ export const Reply = ({
               setLoading(true);
               setMessages(response.data.messages);
               setMessage("");
-              setTimeout(() => setLoading(false), 3000);
+              setTimeout(() => setLoading(true), 3000);
             });
         });
       } else {

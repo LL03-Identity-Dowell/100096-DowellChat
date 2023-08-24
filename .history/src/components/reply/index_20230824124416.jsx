@@ -4,19 +4,13 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { toast } from "react-toastify";
 
-export const Reply = ({
-  roomId,
-  userId,
-  orgId,
-  setMessages,
-  rooms,
-  status,
-  setLoading,
-}) => {
+export const Reply = ({ roomId, userId, orgId, setMessages, rooms,status,statusChecking }) => {
+  console.log(status,'status')
   const [message, setMessage] = useState(undefined);
   const [showPicker, setShowPicker] = useState(false);
-  // const [loading, setLoading] = useState(false);
+  const [loading,setLoading] = useState(false)
   const fileInputRef = useRef(null);
+  console.log(loading)
 
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -32,8 +26,11 @@ export const Reply = ({
     });
   }
 
+
   const sendMessage = (message, type) => {
-    if (message !== "" && rooms.length !== 0) {  
+    if (message !== "" && rooms.length !== 0) {
+      // setLoading(true)
+      // statusChecking(true)
       let data = {};
       if (type === "IMAGE") {
         fileToBase64(message).then((response) => {
@@ -49,10 +46,10 @@ export const Reply = ({
               data
             )
             .then((response) => {
-              setLoading(true);
-              setMessages(response.data.messages);
-              setMessage("");
-              setTimeout(() => setLoading(false), 3000);
+              console.log(setLoading(true),'true')
+                // setMessages(response.data.messages)
+                // setMessage("");
+              
             });
         });
       } else {
