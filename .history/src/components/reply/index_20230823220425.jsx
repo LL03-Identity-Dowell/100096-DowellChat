@@ -7,7 +7,7 @@ import Lottie from "lottie-react";
 import loader from "../../assets/images/loader.json";
 import { toast } from "react-toastify";
 
-export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
+export const Reply = ({ roomId, userId, orgId, setMessages, rooms,setLoading }) => {
   const [message, setMessage] = useState(undefined);
   const [showPicker, setShowPicker] = useState(false);
   const fileInputRef = useRef(null);
@@ -56,8 +56,10 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
               data
             )
             .then((response) => {
+            // shimmer()
              setTimeout(() => setMessages(response.data.messages),3000)
               setMessage("");
+              // <Lottie animationData={loader} loop={true} style={style}/>
             });
         });
       } else {

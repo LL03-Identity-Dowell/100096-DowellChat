@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
   const [message, setMessage] = useState(undefined);
   const [showPicker, setShowPicker] = useState(false);
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const style = {
     width:200,
@@ -56,8 +57,10 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
               data
             )
             .then((response) => {
+            // shimmer()
              setTimeout(() => setMessages(response.data.messages),3000)
               setMessage("");
+              // <Lottie animationData={loader} loop={true} style={style}/>
             });
         });
       } else {
@@ -89,6 +92,7 @@ export const Reply = ({ roomId, userId, orgId, setMessages, rooms }) => {
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
+    setLoading(true);
     if (selectedFile) {
       sendMessage(selectedFile, "IMAGE");
     }

@@ -116,7 +116,7 @@ export const CustomerSupport = () => {
       .then((response) => {
         setLoading(true)
           setMessages(response.data.messages);
-          setTimeout(()=>setLoading(false),3000)
+          // setTimeout(()=>setLoading(false),3000)
        
       });
   };
