@@ -6,8 +6,6 @@ export const PopUp = ({
   setRooms,
   notify,
   roomId,
-  // orgId,
-  // sessionId,
   setSelectedRoomId,
   setShowPopUp,
 }) => {
@@ -20,7 +18,6 @@ export const PopUp = ({
         `https://100096.pythonanywhere.com/delete-customer-support-room/?session_id=${dataContext.collectedData.sessionId}&room_id=${roomId}`
       )
       .then(() => {
-        // toast("Room Deleted Successfully!");
         notify("Room Deleted Successfully!", "success");
         axios
           .get(
@@ -34,7 +31,6 @@ export const PopUp = ({
         setShowPopUp(false);
       })
       .catch((reason) => {
-        // toast("Something went wrong!", { type: "error" });
         notify(reason.response.data.status, "error");
         setShowPopUp(false);
         setIsLoading(false);
@@ -42,7 +38,7 @@ export const PopUp = ({
   };
   return (
     <>
-      <div className="fixed top-0 bottom-0 left-0 right-0">
+      <div className="fixed top-0 bottom-0 left-0 right-0 backdrop-blur-sm">
         {isLoading ? (
           <div className="flex fixed w-[480px] justify-center items-center bg-gray-100 rounded-lg top-1/2 left-1/2 h-56 max-w-96 shadow-lg -translate-x-1/2 -translate-y-1/2">
             <svg
