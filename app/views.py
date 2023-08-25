@@ -107,7 +107,7 @@ class RoomService(APIView):
         }
 
         print(room_id)
-        response = dowellconnection(*room_services, "find", field, update_field= None)
+        response = json.loads(dowellconnection(*room_services, "find", field, update_field= None))
         return Response({
             "success": True,
             "message": "Room deatils based on workspace id",
@@ -124,29 +124,27 @@ class RoomService(APIView):
         message_type = request.data.get('message_type')
 
         field = {
-            "_id": room_id,
+            "room_id": room_id,
             "message": message_data,
             "side": side,
             "author": author,
             "message_type": message_type,
             "read": True,
         }     
-        response = dowellconnection(*chat, "insert", field, update_field= None)
+        response =  json.loads(dowellconnection(*chat, "insert", field, update_field= None))
         return Response({
             "success": True,
-            "message": "Message updated successfully",
-            "response": response['data'],
+            "message": "Messa9ge updated successfully",
+            "response": response,
         })
     
     """get message ROOM BY ID"""
     def get_messages(self, request):
         room_id = request.data.get('room_id')
         field = {
-            "_id": room_id
+            "room_id": room_id
         }
-
-        print(room_id)
-        response = dowellconnection(*chat, "find", field, update_field= None)
+        response = json.loads(dowellconnection(*chat, "fetch", field, update_field= None))
         return Response({
             "success": True,
             "message": "Room deatils based on workspace id",

@@ -30,7 +30,7 @@ Api_url = `https://100096.pythonanywhere.com/`
 
 ### 1. Create room API
 
-_Post_to `Api_url/api/v2/room-control/`
+\_Post_to `Api_url/api/v2/room-control/`
 
 - Request body
 
@@ -66,14 +66,55 @@ _Post_to `Api_url/api/v2/room-control/`
 }
 ```
 
-## 2. Get room details by workspaceId
+## 2. Post send_message to database
 
-_Get_ to `Api_url/api/v2/room-service/?type=get_rooms_by_workspace_id&org_id=DOWELL12345`
+_Post_ to `Api_url/api/v2/room-service/?type=create_message`
 
 **Query Parameters:**
 
-- `type`: get_rooms_by_org_id
-- `org_id`: "org_id"
+- `type`: create_message
+
+**Request:**
+
+```json
+{
+  "room_id": "64e573b66c3b5f96ec61434c",
+  "message_data": {
+    "user": "hello"
+  },
+  "side": true,
+  "auther": "client",
+  "message_type": "text"
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Message updated successfully",
+  "response": {
+    "isSuccess": true
+  }
+}
+```
+
+## 3. Get message by room Id
+
+_Get_ to `Api_url/api/v2/room-service/?type=get_messages`
+
+**Query Parameters:**
+
+- `type`: get_messages
+
+**Request:**
+
+```json
+{
+  "room_id": "room_id"
+}
+```
 
 **Response:**
 
@@ -103,7 +144,7 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_rooms_by_workspace_id&org_id=DOW
 }
 ```
 
-## 3. Get room by Id
+## 4. Get room by Id
 
 _Get_ to `Api_url/api/v2/room-service/?type=get_room_by_id`
 
@@ -147,60 +188,7 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_room_by_id`
 }
 ```
 
-### 4. Post send_message to database
-
-_Post_ to `Api_url/api/v2/room-service/?type=update_message_room`
-
-**Query Parameters:**
-
-- `type`: update_message_room
-
-**Request:**
-
-```json
-{
-  "room_id": "64e573b66c3b5f96ec61434c",
-  "message_data": {
-    "user": "hello",
-    "recevier": "hy how are you ?",
-    "user": "i am fine any you?"
-  }
-}
-```
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "message": "Message updated successfully",
-  "response": {
-    "isSuccess": true
-  }
-}
-```
-
-### 5. fetch list of rooms product from database
-
-_Get_ to `Api_url/api/v2/room-list/?workspace_id=DOWELL12345&product_name=WORKFLOWAI`
-
-**Query Parameters:**
-
-- `workspace_id`: workspace_id,
-- `product_name`: product_name
-
-**Response:**
-
-- **Status:** 200 OK
-- **Content:**
-
-```json
-{
-  "rooms": ["List of rooms"]
-}
-```
-
-### 6. Delete Chat room to database
+## 5. Delete Chat room to database
 
 _Get_ to `Api_url/api/v2/room-service/?type=delete_room`
 
@@ -230,5 +218,186 @@ _Get_ to `Api_url/api/v2/room-service/?type=delete_room`
   "response": {
     "isSuccess": true
   }
+}
+```
+
+# Server side chat api
+
+## 1. Get room details by workspaceId
+
+_Get_ to `Api_url/api/v2/room-service/?type=get_rooms_by_workspace_id&org_id=DOWELL12345`
+
+**Query Parameters:**
+
+- `type`: get_rooms_by_org_id
+- `org_id`: "org_id"
+
+**Response:**
+
+- **Status:** 200 OK
+- **Content:**
+
+```json
+{
+  "success": true,
+  "message": "Room deatils based on workspace id",
+  "response": [
+    {
+      "_id": "_id",
+      "eventId": "eventId",
+      "user_id": "user_id",
+      "workspace_id": "workspace_id",
+      "portfolio_name": "portfolio_name",
+      "room_room_id": "room_room_id",
+      "product_name": "product_name",
+      "message": {
+        "user": "i am fine any you?",
+        "recevier": "hy how are you ?"
+      },
+      "is_active": false
+    }
+  ]
+}
+```
+
+## 2. Get room by Id
+
+_Get_ to `Api_url/api/v2/room-service/?type=get_room_by_id`
+
+**Query Parameters:**
+
+- `type`: get_room_by_id
+
+**Request:**
+
+```json
+{
+  "room_id": "room_id"
+}
+```
+
+**Response:**
+
+- **Status:** 200 OK
+- **Content:**
+
+```json
+{
+  "success": true,
+  "message": "Room deatils based on workspace id",
+  "response": [
+    {
+      "_id": "_id",
+      "eventId": "eventId",
+      "user_id": "user_id",
+      "workspace_id": "workspace_id",
+      "portfolio_name": "portfolio_name",
+      "room_room_id": "room_room_id",
+      "product_name": "product_name",
+      "message": {
+        "user": "i am fine any you?",
+        "recevier": "hy how are you ?"
+      },
+      "is_active": false
+    }
+  ]
+}
+```
+
+## 3. Post send_message to database
+
+_Post_ to `Api_url/api/v2/room-service/?type=create_message`
+
+**Query Parameters:**
+
+- `type`: create_message
+
+**Request:**
+
+```json
+{
+  "room_id": "64e573b66c3b5f96ec61434c",
+  "message_data": {
+    "user": "hello"
+  },
+  "side": true,
+  "auther": "client",
+  "message_type": "text"
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Message updated successfully",
+  "response": {
+    "isSuccess": true
+  }
+}
+```
+
+## 4. Get message by room Id
+
+_Get_ to `Api_url/api/v2/room-service/?type=get_messages`
+
+**Query Parameters:**
+
+- `type`: get_messages
+
+**Request:**
+
+```json
+{
+  "room_id": "room_id"
+}
+```
+
+**Response:**
+
+- **Status:** 200 OK
+- **Content:**
+
+```json
+{
+  "success": true,
+  "message": "Room deatils based on workspace id",
+  "response": [
+    {
+      "_id": "_id",
+      "eventId": "eventId",
+      "user_id": "user_id",
+      "workspace_id": "workspace_id",
+      "portfolio_name": "portfolio_name",
+      "room_room_id": "room_room_id",
+      "product_name": "product_name",
+      "message": {
+        "user": "i am fine any you?",
+        "recevier": "hy how are you ?"
+      },
+      "is_active": false
+    }
+  ]
+}
+```
+
+## 5. fetch list of rooms product from database
+
+_Get_ to `Api_url/api/v2/room-list/?workspace_id=DOWELL12345&product_name=WORKFLOWAI`
+
+**Query Parameters:**
+
+- `workspace_id`: workspace_id,
+- `product_name`: product_name
+
+**Response:**
+
+- **Status:** 200 OK
+- **Content:**
+
+```json
+{
+  "rooms": ["List of rooms"]
 }
 ```
