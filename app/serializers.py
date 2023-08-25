@@ -1,10 +1,20 @@
 from rest_framework import serializers
 
 class CreateRoomServiceSerializer(serializers.Serializer):
-    MODULE_CHOICES = (
-        ('WORKFLOWAI', 'WORKFLOWAI'),
-        ('TEAMMANAGEMENT', 'TEAMMANAGEMENT')
-    )
+    MODULE_CHOICES =(
+    ("WORKFLOWAI","WORKFLOWAI"),
+    ("TEAMMANAGEMENT","TEAMMANAGEMENT"),
+    ("WIFIQRCODE","WIFIQRCODE"),
+    ('SALESAGENTLOGIN','SALESAGENTLOGIN'),
+    ('LEGALZARD','LEGALZARD'),
+    ('USEREXPERIENCELIVE','USEREXPERIENCELIVE'),
+    ('SOCIALMEDIAAUTOMATION','SOCIALMEDIAAUTOMATION'),
+    ('LIVINGLABCALCULATOR','LIVINGLABCALCULATOR'),
+    ('LIVINGLABSCALES','LIVINGLABSCALES'),
+    ('LOGOSCAN','LOGOSCAN'),
+    ('LIVINGLABMONITORING','LIVINGLABMONITORING'),
+    ('PERMUTATIONCALCULATOR','PERMUTATIONCALCULATOR'),
+    ) 
     user_id = serializers.CharField(allow_null=False, allow_blank=False)
     workspace_id = serializers.CharField(allow_null=False, allow_blank=False)
     portfolio_name = serializers.CharField(allow_null=False, allow_blank=False)

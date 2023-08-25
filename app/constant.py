@@ -7,6 +7,15 @@ room_services = [
     "ABCDE"
 ]
 
+chat = [
+    "chat",
+    "chat",
+    "chats",
+    "chats",
+    "10006902",
+    "ABCDE",
+]
+
 product_details = {
     "WORKFLOWAI": 11,
     "TEAMMANAGEMENT": 12,
