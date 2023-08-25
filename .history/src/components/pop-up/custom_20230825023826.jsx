@@ -38,14 +38,14 @@ const CustomPopUp = ({ isLoading, showPopup, rooms, title }) => {
       ) : (
         <>
           <div className="mt-5 pt-[50px]">
-         <h1 className="font-bold text-3xl text-gray-500 mt-12 mb-4">Available IDS</h1>
+         <h1 className="font-bold text-3xl text-gray-500">Available IDS</h1>
             {rooms?.map(({ session_id }) => (
               <p
                 key={session_id}
                 className={`mb-3 ${select ? "bg-gray-300 px-3 py-2 rounded" : null}`}
                 onClick={(e) => {
                   setValue(session_id)
-                  setSelect(session_id)
+                  setSelect(!select)
                 }}
               >
                 {session_id}

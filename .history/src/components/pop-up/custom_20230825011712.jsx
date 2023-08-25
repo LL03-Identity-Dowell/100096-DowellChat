@@ -5,7 +5,6 @@ const CustomPopUp = ({ isLoading, showPopup, rooms, title }) => {
   const [value, setValue] = React.useState("");
   const [product, setProduct] = React.useState("");
   const [next, setNext] = React.useState(false);
-  const [select,setSelect] = React.useState(false)
   const handleForm = (event) => {
     event.preventDefault();
     setActive(!active);
@@ -38,15 +37,12 @@ const CustomPopUp = ({ isLoading, showPopup, rooms, title }) => {
       ) : (
         <>
           <div className="mt-5 pt-[50px]">
-         <h1 className="font-bold text-3xl text-gray-500 mt-12 mb-4">Available IDS</h1>
+         <h1>Available IDS</h1>
             {rooms?.map(({ session_id }) => (
               <p
                 key={session_id}
-                className={`mb-3 ${select ? "bg-gray-300 px-3 py-2 rounded" : null}`}
-                onClick={(e) => {
-                  setValue(session_id)
-                  setSelect(session_id)
-                }}
+                className="mb-3"
+                onClick={() => setValue(session_id)}
               >
                 {session_id}
               </p>

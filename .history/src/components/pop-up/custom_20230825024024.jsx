@@ -38,7 +38,7 @@ const CustomPopUp = ({ isLoading, showPopup, rooms, title }) => {
       ) : (
         <>
           <div className="mt-5 pt-[50px]">
-         <h1 className="font-bold text-3xl text-gray-500 mt-12 mb-4">Available IDS</h1>
+         <h1 className="font-bold text-3xl text-gray-500 mt-12">Available IDS</h1>
             {rooms?.map(({ session_id }) => (
               <p
                 key={session_id}
