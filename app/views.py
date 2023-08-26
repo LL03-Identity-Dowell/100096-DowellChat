@@ -221,7 +221,7 @@ class RoomController(RoomService):
             'is_active': True
         }
 
-        response = dowellconnection(*room_services, "fetch", field, update_field= None)
+        response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None)) 
         return response["data"]
 
 

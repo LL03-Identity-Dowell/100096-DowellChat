@@ -47,22 +47,22 @@ Api_url = `https://100096.pythonanywhere.com/`
 
 ```json
 {
-  "messages": [
-    {
-      "id": "id",
-      "timestamp": "2023-05-01T09:47+00:00",
-      "room_id": "room_id",
-      "read": "true|false",
-      "message": "message",
-      "message_type": "TEXT",
-      "side": true,
-      "author": {
-        "id": "id",
-        "session_id": "session_id"
-      }
-    }
-  ],
-  "room_pk": "room_pk"
+  "success": true,
+  "message": "Room filter successfully",
+  "inserted_id": "64e96a73f59c079a226e1ae9",
+  "response": {
+    "_id": "64e96a73f59c079a226e1ae9",
+    "eventId": "FB10100000001693018738#5535526",
+    "user_id": "ABCD12345",
+    "workspace_id": "DOWELL12345",
+    "portfolio_name": "umair",
+    "room_room_id": "19-ABCD12345",
+    "product_name": "LOGOSCAN",
+    "message": {
+      "receiver": "How may I help you"
+    },
+    "is_active": true
+  }
 }
 ```
 
