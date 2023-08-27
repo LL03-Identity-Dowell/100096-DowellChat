@@ -1,4 +1,4 @@
-export const Header = () => {
+export const Header = ({ handleShowInvitePopup }) => {
   return (
     <div className="flex h-fit justify-between p-4">
       <div className="flex flex-col gap-2">
@@ -8,7 +8,10 @@ export const Header = () => {
         <span>Respond to messages, set up automations and more</span>
       </div>
       <div className="flex gap-3">
-        <button className="flex gap-1 bg-[#E9EFF3] p-2 items-center justify-center rounded-md h-12 w-32">
+        <button
+          className="flex gap-1 bg-[#E9EFF3] p-2 items-center justify-center rounded-md h-12 w-32"
+          onClick={handleShowInvitePopup}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

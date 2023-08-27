@@ -13,6 +13,7 @@ import { RoomLoader } from "../../components/room-loader";
 import DataContext from "../../context/data-context";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { InvitePopup } from "../../components/invite-popup";
 
 export const LivingLabChat = () => {
   const dataContext = useContext(DataContext);
@@ -21,6 +22,8 @@ export const LivingLabChat = () => {
   const [selectedRoomId, setSelectedRoomId] = useState("Room ID");
   const [messages, setMessages] = useState(undefined);
   const [showPopUp, setShowPopUp] = useState(false);
+  const [showInvitePopup, setShowInvitePopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (dataContext.collectedData) {
@@ -66,12 +69,22 @@ export const LivingLabChat = () => {
     }
   }, [selectedRoomId, productTitle]);
 
+  const handleShowInvitePopup = () => {
+    showInvitePopup ? setShowInvitePopup(false) : setShowInvitePopup(true);
+  };
+
+  const handleInvite = () => {
+    setIsLoading(true);
+    console.log("handle invite");
+    setIsLoading(false);
+  };
+
   return (
     <div className="flex h-screen justify-around pt-4 gap-2 pb-2">
       <div className="flex w-11/12 ">
         <div className="flex flex-col w-4/5 pt-6 justify-evenly">
           <div>
-            <Header />
+            <Header handleShowInvitePopup={handleShowInvitePopup} />
             <div className="flex overflow-y-auto scrollbar-thin gap-4 pl-3">
               <span className="hidden">
                 {sessionStorage.getItem("sessionId")}
@@ -260,6 +273,13 @@ export const LivingLabChat = () => {
           productTitle={productTitle}
           setSelectedRoomId={setSelectedRoomId}
           setShowPopUp={setShowPopUp}
+        />
+      )}
+      {showInvitePopup && (
+        <InvitePopup
+          handleShowInvitePopup={handleShowInvitePopup}
+          isLoading={isLoading}
+          handelInvite={handleInvite}
         />
       )}
       <ToastContainer />

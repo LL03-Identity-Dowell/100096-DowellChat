@@ -20,6 +20,7 @@ export const FirstLoadComponent = () => {
       ) {
         navigate(`/${pageName}`, { replace: true });
         setCustomerSupportEligible(true);
+        setLivingLabChatEligible(false);
         return true;
       } else if (
         portfolio_info[i].product === "Living Lab Chat" &&
@@ -27,6 +28,7 @@ export const FirstLoadComponent = () => {
       ) {
         navigate(`/${pageName}`, { replace: true });
         setLivingLabChatEligible(true);
+        setCustomerSupportEligible(false);
         return true;
       }
     }
@@ -137,6 +139,7 @@ export const FirstLoadComponent = () => {
     } else {
       window.location.href = "https://100014.pythonanywhere.com/en/";
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageName, navigate]);
 
   return customerSupportEligible ? (

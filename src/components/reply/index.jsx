@@ -95,7 +95,7 @@ export const Reply = ({ roomId, setMessages, rooms }) => {
           setMessage(event.target.value);
         }}
       />
-      <div className="flex gap-5">
+      <div className="flex gap-5 pr-2">
         <div
           className="relative hover:cursor-pointer"
           onClick={handleButtonClick}
@@ -154,7 +154,6 @@ export const Reply = ({ roomId, setMessages, rooms }) => {
                 onEmojiSelect={(emoji) => {
                   setMessage(message + emoji.native);
                 }}
-                // onClickOutside={handleShowEmojiPicker}
               />
             </div>
           )}

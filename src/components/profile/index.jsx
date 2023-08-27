@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import profileImage from "../../assets/images/dowell.png";
 import DataContext from "../../context/data-context";
 export const Profile = ({
   // userInfo,
