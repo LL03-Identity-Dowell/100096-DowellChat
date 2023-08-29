@@ -276,13 +276,34 @@ class createOpenChatRoom(RoomService):
         room_name = request.data.get('room_name')
 
         if room_name == 'openchat' and product_name == 'SALESAGENT':
-            field = {
-                "user_id": user_id,
-                'org_id': org_id,
-                'product_name': product_name,
-                'portfolio_name': portfolio_name,
-            }
-            self.create_room(user_id, org_id, product_name, portfolio_name)
+            response=self.create_room(user_id, org_id, product_name, portfolio_name)
+            if response:
+                return Response({
+                    "success": True,
+                    "message": "Room created successfully",
+                    "inserted_id": response["inserted_id"],
+                    "response": response['response']
+                })
+            else:
+                return Response({
+                    "success": False,
+                    "message": "Failed to create room",
+                })
+        elif room_name == 'openChat' and product_name == 'LOGIN':
+            response=self.create_room(user_id, org_id, product_name, portfolio_name)
+            if response:
+                return Response({
+                    "success": True,
+                    "message": "Room created successfully",
+                    "inserted_id": response["inserted_id"],
+                    "response": response['response']
+                })
+            else:
+                return Response({
+                    "success": False,
+                    "message": "Failed to create room",
+                })
+
 
     
 
