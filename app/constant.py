@@ -17,7 +17,7 @@ chat = [
 ]
 
 
-event_service = [
+event_services = [
     "chat",
     "chat",
     "events",
@@ -44,6 +44,6 @@ product_details = {
     'CUSTOMEREXPERIENCE':24,
     'DOWELLCSC':25,
     'LIVINGLABCHAT' : 26,
-    "SALESAGENT":27,
-    "LOGIN":28,
+    'SALESAGENT':27,
+    'LOGIN':28,
 }

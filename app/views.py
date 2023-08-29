@@ -38,14 +38,14 @@ class RoomService(APIView):
             return self.handle_error(request)
         
     """CREATE ROOM SERVICE"""
-    def create_room(self, user_id, org_id, product_name,portfolio_name):
+    def create_room(self, user_id, org_id, product_name,portfolio_name, isLogin = False, public_QR=False):
         message = {"receiver":'How may I help you'}
         data = {
             "user_id": user_id,
             "org_id": org_id,
             "product_name": product_name,
             "portfolio_name": portfolio_name,
-            "message": message
+            "message": message,
         }
 
         serializer = CreateRoomServiceSerializer(data=data)
@@ -59,6 +59,7 @@ class RoomService(APIView):
                 "room_room_id": room_name["room_name"],
                 "product_name": data["product_name"],
                 "message": data["message"],
+                "isLogin": isLogin,
                 "is_active": True,
             }
             response =  dowellconnection(*room_services, "insert", field, update_field=None)
@@ -138,6 +139,7 @@ class RoomService(APIView):
                 "message": "Invalid data",
                 "errors": serializer.errors,
             }, status=status.HTTP_400_BAD_REQUEST)
+        
     """get message ROOM BY ID"""
     def get_messages(self, request):
         room_id = request.GET.get('room_id')
@@ -195,7 +197,7 @@ class RoomController(RoomService):
             })
         else:
             try:
-                response = self.create_room(user_id, org_id, product_name, portfolio_name)
+                response = self.create_room(user_id, org_id, product_name, portfolio_name, isLogin = True)
                 if response:
                     return Response({
                         "success": True,
@@ -266,17 +268,24 @@ class RoomList(APIView):
             "response": response["data"],
         }
 
-class createOpenChatRoom(RoomService):
+class createOpenChatRoom(RoomController):
     def post(self, request):
         user_id = request.data.get('user_id')
         product_name = request.data.get('product_name')
         org_id = generate_room_id(product_name, user_id)
         org_id = org_id['room_name']
         portfolio_name = user_id
-        room_name = request.data.get('room_name')
-
-        if room_name == 'openchat' and product_name == 'SALESAGENT':
-            response=self.create_room(user_id, org_id, product_name, portfolio_name)
+        isLogin = False
+        response = self.roomFilter(user_id, org_id, product_name, portfolio_name)
+        if response:
+            return Response({
+                "success": True,
+                "message": "Room filter successfully",
+                "inserted_id": response[0]["_id"],
+                "response": response[0]
+            })
+        else:
+            response=self.create_room(user_id, org_id, product_name, portfolio_name, isLogin)
             if response:
                 return Response({
                     "success": True,
@@ -289,24 +298,138 @@ class createOpenChatRoom(RoomService):
                     "success": False,
                     "message": "Failed to create room",
                 })
-        elif room_name == 'openChat' and product_name == 'LOGIN':
-            response=self.create_room(user_id, org_id, product_name, portfolio_name)
-            if response:
-                return Response({
+        
+
+@method_decorator(csrf_exempt, name='dispatch')
+class QRServiceHandler(APIView):
+    def get(self, request, *args, **kwargs):
+        rooms = self.room_filter(workspace_id=kwargs['workspace_id'], public_QR=True)
+        return Response({'rm_s': rooms})
+
+    def post(self, request, *args, **kwargs):
+        workspace_id = str(request.POST.get(['workspace_id']))
+        QR_ids = list(request.POST.get('qr_ids'))  #  #  [secrets.token_hex(16) for i in range(3)]  # Generate a random string of 16 characters
+        event_name = '-'.join(request.POST.get('event-name').replace(":","").replace(".","").split(' '))
+
+        r_event = self.event_controller({ 'name' : event_name, 'workspace_id': workspace_id, 'room_count': len(QR_ids) })
+        print("Event :", r_event)
+        links = list()
+        for qr_hash in QR_ids:
+            rm_link = self.get_httpURL(qr_hash, r_event.event_name.lower(), workspace_id)
+            links.append(rm_link)
+
+        save_response = json.loads(self.save_links_2mgdb(workspace_id, links, r_event.event_name.lower()))
+
+        return Response({
+                'e':r_event.event_name, 
+                'qr_response': save_response['response'],
+            }
+        )
+
+    def create_event(self, event_name, room_count, workspace_id):
+        data = {
+            "workspace_id": workspace_id,
+            "event_name": event_name,
+            "room_count": room_count
+        }
+
+        serializer = CreateEventServiceSerializer(data=data)
+        if serializer.is_valid():
+            print("Event data parsed successfully")
+            
+            field = {
+                "eventId": get_event_id()["event_id"],
+                "workspace_id": data["workspace_id"],
+                "event_name": data["event_name"],
+                "room_count": data["room_count"],
+                "is_active": True,
+            }
+
+            response =  dowellconnection(*event_services, "insert", field, update_field=None)
+            print("response",response)
+            if response["isSuccess"]:
+                return {
                     "success": True,
-                    "message": "Room created successfully",
+                    "message": "Event created successfully",
                     "inserted_id": response["inserted_id"],
-                    "response": response['response']
-                })
+                    "response": json.loads(response)
+                }
             else:
-                return Response({
+                return{
                     "success": False,
-                    "message": "Failed to create room",
-                })
+                    "message": "Failed to create event",
+                }
+        else:
+            return {
+                "success": False,
+                "message": "Posting wrong data to API",
+                "error": serializer.errors
+            }
 
+    def room_filter(self, workspace_id):
+        field = {
+            'workspace_id': workspace_id,
+            'public_QR': True
+        }
 
+        response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None)) 
+        return response["data"]
+
+    def get_httpURL(self, qr_id, event, workspace_id):
+        return f'https://100096.pythonanywhere.com/api/v3/init/{workspace_id}/{event}/{qr_id}/' 
     
+    def save_links_2mgdb(company_id, links, job_name):
+        url = "https://www.qrcodereviews.uxlivinglab.online/api/v3/qr-code/"
+        
+        payload = {
+            "qrcode_type": "Link",
+            "quantity": 1,
+            "company_id": company_id,
+            "links": links,
+            "document_name":job_name
+        }
+        response = requests.post(url, json=payload)
+
+        return response.text
+
+
+    def get_event_by_details(self, event_name, workspace_id):
+        field = {
+            "event_name": event_name,
+            'workspace_id': workspace_id,
+        }
+
+        response = json.loads(dowellconnection(*event_services, "fetch", field, update_field= None))
+        return response["data"]
+
+    def update_event_by_id(self, event_id, data):
+        field = {
+            "_id": event_id,
+        }
+        update_field = {
+            **data
+        }       
+        response = json.loads(dowellconnection(*event_services, "update", field, update_field= update_field))
+        return response
+
+
+    def event_controller(self, event):
+        ev_response = None
+        ev = self.get_event_by_details(event['name'], event['workspace_id'])
+        if ev['isSuccess']:
+            field = {
+                'room_count': ev['data']['room_count'] + event['room_count'],   #room_count += len(QR_ids)
+            }
+            ev_response = self.update_event(ev['data']['_id'], field)
+        else:
+            ev_response = self.create_event(event_name=event['name'], room_count=event['room_count'], workspace_id=['workspace_id'])      #   event = RoomEvent.objects.create(event_name=event_name, room_count=len(QR_ids), organization=company_id)        #   num_links = int(request.POST.get('your-surname'))
+        return ev_response
 
 
 
 
+class QRServiceValidationHandler(QRServiceHandler, RoomService):
+    def public_chat_link(self,request, *args, **kwargs):
+        room = self.create_room(kwargs['link_id'], kwargs['company'], kwargs['event'].lower(), kwargs['link_id'], public_QR=True)
+        return Response({'room': room})
+        

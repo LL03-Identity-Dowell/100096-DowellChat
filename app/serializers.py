@@ -14,6 +14,9 @@ class CreateRoomServiceSerializer(serializers.Serializer):
     ('LOGOSCAN','LOGOSCAN'),
     ('LIVINGLABMONITORING','LIVINGLABMONITORING'),
     ('PERMUTATIONCALCULATOR','PERMUTATIONCALCULATOR'),
+    ('SALESAGENT','SALESAGENT'),
+    ('LOGIN','LOGIN'),
+
     ) 
     user_id = serializers.CharField(allow_null=False, allow_blank=False)
     org_id = serializers.CharField(allow_null=False, allow_blank=False)
