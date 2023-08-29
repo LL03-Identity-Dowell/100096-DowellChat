@@ -76,11 +76,9 @@ _Post_ to `Api_url/api/v2/room-service/`
 {
   "type": "create_message",
   "room_id": "64ed7d75a57293efb539eb19",
-  "message_data": {
-    "user": "hello"
-  },
+  "message_data": "message"
   "side": true,
-  "auther": "client",
+  "author": "client",
   "message_type": "text"
 }
 ```
