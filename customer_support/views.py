@@ -1111,7 +1111,7 @@ def set_viewed(linkid):
 
 
 def convert_to_httpURL(_id__, event, company):
-    return f'https://100096.pythonanywhere.com/api/v3/init/{company}/{event}/{_id__}/' 
+    return f'https://100096.pythonanywhere.com/api/v1/init/{company}/{event}/{_id__}/' 
 
 
 

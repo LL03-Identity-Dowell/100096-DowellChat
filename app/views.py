@@ -303,7 +303,7 @@ class createOpenChatRoom(RoomController):
 @method_decorator(csrf_exempt, name='dispatch')
 class QRServiceHandler(APIView):
     def get(self, request, *args, **kwargs):
-        rooms = self.room_filter(workspace_id=kwargs['workspace_id'], public_QR=True)
+        rooms = self.room_filter(workspace_id=kwargs['workspace_id'])
         return Response({'rm_s': rooms})
 
     def post(self, request, *args, **kwargs):
@@ -427,9 +427,13 @@ class QRServiceHandler(APIView):
 
 
 
-
+from django.http import JsonResponse
 class QRServiceValidationHandler(QRServiceHandler, RoomService):
-    def public_chat_link(self,request, *args, **kwargs):
-        room = self.create_room(kwargs['link_id'], kwargs['company'], kwargs['event'].lower(), kwargs['link_id'], public_QR=True)
-        return Response({'room': room})
+    def get(self,request, *args, **kwargs):
+        room_create_response = self.create_room(kwargs['link_id'], kwargs['workspace_id'], kwargs['event'], kwargs['link_id'], isLogin=False, public_QR=True)
+        print("ROOM :", room_create_response)
+        try:
+            return JsonResponse({'room': room_create_response})
+        except:
+            return room_create_response
         
