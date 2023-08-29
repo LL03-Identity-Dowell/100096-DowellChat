@@ -16,6 +16,17 @@ chat = [
     "ABCDE",
 ]
 
+
+event_service = [
+    "chat",
+    "chat",
+    "events",
+    "events",
+    "10006902",
+    "ABCDE",
+]
+
+
 product_details = {
     "WORKFLOWAI": 11,
     "TEAMMANAGEMENT": 12,

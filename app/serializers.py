@@ -20,3 +20,11 @@ class CreateRoomServiceSerializer(serializers.Serializer):
     portfolio_name = serializers.CharField(allow_null=False, allow_blank=False)
     product_name = serializers.ChoiceField(allow_null=False, allow_blank=False, choices=MODULE_CHOICES)
     message = serializers.JSONField()
+
+
+
+
+class CreateEventServiceSerializer(serializers.Serializer):
+    workspace_id = serializers.CharField(allow_null=False, allow_blank=False)
+    event_name = serializers.CharField(allow_null=False, allow_blank=False)
+    room_count = serializers.DecimalField(max_digits=19, decimal_places=10)
