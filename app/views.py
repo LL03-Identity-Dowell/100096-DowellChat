@@ -430,7 +430,7 @@ class QRServiceHandler(APIView):
 from django.http import JsonResponse
 class QRServiceValidationHandler(QRServiceHandler, RoomService):
     def get(self,request, *args, **kwargs):
-        room_create_response = self.create_room(kwargs['link_id'], kwargs['workspace_id'], kwargs['event'], kwargs['link_id'], isLogin=False, public_QR=True)
+        room_create_response = self.create_room(**kwargs, portfolio_name=kwargs['user_id'], isLogin=False, public_QR=True)
         print("ROOM :", room_create_response)
         try:
             return JsonResponse({'room': room_create_response})
