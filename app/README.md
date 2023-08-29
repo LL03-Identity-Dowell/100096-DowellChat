@@ -37,7 +37,7 @@ Api_url = `https://100096.pythonanywhere.com/`
 ```json
 {
   "user_id": "ABCD12345",
-  "workspace_id": "DOWELL12345",
+  "org_id": "DOWELL12345",
   "portfolio_name": "umair",
   "product_name": "WIFIQRCODE"
 }
@@ -54,7 +54,7 @@ Api_url = `https://100096.pythonanywhere.com/`
     "_id": "64e96a73f59c079a226e1ae9",
     "eventId": "FB10100000001693018738#5535526",
     "user_id": "ABCD12345",
-    "workspace_id": "DOWELL12345",
+    "org_id": "DOWELL12345",
     "portfolio_name": "umair",
     "room_room_id": "19-ABCD12345",
     "product_name": "LOGOSCAN",
@@ -68,17 +68,14 @@ Api_url = `https://100096.pythonanywhere.com/`
 
 ## 2. Post send_message to database
 
-_Post_ to `Api_url/api/v2/room-service/?type=create_message`
-
-**Query Parameters:**
-
-- `type`: create_message
+_Post_ to `Api_url/api/v2/room-service/`
 
 **Request:**
 
 ```json
 {
-  "room_id": "64e573b66c3b5f96ec61434c",
+  "type": "create_message",
+  "room_id": "64ed7d75a57293efb539eb19",
   "message_data": {
     "user": "hello"
   },
@@ -106,15 +103,8 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_messages`
 
 **Query Parameters:**
 
-- `type`: get_messages
-
-**Request:**
-
-```json
-{
-  "room_id": "room_id"
-}
-```
+- `type`: "get_messages"
+- `room_id`: "room_id"
 
 **Response:**
 
@@ -130,7 +120,7 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_messages`
       "_id": "_id",
       "eventId": "eventId",
       "user_id": "user_id",
-      "workspace_id": "workspace_id",
+      "org_id": "org_id",
       "portfolio_name": "portfolio_name",
       "room_room_id": "room_room_id",
       "product_name": "product_name",
@@ -150,15 +140,8 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_room_by_id`
 
 **Query Parameters:**
 
-- `type`: get_room_by_id
-
-**Request:**
-
-```json
-{
-  "room_id": "room_id"
-}
-```
+- `type`: "get_room_by_id"
+- `room_id`: "room_id"
 
 **Response:**
 
@@ -174,7 +157,7 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_room_by_id`
       "_id": "_id",
       "eventId": "eventId",
       "user_id": "user_id",
-      "workspace_id": "workspace_id",
+      "org_id": "org_id",
       "portfolio_name": "portfolio_name",
       "room_room_id": "room_room_id",
       "product_name": "product_name",
@@ -194,7 +177,7 @@ _Get_ to `Api_url/api/v2/room-service/?type=delete_room`
 
 **Query Parameters:**
 
-- `workspace_id`: workspace_id,
+- `org_id`: org_id,
 - `product_name`: product_name
 
 **Request:**
@@ -223,14 +206,14 @@ _Get_ to `Api_url/api/v2/room-service/?type=delete_room`
 
 # Server side chat api
 
-## 1. Get room details by workspaceId
+## 1. fetch list of rooms product from database
 
-_Get_ to `Api_url/api/v2/room-service/?type=get_rooms_by_workspace_id&org_id=DOWELL12345`
+_Get_ to `Api_url/api/v2/room-list/?org_id=DOWELL12345&product_name=WORKFLOWAI`
 
 **Query Parameters:**
 
-- `type`: get_rooms_by_org_id
-- `org_id`: "org_id"
+- `org_id`: org_id,
+- `product_name`: product_name
 
 **Response:**
 
@@ -239,24 +222,7 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_rooms_by_workspace_id&org_id=DOW
 
 ```json
 {
-  "success": true,
-  "message": "Room deatils based on workspace id",
-  "response": [
-    {
-      "_id": "_id",
-      "eventId": "eventId",
-      "user_id": "user_id",
-      "workspace_id": "workspace_id",
-      "portfolio_name": "portfolio_name",
-      "room_room_id": "room_room_id",
-      "product_name": "product_name",
-      "message": {
-        "user": "i am fine any you?",
-        "recevier": "hy how are you ?"
-      },
-      "is_active": false
-    }
-  ]
+  "rooms": ["List of rooms"]
 }
 ```
 
@@ -266,15 +232,8 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_room_by_id`
 
 **Query Parameters:**
 
-- `type`: get_room_by_id
-
-**Request:**
-
-```json
-{
-  "room_id": "room_id"
-}
-```
+- `type`: "get_room_by_id"
+- `room_id`: "room_id"
 
 **Response:**
 
@@ -290,7 +249,7 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_room_by_id`
       "_id": "_id",
       "eventId": "eventId",
       "user_id": "user_id",
-      "workspace_id": "workspace_id",
+      "org_id": "org_id",
       "portfolio_name": "portfolio_name",
       "room_room_id": "room_room_id",
       "product_name": "product_name",
@@ -306,17 +265,14 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_room_by_id`
 
 ## 3. Post send_message to database
 
-_Post_ to `Api_url/api/v2/room-service/?type=create_message`
-
-**Query Parameters:**
-
-- `type`: create_message
+_Post_ to `Api_url/api/v2/room-service/`
 
 **Request:**
 
 ```json
 {
-  "room_id": "64e573b66c3b5f96ec61434c",
+  "type": "create_message",
+  "room_id": "64ed7d75a57293efb539eb19",
   "message_data": {
     "user": "hello"
   },
@@ -344,15 +300,8 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_messages`
 
 **Query Parameters:**
 
-- `type`: get_messages
-
-**Request:**
-
-```json
-{
-  "room_id": "room_id"
-}
-```
+- `type`: "get_messages"
+- `room_id`: "room_id"
 
 **Response:**
 
@@ -368,7 +317,7 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_messages`
       "_id": "_id",
       "eventId": "eventId",
       "user_id": "user_id",
-      "workspace_id": "workspace_id",
+      "org_id": "org_id",
       "portfolio_name": "portfolio_name",
       "room_room_id": "room_room_id",
       "product_name": "product_name",
@@ -379,25 +328,5 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_messages`
       "is_active": false
     }
   ]
-}
-```
-
-## 5. fetch list of rooms product from database
-
-_Get_ to `Api_url/api/v2/room-list/?workspace_id=DOWELL12345&product_name=WORKFLOWAI`
-
-**Query Parameters:**
-
-- `workspace_id`: workspace_id,
-- `product_name`: product_name
-
-**Response:**
-
-- **Status:** 200 OK
-- **Content:**
-
-```json
-{
-  "rooms": ["List of rooms"]
 }
 ```

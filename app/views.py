@@ -3,7 +3,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
 from .serializers import *
+import pdb
+
 from .helper import *
 from .constant import *
 
@@ -15,11 +18,9 @@ class health_check(APIView):
 @method_decorator(csrf_exempt, name='dispatch')
 class RoomService(APIView):
     def post(self, request):
-        type_request = request.GET.get('type')
+        type_request = request.data.get('type')
         
-        if type_request == "get_rooms_by_workspace_id":
-            return self.get_rooms_by_workspace_id(request)
-        elif type_request == "create_message":
+        if type_request == "create_message":
             return self.create_message(request)
         elif type_request == "delete_room":
             return self.delete_room(request)
@@ -37,12 +38,11 @@ class RoomService(APIView):
             return self.handle_error(request)
         
     """CREATE ROOM SERVICE"""
-    def create_room(self, user_id, workspace_id, product_name,portfolio_name):
-    
+    def create_room(self, user_id, org_id, product_name,portfolio_name):
         message = {"receiver":'How may I help you'}
         data = {
             "user_id": user_id,
-            "workspace_id": workspace_id,
+            "org_id": org_id,
             "product_name": product_name,
             "portfolio_name": portfolio_name,
             "message": message
@@ -50,12 +50,11 @@ class RoomService(APIView):
 
         serializer = CreateRoomServiceSerializer(data=data)
         if serializer.is_valid():
-            print("Room created successfully")
             room_name = generate_room_id(data["product_name"], user_id)
             field = {
                 "eventId": get_event_id()["event_id"],
                 "user_id": data["user_id"],
-                "workspace_id": data["workspace_id"],
+                "org_id": data["org_id"],
                 "portfolio_name": data["portfolio_name"],
                 "room_room_id": room_name["room_name"],
                 "product_name": data["product_name"],
@@ -63,7 +62,7 @@ class RoomService(APIView):
                 "is_active": True,
             }
             response =  dowellconnection(*room_services, "insert", field, update_field=None)
-            print("response",response)
+            response = json.loads(response)
             if response["isSuccess"]:
                 return {
                     "success": True,
@@ -83,24 +82,10 @@ class RoomService(APIView):
                 "error": serializer.errors
             },status=status.HTTP_400_BAD_REQUEST)
 
-    """GET ROOM BY SERVER SIDE""" 
-    def get_rooms_by_workspace_id(self, request):
-        org_id = request.GET.get('org_id')
-
-        field = {
-            "workspace_id": org_id
-        }
-
-        response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None))
-        return Response({
-            "success": True,
-            "message": "Room deatils based on workspace id",
-            "response": response["data"],
-        })
     
     """GET ROOM BY ID"""
     def get_room_by_id(self, request):
-        room_id = request.data.get('room_id')
+        room_id = request.GET.get('room_id')
 
         field = {
             "_id": room_id
@@ -110,34 +95,49 @@ class RoomService(APIView):
         response = json.loads(dowellconnection(*room_services, "find", field, update_field= None))
         return Response({
             "success": True,
-            "message": "Room deatils based on workspace id",
+            "message": "Room deatils based on org_id",
             "response": response["data"],
         })
     
     """update message ROOM BY ID"""
-    
-    def create_message(self,request,):
+
+    def create_message(self, request):
+        type = request.data.get('type')
         room_id = request.data.get('room_id')
         message_data = request.data.get('message_data')
         side = request.data.get('side')
         author = request.data.get('author')
         message_type = request.data.get('message_type')
-
-        field = {
+        data = {
+            "type": type,
             "room_id": room_id,
-            "message": message_data,
+            "message_data": message_data,
             "side": side,
             "author": author,
             "message_type": message_type,
-            "read": True,
-        }     
-        response =  json.loads(dowellconnection(*chat, "insert", field, update_field= None))
-        return Response({
-            "success": True,
-            "message": "Messa9ge updated successfully",
-            "response": response,
-        })
-    
+        }
+        serializer = MessageSerializer(data=data)
+        if serializer.is_valid():
+            field = {
+                "room_id": room_id,
+                "message_data": message_data,
+                "side": side,
+                "author": author,
+                "message_type": message_type,
+                "read": True,
+            }     
+            response = json.loads(dowellconnection(*chat, "insert", field, update_field=None))
+            return Response({
+                "success": True,
+                "message": "Message updated successfully",
+                "response": response,
+            })
+        else:
+            return Response({
+                "success": False,
+                "message": "Invalid data",
+                "errors": serializer.errors,
+            }, status=status.HTTP_400_BAD_REQUEST)
     """get message ROOM BY ID"""
     def get_messages(self, request):
         room_id = request.data.get('room_id')
@@ -147,7 +147,7 @@ class RoomService(APIView):
         response = json.loads(dowellconnection(*chat, "fetch", field, update_field= None))
         return Response({
             "success": True,
-            "message": "Room deatils based on workspace id",
+            "message": "Room deatils based on org_id",
             "response": response,
         })
 
@@ -182,11 +182,10 @@ class RoomService(APIView):
 class RoomController(RoomService):
     def post(self, request):
         user_id = request.data.get('user_id')
-        workspace_id = request.data.get('workspace_id')
+        org_id = request.data.get('org_id')
         product_name = request.data.get('product_name')
         portfolio_name = request.data.get('portfolio_name')
-        
-        response = self.roomFilter(user_id, workspace_id, product_name, portfolio_name)
+        response = self.roomFilter(user_id, org_id, product_name, portfolio_name)
         if response:
             return Response({
                 "success": True,
@@ -196,8 +195,8 @@ class RoomController(RoomService):
             })
         else:
             try:
-                response = self.create_room(user_id, workspace_id, product_name, portfolio_name)
-                if response["success"]:
+                response = self.create_room(user_id, org_id, product_name, portfolio_name)
+                if response:
                     return Response({
                         "success": True,
                         "message": "Room created successfully",
@@ -212,10 +211,10 @@ class RoomController(RoomService):
                     })
     
 
-    def roomFilter(self,user_id, workspace_id, product_name, portfolio_name):
+    def roomFilter(self,user_id, org_id, product_name, portfolio_name):
         field = {
             "user_id": user_id,
-            'workspace_id': workspace_id,
+            'org_id': org_id,
             'product_name': product_name,
             'portfolio_name': portfolio_name,
             'is_active': True
@@ -226,13 +225,14 @@ class RoomController(RoomService):
 
 
 class RoomList(APIView):
+    """GET ROOM BY SERVER SIDE""" 
     def get(self, request):
-        workspace_id = request.GET.get('workspace_id')
+        org_id = request.GET.get('org_id')
         product_name= request.GET.get('product_name')
 
 
         field = {
-            "workspace_id": workspace_id,
+            "org_id": org_id,
             "product_name": product_name
         }
 
@@ -240,10 +240,9 @@ class RoomList(APIView):
         if 'data' in response_data and len(response_data['data']) > 0:
             last_id = response_data['data'][-1]["_id"]
             last_room_response =  self.get_room_by_id(last_id)
-            print (last_room_response)
             return Response({
             "success": True,
-            "message": "Room deatils based on workspace id",
+            "message": "Room deatils based on org_id",
             "response": response_data["data"],
             "last_room_details": last_room_response["response"]
         })
@@ -251,7 +250,7 @@ class RoomList(APIView):
             
             return Response({
             "success": False,
-            "message": "Room not found on workspace id",
+            "message": "Room not found on org_id",
         })
     def get_room_by_id(self, room_id):
 
@@ -263,6 +262,30 @@ class RoomList(APIView):
         response = json.loads(dowellconnection(*room_services, "find", field, update_field= None))
         return{
             "success": True,
-            "message": "Room deatils based on workspace id",
+            "message": "Room deatils based on org_id",
             "response": response["data"],
         }
+
+class createOpenChatRoom(RoomService):
+    def post(self, request):
+        user_id = request.data.get('user_id')
+        product_name = request.data.get('product_name')
+        org_id = generate_room_id(product_name, user_id)
+        org_id = org_id['room_name']
+        portfolio_name = user_id
+        room_name = request.data.get('room_name')
+
+        if room_name == 'openchat' and product_name == 'SALESAGENT':
+            field = {
+                "user_id": user_id,
+                'org_id': org_id,
+                'product_name': product_name,
+                'portfolio_name': portfolio_name,
+            }
+            self.create_room(user_id, org_id, product_name, portfolio_name)
+
+    
+
+
+
+
