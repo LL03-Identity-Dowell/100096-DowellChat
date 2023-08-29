@@ -45,4 +45,5 @@ product_details = {
     'DOWELLCSC':25,
     'LIVINGLABCHAT' : 26,
     "SALESAGENT":27,
+    "LOGIN":28,
 }
