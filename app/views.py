@@ -140,7 +140,7 @@ class RoomService(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
     """get message ROOM BY ID"""
     def get_messages(self, request):
-        room_id = request.data.get('room_id')
+        room_id = request.GET.get('room_id')
         field = {
             "room_id": room_id
         }
