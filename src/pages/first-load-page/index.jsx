@@ -4,7 +4,7 @@ import DataContext from "../../context/data-context";
 import { CustomerSupport } from "../customer-support";
 import { LivingLabChat } from "../living-lab-chat";
 import axios from "axios";
-import SecondRoute from "../../secondRoute";
+import SecondRoute from "../secondRoute";
 
 export const FirstLoadComponent = () => {
   const { pageName } = useParams();

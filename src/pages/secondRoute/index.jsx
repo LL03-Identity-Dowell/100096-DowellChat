@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import DataContext from "../context/data-context";
+import DataContext from "../../context/data-context";
 // import { CustomerSupport } from "../customer-support";
 // import { LivingLabChat } from "../living-lab-chat";
 import axios from "axios";
-import { ChatHeader } from "../components/chat-header";
-import { Message } from "../components/message";
-import { Reply } from "../components/reply";
-import { PopUp } from "../components/pop-up";
+import { ChatHeader } from "../../components/chat-header";
+import { Message } from "../../components/message";
+import { Reply } from "../../components/reply";
+import { PopUp } from "../../components/pop-up";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -50,14 +50,14 @@ const {collectedData } = dataContext
     <div className="w-full h-full flex justify-center items-center max-h-full mt-24">
       <div className="w-full h-full flex justify-center items-center max-h-full">
       <div className="w-1/2">
-          <div className="flex h-full flex-col">
+          <div className="flex h-full flex-col border-t-2 border-l-2 border-r-2">
             <ChatHeader
                 chatApi={chatApi}
                 profileImage ={collectedData}
               roomId={selectedRoomId}
               setShowPopUp={setShowPopUp}
             /> 
-            <div className="flex flex-col-reverse h-[400px] overflow-auto">
+            <div className="flex flex-col-reverse h-[400px] overflow-auto border-l-2 border-r-2">
               {messages ? (
                 <div className="flex flex-col-reverse h-max px-3">
                   {messages.toReversed().map((message, index) => (
