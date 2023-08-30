@@ -437,6 +437,13 @@ class QRServiceValidationHandler(QRServiceHandler, RoomService):
 
 
 
-# class createPublicRoomApi(APIView):
-#     def post(self, request, *args, **kwargs):
+class createPublicRoomApi(APIView):
+    def post(self, request, *args, **kwargs):
+        user_id = request.data.get('user_id')
+        org_id = request.data.get('org_id')
+        product_name = request.data.get('product_name')
+        portfolio_name = request.data.get('portfolio_name')
+        api_key = request.data.get('api_key')
+
+        url = 'https://100105.pythonanywhere.com/api/v3/process-services/?type=api_service&api_key=<USER API KEY>'
          
