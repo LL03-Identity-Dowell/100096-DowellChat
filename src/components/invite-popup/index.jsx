@@ -12,6 +12,30 @@ export const InvitePopup = ({
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [idCount, setIdCount] = useState(0);
   const [step, setStep] = useState("select number");
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState("");
+
+  const availableProducts = [
+    { productName: "WORKFLOWAI", id: 11 },
+    { productName: "TEAMMANAGEMENT", id: 12 },
+    { productName: "WIFIQRCODE", id: 13 },
+    { productName: "SALESAGENTLOGIN", id: 14 },
+    { productName: "LEGALZARD", id: 15 },
+    { productName: "USEREXPERIENCELIVE", id: 16 },
+    { productName: "SOCIALMEDIAAUTOMATION", id: 17 },
+    { productName: "LIVINGLABSCALES", id: 18 },
+    { productName: "LOGOSCAN", id: 19 },
+    { productName: "LIVINGLABMONITORING", id: 20 },
+    { productName: "PERMUTATIONCALCULATOR", id: 21 },
+    { productName: "SECUREREPOSITORIES", id: 22 },
+    { productName: "SECUREDATA", id: 23 },
+    { productName: "CUSTOMEREXPERIENCE", id: 24 },
+    { productName: "DOWELLCSC", id: 25 },
+    { productName: "LIVINGLABCHAT", id: 26 },
+    { productName: "SALESAGENT", id: 27 },
+    { productName: "LOGIN", id: 28 },
+    { productName: "PUBLIC_QR", id: 29 },
+  ];
 
   const tabs = ["select number", "select Ids", "select name"];
   useEffect(() => {
@@ -32,6 +56,7 @@ export const InvitePopup = ({
     }
     setSelectOptions(selectedOption);
     setSelectedOptions(selectedOption);
+    setSelectedIds(selectedOption.map((item) => item.value));
   }, [idCount, userportfolio]);
   const handleTabChange = (tabName) => {
     setStep(tabName);
@@ -106,12 +131,13 @@ export const InvitePopup = ({
               </div>
               {step === "select number" && (
                 <>
-                  <label className="w-4/5" htmlFor="selectNumber">
+                  <label className="w-4/5  pb-2" htmlFor="selectNumber">
                     Number of Ids <strong className="text-red-600">*</strong>
                   </label>
                   <input
                     name="selectNumber"
                     type="number"
+                    value={idCount}
                     min={1}
                     required
                     placeholder="Enter Number of Ids"
@@ -132,7 +158,7 @@ export const InvitePopup = ({
               )}
               {step === "select Ids" && (
                 <>
-                  <label className="w-4/5" htmlFor="availableIds">
+                  <label className="w-4/5  pb-2" htmlFor="availableIds">
                     Select id <strong className="text-red-600">*</strong>
                   </label>
                   <Select
@@ -142,6 +168,11 @@ export const InvitePopup = ({
                     classNamePrefix="select"
                     isMulti
                     isSearchable={false}
+                    onChange={(value) => {
+                      setSelectedIds(
+                        value.map((item) => item.value.toString())
+                      );
+                    }}
                   />
                   <button
                     className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
@@ -155,19 +186,42 @@ export const InvitePopup = ({
               )}
               {step === "select name" && (
                 <>
-                  <label className="w-4/5" htmlFor="selectName">
-                    Enter Name <strong className="text-red-600">*</strong>
+                  <label className="w-4/5 pb-2" htmlFor="selectName">
+                    Available Products
+                    <strong className="text-red-600">*</strong>
                   </label>
-                  <input
+                  <select
+                    defaultValue=""
+                    onChange={(event) => {
+                      setSelectedProduct(event.target.value);
+                    }}
+                    className="w-4/5 h-11 p-2 border outline-none"
+                  >
+                    <option value="">Select Product Name</option>
+                    {availableProducts.map((item, index) => (
+                      <option key={index} value={item.productName}>
+                        {item.productName}
+                      </option>
+                    ))}
+                  </select>
+                  {/* <input
                     name="selectName"
                     type="text"
                     placeholder="Enter Number of chat"
                     onChange={setIdCount}
                     className="w-4/5 h-11 p-2 border outline-none"
-                  />
+                  /> */}
                   <button
                     className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
-                    onClick={handelInvite}
+                    onClick={() => {
+                      const product = availableProducts.filter(
+                        (item) => item.productName === selectedProduct
+                      )[0];
+                      const obj = {};
+                      obj[product.productName] = product.id;
+                      console.log(obj);
+                      handelInvite(selectedIds, obj);
+                    }}
                   >
                     Generate QR
                   </button>

@@ -54,7 +54,9 @@ export const CustomerSupport = () => {
     setSelectedRoomId(roomId);
     setMessages(undefined);
     axios
-      .get(`https://100096.pythonanywhere.com/send_message/${roomId}`)
+      .get(
+        `https://100096.pythonanywhere.com/api/v2/room-service/?type=get_messages&room_id=${roomId}`
+      )
       .then((response) => {
         setMessages(response.data.messages);
       });
@@ -73,9 +75,21 @@ export const CustomerSupport = () => {
     showInvitePopup ? setShowInvitePopup(false) : setShowInvitePopup(true);
   };
 
-  const handleInvite = () => {
+  const handleInvite = (selectedOption, selectedProduct) => {
     setIsLoading(true);
-    console.log("handle invite");
+    const data = {
+      workspace_id: dataContext.collectedData.orgId,
+      qr_ids: selectedOption,
+      product_name: selectedProduct,
+    };
+    axios
+      .post(
+        `https://100096.pythonanywhere.com/api/v2/create_master_link/some_company/`,
+        data
+      )
+      .then((response) => {
+        console.log(response);
+      });
     setIsLoading(false);
   };
 

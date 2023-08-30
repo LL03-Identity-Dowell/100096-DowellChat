@@ -8,20 +8,23 @@ export const PopUp = ({
   roomId,
   setSelectedRoomId,
   setShowPopUp,
+  productTitle,
 }) => {
   const dataContext = useContext(DataContext);
   const [isLoading, setIsLoading] = useState(false);
   const handleRoomDelete = () => {
     setIsLoading(true);
     axios
-      .get(
-        `https://100096.pythonanywhere.com/delete-customer-support-room/?session_id=${dataContext.collectedData.sessionId}&room_id=${roomId}`
-      )
+      .get(`https://100096.pythonanywhere.com/api/v2/room-service/`, {
+        type: "delete_room",
+        room_id: roomId,
+        is_active: false,
+      })
       .then(() => {
         notify("Room Deleted Successfully!", "success");
         axios
           .get(
-            `https://100096.pythonanywhere.com/room_list1/Login/${dataContext.collectedData.orgId}`
+            `https://100096.pythonanywhere.com/api/v2/room-list/?org_id=${dataContext.collectedData.orgId}&product_name=${productTitle}`
           )
           .then((response) => {
             setRooms(response.data.rooms);
