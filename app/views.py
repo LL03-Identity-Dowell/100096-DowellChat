@@ -119,6 +119,7 @@ class RoomService(APIView):
         }
         serializer = MessageSerializer(data=data)
         if serializer.is_valid():
+            
             field = {
                 "room_id": room_id,
                 "message_data": message_data,
@@ -433,3 +434,9 @@ class QRServiceValidationHandler(QRServiceHandler, RoomService):
         room = self.create_room(kwargs['link_id'], kwargs['company'], kwargs['event'].lower(), kwargs['link_id'], public_QR=True)
         return Response({'room': room})
         
+
+
+
+# class createPublicRoomApi(APIView):
+#     def post(self, request, *args, **kwargs):
+         

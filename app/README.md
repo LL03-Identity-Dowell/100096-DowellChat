@@ -58,9 +58,7 @@ Api_url = `https://100096.pythonanywhere.com/`
     "portfolio_name": "umair",
     "room_room_id": "19-ABCD12345",
     "product_name": "LOGOSCAN",
-    "message": {
-      "receiver": "How may I help you"
-    },
+    "message_data": "message",
     "is_active": true
   }
 }
@@ -76,9 +74,7 @@ _Post_ to `Api_url/api/v2/room-service/`
 {
   "type": "create_message",
   "room_id": "64ed7d75a57293efb539eb19",
-  "message_data": {
-    "user": "hello"
-  },
+  "message_data": "message",
   "side": true,
   "auther": "client",
   "message_type": "text"
@@ -124,10 +120,7 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_messages`
       "portfolio_name": "portfolio_name",
       "room_room_id": "room_room_id",
       "product_name": "product_name",
-      "message": {
-        "user": "i am fine any you?",
-        "recevier": "hy how are you ?"
-      },
+      "message_data": "message",
       "is_active": false
     }
   ]
@@ -161,10 +154,7 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_room_by_id`
       "portfolio_name": "portfolio_name",
       "room_room_id": "room_room_id",
       "product_name": "product_name",
-      "message": {
-        "user": "i am fine any you?",
-        "recevier": "hy how are you ?"
-      },
+      "message_data": "message",
       "is_active": false
     }
   ]
@@ -173,18 +163,14 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_room_by_id`
 
 ## 5. Delete Chat room to database
 
-_Get_ to `Api_url/api/v2/room-service/?type=delete_room`
-
-**Query Parameters:**
-
-- `org_id`: org_id,
-- `product_name`: product_name
+_Get_ to `Api_url/api/v2/room-service/`
 
 **Request:**
 
 ```json
 {
-  "room_id": "64e573b66c3b5f96ec61434c",
+  "type": "delete_room",
+  "room_id": "64edd973bb5e27de179c721c",
   "is_active": false
 }
 ```
@@ -253,10 +239,7 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_room_by_id`
       "portfolio_name": "portfolio_name",
       "room_room_id": "room_room_id",
       "product_name": "product_name",
-      "message": {
-        "user": "i am fine any you?",
-        "recevier": "hy how are you ?"
-      },
+      "message_data": "message",
       "is_active": false
     }
   ]
@@ -273,9 +256,7 @@ _Post_ to `Api_url/api/v2/room-service/`
 {
   "type": "create_message",
   "room_id": "64ed7d75a57293efb539eb19",
-  "message_data": {
-    "user": "hello"
-  },
+  "message_data": "message",
   "side": true,
   "auther": "client",
   "message_type": "text"
@@ -296,7 +277,7 @@ _Post_ to `Api_url/api/v2/room-service/`
 
 ## 4. Get message by room Id
 
-_Get_ to `Api_url/api/v2/room-service/?type=get_messages`
+_Get_ to `Api_url/api/v2/room-service/?type=get_messages&room_id=room_id`
 
 **Query Parameters:**
 
@@ -321,10 +302,7 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_messages`
       "portfolio_name": "portfolio_name",
       "room_room_id": "room_room_id",
       "product_name": "product_name",
-      "message": {
-        "user": "i am fine any you?",
-        "recevier": "hy how are you ?"
-      },
+      "message_data": "message",
       "is_active": false
     }
   ]
