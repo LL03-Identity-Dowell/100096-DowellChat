@@ -1,13 +1,46 @@
+import Select from "react-select";
+import DataContext from "../../context/data-context";
+import { useContext, useEffect, useState } from "react";
+
 export const InvitePopup = ({
   isLoading,
   handleShowInvitePopup,
   handelInvite,
 }) => {
+  const { userportfolio } = useContext(DataContext).collectedData;
+  const [selectOptions, setSelectOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [idCount, setIdCount] = useState(0);
+  const [step, setStep] = useState("select number");
+
+  const tabs = ["select number", "select Ids", "select name"];
+  useEffect(() => {
+    const options = [];
+    for (let i = 0; i < userportfolio?.length; i++) {
+      if (userportfolio[i].member_type === "public") {
+        for (let j = 0; j < userportfolio[i].username.length; j++) {
+          options.push({
+            value: userportfolio[i].username[j],
+            label: userportfolio[i].username[j],
+          });
+        }
+      }
+    }
+    const selectedOption = [];
+    for (let i = 0; i < idCount; i++) {
+      selectedOption.push(options[i]);
+    }
+    setSelectOptions(selectedOption);
+    setSelectedOptions(selectedOption);
+  }, [idCount, userportfolio]);
+  const handleTabChange = (tabName) => {
+    setStep(tabName);
+  };
   return (
     <>
       <div className="fixed top-0 bottom-0 left-0 right-0 backdrop-blur-sm">
         {isLoading ? (
-          <div className="flex fixed w-[480px] justify-center items-center bg-gray-100 rounded-lg top-1/2 left-1/2 h-56 max-w-96 shadow-lg -translate-x-1/2 -translate-y-1/2">
+          <div className="flex fixed w-[600px] justify-center items-center bg-gray-100 rounded-lg top-1/2 left-1/2 h-56 max-w-96 shadow-lg -translate-x-1/2 -translate-y-1/2">
             <svg
               aria-hidden="true"
               className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -26,10 +59,34 @@ export const InvitePopup = ({
             </svg>
           </div>
         ) : (
-          <div className="flex fixed w-[480px] flex-col gap-10 justify-center items-center bg-gray-100 rounded-lg top-1/2 left-1/2 h-56 max-w-96 shadow-lg -translate-x-1/2 -translate-y-1/2">
+          <div className="flex fixed w-[600px] h-72 flex-col gap-10 justify-center items-center bg-gray-100 rounded-lg top-1/2 left-1/2  max-w-96 shadow-lg -translate-x-1/2 -translate-y-1/2">
             <div className="flex flex-col w-full items-center">
-              <div className="flex w-full justify-end pr-5">
-              <div className="hover:bg-gray-200 hover:rounded-full hover:h-[20px] hover:w-[20px] animate-bounce hover:transition hover:delay-75">
+              <div
+                className={`flex w-full ${
+                  step !== "select number" ? "justify-between" : "justify-end"
+                } px-5 pb-3`}
+              >
+                {step !== "select number" && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-5 h-5 text-gray-500 hover:cursor-pointer"
+                    onClick={() => {
+                      handleTabChange(
+                        tabs[tabs.findIndex((item) => item === step) - 1]
+                      );
+                    }}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                    />
+                  </svg>
+                )}
 
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -46,77 +103,80 @@ export const InvitePopup = ({
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-                </div>
-                </div>
-              <label className="w-4/5" htmlFor="availableIds">
-                Select id <strong className="text-red-600">*</strong>
-              </label>
-              <select
-                name="availableIds"
-                className="w-4/5 h-11 border border-gray-400 outline-none"
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
+              </div>
+              {step === "select number" && (
+                <>
+                  <label className="w-4/5" htmlFor="selectNumber">
+                    Number of Ids <strong className="text-red-600">*</strong>
+                  </label>
+                  <input
+                    name="selectNumber"
+                    type="number"
+                    min={1}
+                    required
+                    placeholder="Enter Number of Ids"
+                    onChange={(event) => {
+                      setIdCount(event.target.value);
+                    }}
+                    className="w-4/5 h-11 p-2 border outline-none"
+                  />
+                  <button
+                    className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
+                    onClick={() => {
+                      handleTabChange("select Ids");
+                    }}
+                  >
+                    Continue
+                  </button>
+                </>
+              )}
+              {step === "select Ids" && (
+                <>
+                  <label className="w-4/5" htmlFor="availableIds">
+                    Select id <strong className="text-red-600">*</strong>
+                  </label>
+                  <Select
+                    options={selectOptions}
+                    defaultValue={selectedOptions}
+                    className="basic-multi-select w-4/5 outline-none"
+                    classNamePrefix="select"
+                    isMulti
+                    isSearchable={false}
+                  />
+                  <button
+                    className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
+                    onClick={() => {
+                      handleTabChange("select name");
+                    }}
+                  >
+                    Continue
+                  </button>
+                </>
+              )}
+              {step === "select name" && (
+                <>
+                  <label className="w-4/5" htmlFor="selectName">
+                    Enter Name <strong className="text-red-600">*</strong>
+                  </label>
+                  <input
+                    name="selectName"
+                    type="text"
+                    placeholder="Enter Number of chat"
+                    onChange={setIdCount}
+                    className="w-4/5 h-11 p-2 border outline-none"
+                  />
+                  <button
+                    className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
+                    onClick={handelInvite}
+                  >
+                    Generate QR
+                  </button>
+                </>
+              )}
             </div>
-
-            <button
-              className="bg-blue-600 text-white px-4 py-2 w-36 rounded-md shadow-md"
-              onClick={handelInvite}
-            >
-              Continue
-            </button>
           </div>
         )}
       </div>
     </>
   );
 };
-{/* <div className="flex fixed w-[480px] flex-col gap-10 justify-center items-center bg-gray-100 rounded-lg top-1/2 left-1/2 h-56 max-w-96 shadow-lg -translate-x-1/2 -translate-y-1/2">
-            <div className="flex flex-col w-full items-center">
-              <div className="flex w-full justify-end pr-5">
-                <div className="hover:bg-gray-200 hover:rounded-full hover:h-[20px] hover:w-[20px] animate-bounce hover:transition hover:delay-75">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5 text-gray-500 hover:cursor-pointer"
-                  onClick={handleShowInvitePopup}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-                </div>
-              </div>
-              <label className="w-4/5" htmlFor="availableIds">
-                Select id <strong className="text-red-600">*</strong>
-              </label>
-              <select
-                name="availableIds"
-                className="w-4/5 h-11 border border-gray-400 outline-none rounded-md"
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
-            </div>
-
-            <button
-              className="bg-blue-600 text-white px-4 py-2 w-36 rounded-md shadow-md"
-              onClick={handelInvite}
-            >
-              Continue
-            </button>
-          </div> */}

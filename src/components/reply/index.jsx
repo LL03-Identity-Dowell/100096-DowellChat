@@ -37,6 +37,7 @@ export const Reply = ({ roomId, setMessages, rooms }) => {
             user_id: dataContext.collectedData.userId,
             message_type: type,
             org_id: dataContext.collectedData.orgId,
+            side: true,
           };
           axios
             .post(
