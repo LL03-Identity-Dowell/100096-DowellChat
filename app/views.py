@@ -11,19 +11,7 @@ from .helper import *
 from .constant import *
 
 
-def save_links_2mgdb(company_id, links, job_name):
-    url = "https://www.qrcodereviews.uxlivinglab.online/api/v3/qr-code/"
-    
-    payload = {
-        "qrcode_type": "Link",
-        "quantity": 1,
-        "company_id": company_id,
-        "links": [{'link': l} for l in links],
-        "document_name":job_name
-    }
-    response = requests.post(url, json=payload)
-    print(response.text)
-    return response
+from django.http import HttpResponse
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -119,14 +107,14 @@ class RoomService(APIView):
     """update message ROOM BY ID"""
 
     def create_message(self, request):
-        type = request.data.get('type')
+        type_ = request.data.get('type_')
         room_id = request.data.get('room_id')
         message_data = request.data.get('message_data')
         side = request.data.get('side')
         author = request.data.get('author')
         message_type = request.data.get('message_type')
         data = {
-            "type": type,
+            "type_": type_,
             "room_id": room_id,
             "message_data": message_data,
             "side": side,
@@ -319,38 +307,57 @@ class createOpenChatRoom(RoomController):
 @method_decorator(csrf_exempt, name='dispatch')
 class QRServiceHandler(APIView):
     def get(self, request, *args, **kwargs):
-        rooms = self.room_filter(workspace_id=kwargs['workspace_id'])
+        rooms = self.room_filter(workspace_id=kwargs['workspace_id'], public_QR=True)
         print('rooms :', rooms)
         return Response({'rm_s': rooms})
 
+    def save_links_2mgdb(self, company_id, links, job_name):
+        url = "https://www.qrcodereviews.uxlivinglab.online/api/v3/qr-code/"
+        
+        payload = {
+            "qrcode_type": "Link",
+            "quantity": 1,
+            "company_id": company_id,
+            "links": [{'link': l} for l in links],
+            "document_name":job_name
+        }
+        response = requests.post(url, json=payload)
+        #   print(response.text)
+        return response
+
     def post(self, request, *args, **kwargs):
         workspace_id = str(request.data.get('workspace_id')) or str(kwargs['workspace_id'])
-
-        print("qr_ids", request.data.get('qr_ids'))
-        QR_ids = list(request.data.get('qr_ids'))  
-        event_name = "PUBLIC_QR"
-        print("workspace_id : ", workspace_id)
-        links = list()
-        for qr_hash in QR_ids:
-            rm_link = self.get_httpURL(qr_hash, event_name, workspace_id)
-            links.append(rm_link)
-
-        QR_server_response = save_links_2mgdb(workspace_id, links, event_name)
-
-
+        QR_ids = list(request.data.get('qr_ids'))
+        pn = request.data.get('product_name')
+        product_name__key = str()
 
         try:
-            save_response = json.loads(QR_server_response.text)
+            product_name__key = [*pn][0]
+            product_name_value = [*pn.value()][0]
+            
+            if not(product_name__key in product_details.keys() and product_name_value in product_details.values()):
+                return Response({
+                    'success': False,
+                    'error' : 'Invalid Product Name.' 
+                })
+        except:
+            pass    
+
+        links = list()
+        for qr_hash in QR_ids:
+            rm_link = self.get_httpURL(qr_hash, product_name__key, workspace_id)
+            links.append(rm_link)
+
+        QR_server_response = self.save_links_2mgdb(workspace_id, links, product_name__key)       #   print(QR_server_response.text)
+
+        try:
             return Response({
-                    'e':event_name, 
-                    'qr_response': save_response['response'],
-                }
-            )
+                    'product_name':product_name__key, 
+                    'qr_response': QR_server_response,
+                })
 
         except:
-            with open('mgdbresponse.html', 'w') as f:
-                f.write(QR_server_response.text)
-            return HttpResponse(QR_server_response.text)
+            return HttpResponse(QR_server_response)
 
     def room_filter(self, workspace_id):
         field = {
@@ -367,13 +374,10 @@ class QRServiceHandler(APIView):
     
 
 
-
-
 from django.http import JsonResponse
 class QRServiceValidationHandler(QRServiceHandler, RoomService):
     def get(self,request, *args, **kwargs):
-        room_create_response = self.create_room(**kwargs, portfolio_name=kwargs['user_id'], isLogin=False, public_QR=True)
-        print("ROOM :", room_create_response)
+        room_create_response = self.create_room(kwargs['user_id'], kwargs['org_id'], kwargs['product_name'], portfolio_name=kwargs['user_id'], isLogin=False, public_QR=True)      #   print("ROOM :", room_create_response)
         try:
             return JsonResponse({'room': room_create_response})
         except:
