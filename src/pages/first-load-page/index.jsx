@@ -4,6 +4,7 @@ import DataContext from "../../context/data-context";
 import { CustomerSupport } from "../customer-support";
 import { LivingLabChat } from "../living-lab-chat";
 import axios from "axios";
+import SecondRoute from "../../secondRoute";
 
 export const FirstLoadComponent = () => {
   const { pageName } = useParams();
@@ -11,7 +12,6 @@ export const FirstLoadComponent = () => {
   const [customerSupportEligible, setCustomerSupportEligible] = useState(false);
   const [livingLabChatEligible, setLivingLabChatEligible] = useState(false);
   const dataContext = React.useContext(DataContext);
-
   const checkProduct = (portfolio_info) => {
     for (let i = 0; i < portfolio_info.length; i++) {
       if (
@@ -141,6 +141,7 @@ export const FirstLoadComponent = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageName, navigate]);
+  console.log('getUserData',dataContext)
 
   return customerSupportEligible ? (
     <CustomerSupport />

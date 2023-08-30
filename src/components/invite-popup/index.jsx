@@ -29,6 +29,8 @@ export const InvitePopup = ({
           <div className="flex fixed w-[480px] flex-col gap-10 justify-center items-center bg-gray-100 rounded-lg top-1/2 left-1/2 h-56 max-w-96 shadow-lg -translate-x-1/2 -translate-y-1/2">
             <div className="flex flex-col w-full items-center">
               <div className="flex w-full justify-end pr-5">
+              <div className="hover:bg-gray-200 hover:rounded-full hover:h-[20px] hover:w-[20px] animate-bounce hover:transition hover:delay-75">
+
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -44,7 +46,8 @@ export const InvitePopup = ({
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-              </div>
+                </div>
+                </div>
               <label className="w-4/5" htmlFor="availableIds">
                 Select id <strong className="text-red-600">*</strong>
               </label>
@@ -73,3 +76,47 @@ export const InvitePopup = ({
     </>
   );
 };
+{/* <div className="flex fixed w-[480px] flex-col gap-10 justify-center items-center bg-gray-100 rounded-lg top-1/2 left-1/2 h-56 max-w-96 shadow-lg -translate-x-1/2 -translate-y-1/2">
+            <div className="flex flex-col w-full items-center">
+              <div className="flex w-full justify-end pr-5">
+                <div className="hover:bg-gray-200 hover:rounded-full hover:h-[20px] hover:w-[20px] animate-bounce hover:transition hover:delay-75">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5 text-gray-500 hover:cursor-pointer"
+                  onClick={handleShowInvitePopup}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+                </div>
+              </div>
+              <label className="w-4/5" htmlFor="availableIds">
+                Select id <strong className="text-red-600">*</strong>
+              </label>
+              <select
+                name="availableIds"
+                className="w-4/5 h-11 border border-gray-400 outline-none rounded-md"
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+
+            <button
+              className="bg-blue-600 text-white px-4 py-2 w-36 rounded-md shadow-md"
+              onClick={handelInvite}
+            >
+              Continue
+            </button>
+          </div> */}
