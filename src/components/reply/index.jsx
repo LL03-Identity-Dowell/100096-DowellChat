@@ -94,7 +94,7 @@ export const Reply = ({ roomId, setMessages, rooms }) => {
     setShowPicker(!showPicker);
   };
   return (
-    <div className="flex items-center border-t h-fit">
+    <div className="flex items-center border-t h-fit border-b-2 border-l-2 border-r-2">
       <textarea
         value={message}
         rows={4}
