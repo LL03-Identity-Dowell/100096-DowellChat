@@ -32,13 +32,6 @@ export const Reply = ({ roomId, setMessages, rooms }) => {
       let data = {};
       if (type === "IMAGE") {
         fileToBase64(message).then((response) => {
-          // data = {
-          //   message: response,
-          //   user_id: dataContext.collectedData.userId,
-          //   message_type: type,
-          //   org_id: dataContext.collectedData.orgId,
-          //   side: true,
-          // };
           data = {
             type: "create_message",
             room_id: roomId,

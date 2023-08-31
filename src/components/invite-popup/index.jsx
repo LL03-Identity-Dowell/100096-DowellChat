@@ -1,11 +1,13 @@
 import Select from "react-select";
 import DataContext from "../../context/data-context";
 import { useContext, useEffect, useState } from "react";
+import { availableProducts } from "../../utils/constants";
 
 export const InvitePopup = ({
   isLoading,
   handleShowInvitePopup,
   handelInvite,
+  masterLink,
 }) => {
   const { userportfolio } = useContext(DataContext).collectedData;
   const [selectOptions, setSelectOptions] = useState([]);
@@ -15,29 +17,14 @@ export const InvitePopup = ({
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
 
-  const availableProducts = [
-    { productName: "WORKFLOWAI", id: 11 },
-    { productName: "TEAMMANAGEMENT", id: 12 },
-    { productName: "WIFIQRCODE", id: 13 },
-    { productName: "SALESAGENTLOGIN", id: 14 },
-    { productName: "LEGALZARD", id: 15 },
-    { productName: "USEREXPERIENCELIVE", id: 16 },
-    { productName: "SOCIALMEDIAAUTOMATION", id: 17 },
-    { productName: "LIVINGLABSCALES", id: 18 },
-    { productName: "LOGOSCAN", id: 19 },
-    { productName: "LIVINGLABMONITORING", id: 20 },
-    { productName: "PERMUTATIONCALCULATOR", id: 21 },
-    { productName: "SECUREREPOSITORIES", id: 22 },
-    { productName: "SECUREDATA", id: 23 },
-    { productName: "CUSTOMEREXPERIENCE", id: 24 },
-    { productName: "DOWELLCSC", id: 25 },
-    { productName: "LIVINGLABCHAT", id: 26 },
-    { productName: "SALESAGENT", id: 27 },
-    { productName: "LOGIN", id: 28 },
-    { productName: "PUBLIC_QR", id: 29 },
-  ];
-
   const tabs = ["select number", "select Ids", "select name"];
+
+  useEffect(() => {
+    if (masterLink !== "") {
+      setStep("");
+    }
+  }, [masterLink]);
+
   useEffect(() => {
     const options = [];
     for (let i = 0; i < userportfolio?.length; i++) {
@@ -60,6 +47,26 @@ export const InvitePopup = ({
   }, [idCount, userportfolio]);
   const handleTabChange = (tabName) => {
     setStep(tabName);
+  };
+
+  const handleCopyClick = () => {
+    const copyTextElement = document.getElementById("copyText");
+
+    const range = document.createRange();
+    range.selectNode(copyTextElement);
+
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    try {
+      document.execCommand("copy");
+      console.log("Text copied to clipboard");
+    } catch (error) {
+      console.error("Unable to copy text:", error);
+    }
+
+    selection.removeAllRanges();
   };
   return (
     <>
@@ -88,10 +95,12 @@ export const InvitePopup = ({
             <div className="flex flex-col w-full items-center">
               <div
                 className={`flex w-full ${
-                  step !== "select number" ? "justify-between" : "justify-end"
+                  step !== "select number" && masterLink === ""
+                    ? "justify-between"
+                    : "justify-end"
                 } px-5 pb-3`}
               >
-                {step !== "select number" && (
+                {step !== "select number" && masterLink === "" && (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -226,6 +235,15 @@ export const InvitePopup = ({
                     Generate QR
                   </button>
                 </>
+              )}
+              {masterLink !== "" && (
+                <span
+                  id="copyText"
+                  className="flex w-full text-center hover:cursor-pointer text-lg"
+                  onClick={handleCopyClick}
+                >
+                  {masterLink}
+                </span>
               )}
             </div>
           </div>

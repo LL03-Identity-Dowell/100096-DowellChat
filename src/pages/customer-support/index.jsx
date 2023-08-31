@@ -17,13 +17,14 @@ import { InvitePopup } from "../../components/invite-popup";
 
 export const CustomerSupport = () => {
   const dataContext = useContext(DataContext);
-  const [productTitle, setProductTitle] = useState("Login");
+  const [productTitle, setProductTitle] = useState("LOGIN");
   const [rooms, setRooms] = useState();
   const [selectedRoomId, setSelectedRoomId] = useState("Room ID");
   const [messages, setMessages] = useState(undefined);
   const [showPopUp, setShowPopUp] = useState(false);
   const [showInvitePopup, setShowInvitePopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [masterLink, setMasterLink] = useState("");
 
   useEffect(() => {
     if (dataContext.collectedData) {
@@ -34,14 +35,15 @@ export const CustomerSupport = () => {
 
   useEffect(() => {
     setRooms(undefined);
+    setMessages([]);
     axios
       .get(
         `https://100096.pythonanywhere.com/api/v2/room-list/?org_id=${dataContext.collectedData.orgId}&product_name=${productTitle}`
       )
       .then((response) => {
-        if (response.data.rooms?.length > 0) {
-          setRooms(response.data.rooms);
-          setSelectedRoomId(response.data.firstroom.room_id);
+        if (response.data.response?.length > 0) {
+          setRooms(response.data.response);
+          setSelectedRoomId(response.data.last_room_details._id);
         } else {
           setRooms([]);
           setSelectedRoomId("Room ID");
@@ -58,7 +60,7 @@ export const CustomerSupport = () => {
         `https://100096.pythonanywhere.com/api/v2/room-service/?type=get_messages&room_id=${roomId}`
       )
       .then((response) => {
-        setMessages(response.data.messages);
+        setMessages(response.data.response.data);
       });
   };
 
@@ -88,9 +90,17 @@ export const CustomerSupport = () => {
         data
       )
       .then((response) => {
-        console.log(response);
+        let string = "";
+        for (let i = 0; i < response.data.qr_response.length; i++) {
+          string = string + response.data.qr_response[i];
+        }
+        setMasterLink(JSON.parse(string).qrcodes[0].masterlink);
+        setIsLoading(false);
+      })
+      .catch((reason) => {
+        console.log(reason);
+        setIsLoading(false);
       });
-    setIsLoading(false);
   };
 
   return (
@@ -194,7 +204,7 @@ export const CustomerSupport = () => {
                   rooms.map((room, index) => (
                     <Room
                       key={index}
-                      roomId={room.room_id}
+                      roomId={room._id}
                       roomName={room.room_name}
                       fetchRoomMessages={getMessages}
                     />
@@ -231,7 +241,7 @@ export const CustomerSupport = () => {
                         >
                           {
                             <Message
-                              message={message.message}
+                              message={message.message_data}
                               messageType={message.message_type}
                               color={
                                 message.side ? "bg-blue-600" : "bg-gray-300"
@@ -293,6 +303,7 @@ export const CustomerSupport = () => {
           handleShowInvitePopup={handleShowInvitePopup}
           isLoading={isLoading}
           handelInvite={handleInvite}
+          masterLink={masterLink}
         />
       )}
       <ToastContainer />
