@@ -330,6 +330,7 @@ class QRServiceHandler(APIView):
         workspace_id = str(request.data.get('workspace_id')) or str(kwargs['workspace_id'])
         QR_ids = list(request.data.get('qr_ids'))
         pn = request.data.get('product_name')
+        base_url = str(request.data.get('base_url'))
         product_name__key = str()
 
         try:
@@ -346,7 +347,7 @@ class QRServiceHandler(APIView):
 
         links = list()
         for qr_hash in QR_ids:
-            rm_link = self.get_httpURL(qr_hash, product_name__key, workspace_id)
+            rm_link = self.get_httpURL(base_url, qr_hash, product_name__key, workspace_id)
             links.append(rm_link)
 
         QR_server_response = self.save_links_2mgdb(workspace_id, links, product_name__key)       #   print(QR_server_response.text)
@@ -369,8 +370,8 @@ class QRServiceHandler(APIView):
         response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None)) 
         return response["data"]
 
-    def get_httpURL(self, qr_id, event, workspace_id):
-        return f'https://100096.pythonanywhere.com/api/v3/init/{workspace_id}/{event}/{qr_id}/' 
+    def get_httpURL(self, base_url, qr_id, event, workspace_id):
+        return f'{base_url}/init/chat/public/{workspace_id}/{event}/{qr_id}/' 
     
     
 
