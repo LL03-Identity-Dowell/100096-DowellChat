@@ -123,6 +123,7 @@ class RoomService(APIView):
         }
         serializer = MessageSerializer(data=data)
         if serializer.is_valid():
+            
             field = {
                 "room_id": room_id,
                 "message_data": message_data,
@@ -471,4 +472,3 @@ class QRServiceValidationHandler(QRServiceHandler, RoomService):
             ev_response = self.create_event(event_name=event['name'], room_count=event['room_count'], workspace_id=['workspace_id'])      #   event = RoomEvent.objects.create(event_name=event_name, room_count=len(QR_ids), organization=company_id)        #   num_links = int(request.POST.get('your-surname'))
         return ev_response
 '''
-
