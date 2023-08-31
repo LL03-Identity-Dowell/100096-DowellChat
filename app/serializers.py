@@ -16,6 +16,7 @@ class CreateRoomServiceSerializer(serializers.Serializer):
     ('PERMUTATIONCALCULATOR','PERMUTATIONCALCULATOR'),
     ('SALESAGENT','SALESAGENT'),
     ('LOGIN','LOGIN'),
+    ('PUBLIC_QR', 'PUBLIC_QR'),
 
     ) 
     user_id = serializers.CharField(allow_null=False, allow_blank=False)

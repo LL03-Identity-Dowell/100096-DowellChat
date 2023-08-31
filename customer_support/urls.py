@@ -50,7 +50,7 @@ urlpatterns = [
 
     path('public-link-login/', views.public_link_login, name='public-link'),
     path('create_master_link/', views.create_master_link, name='create_master_link'),
-    path('api/v3/init/<str:company>/<str:event>/<str:link_id>/', views.public_chat_link, name='public-chat-link'),
+    path('api/v1/init/<str:company>/<str:event>/<str:link_id>/', views.public_chat_link, name='public-chat-link'),
 
     
 

@@ -10,6 +10,10 @@ import pdb
 from .helper import *
 from .constant import *
 
+
+from django.http import HttpResponse
+
+
 @method_decorator(csrf_exempt, name='dispatch')
 class health_check(APIView):
     def get(self, request ):
@@ -103,14 +107,14 @@ class RoomService(APIView):
     """update message ROOM BY ID"""
 
     def create_message(self, request):
-        type = request.data.get('type')
+        type_ = request.data.get('type_')
         room_id = request.data.get('room_id')
         message_data = request.data.get('message_data')
         side = request.data.get('side')
         author = request.data.get('author')
         message_type = request.data.get('message_type')
         data = {
-            "type": type,
+            "type_": type_,
             "room_id": room_id,
             "message_data": message_data,
             "side": side,
@@ -305,27 +309,93 @@ class createOpenChatRoom(RoomController):
 class QRServiceHandler(APIView):
     def get(self, request, *args, **kwargs):
         rooms = self.room_filter(workspace_id=kwargs['workspace_id'], public_QR=True)
+        print('rooms :', rooms)
         return Response({'rm_s': rooms})
 
-    def post(self, request, *args, **kwargs):
-        workspace_id = str(request.POST.get(['workspace_id']))
-        QR_ids = list(request.POST.get('qr_ids'))  #  #  [secrets.token_hex(16) for i in range(3)]  # Generate a random string of 16 characters
-        event_name = '-'.join(request.POST.get('event-name').replace(":","").replace(".","").split(' '))
+    def save_links_2mgdb(self, company_id, links, job_name):
+        url = "https://www.qrcodereviews.uxlivinglab.online/api/v3/qr-code/"
+        
+        payload = {
+            "qrcode_type": "Link",
+            "quantity": 1,
+            "company_id": company_id,
+            "links": [{'link': l} for l in links],
+            "document_name":job_name
+        }
+        response = requests.post(url, json=payload)
+        #   print(response.text)
+        return response
 
-        r_event = self.event_controller({ 'name' : event_name, 'workspace_id': workspace_id, 'room_count': len(QR_ids) })
-        print("Event :", r_event)
+    def post(self, request, *args, **kwargs):
+        workspace_id = str(request.data.get('workspace_id')) or str(kwargs['workspace_id'])
+        QR_ids = list(request.data.get('qr_ids'))
+        pn = request.data.get('product_name')
+        product_name__key = str()
+
+        try:
+            product_name__key = [*pn][0]
+            product_name_value = [*pn.value()][0]
+            
+            if not(product_name__key in product_details.keys() and product_name_value in product_details.values()):
+                return Response({
+                    'success': False,
+                    'error' : 'Invalid Product Name.' 
+                })
+        except:
+            pass    
+
         links = list()
         for qr_hash in QR_ids:
-            rm_link = self.get_httpURL(qr_hash, r_event.event_name.lower(), workspace_id)
+            rm_link = self.get_httpURL(qr_hash, product_name__key, workspace_id)
             links.append(rm_link)
 
-        save_response = json.loads(self.save_links_2mgdb(workspace_id, links, r_event.event_name.lower()))
+        QR_server_response = self.save_links_2mgdb(workspace_id, links, product_name__key)       #   print(QR_server_response.text)
 
-        return Response({
-                'e':r_event.event_name, 
-                'qr_response': save_response['response'],
-            }
-        )
+        try:
+            return Response({
+                    'product_name':product_name__key, 
+                    'qr_response': QR_server_response,
+                })
+
+        except:
+            return HttpResponse(QR_server_response)
+
+    def room_filter(self, workspace_id):
+        field = {
+            'workspace_id': workspace_id,
+            'public_QR': True
+        }
+
+        response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None)) 
+        return response["data"]
+
+    def get_httpURL(self, qr_id, event, workspace_id):
+        return f'https://100096.pythonanywhere.com/api/v3/init/{workspace_id}/{event}/{qr_id}/' 
+    
+    
+
+
+from django.http import JsonResponse
+class QRServiceValidationHandler(QRServiceHandler, RoomService):
+    def get(self,request, *args, **kwargs):
+        room_create_response = self.create_room(kwargs['user_id'], kwargs['org_id'], kwargs['product_name'], portfolio_name=kwargs['user_id'], isLogin=False, public_QR=True)      #   print("ROOM :", room_create_response)
+        try:
+            return JsonResponse({'room': room_create_response})
+        except:
+            return room_create_response
+        
+
+
+
+
+
+
+
+
+'''
+    
+        #   r_event = self.event_controller({ 'name' : event_name, 'workspace_id': workspace_id, 'room_count': len(QR_ids) })
+        #   print("Event :", r_event)
 
     def create_event(self, event_name, room_count, workspace_id):
         data = {
@@ -367,31 +437,7 @@ class QRServiceHandler(APIView):
                 "error": serializer.errors
             }
 
-    def room_filter(self, workspace_id):
-        field = {
-            'workspace_id': workspace_id,
-            'public_QR': True
-        }
 
-        response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None)) 
-        return response["data"]
-
-    def get_httpURL(self, qr_id, event, workspace_id):
-        return f'https://100096.pythonanywhere.com/api/v3/init/{workspace_id}/{event}/{qr_id}/' 
-    
-    def save_links_2mgdb(company_id, links, job_name):
-        url = "https://www.qrcodereviews.uxlivinglab.online/api/v3/qr-code/"
-        
-        payload = {
-            "qrcode_type": "Link",
-            "quantity": 1,
-            "company_id": company_id,
-            "links": links,
-            "document_name":job_name
-        }
-        response = requests.post(url, json=payload)
-
-        return response.text
 
 
     def get_event_by_details(self, event_name, workspace_id):
@@ -425,25 +471,4 @@ class QRServiceHandler(APIView):
         else:
             ev_response = self.create_event(event_name=event['name'], room_count=event['room_count'], workspace_id=['workspace_id'])      #   event = RoomEvent.objects.create(event_name=event_name, room_count=len(QR_ids), organization=company_id)        #   num_links = int(request.POST.get('your-surname'))
         return ev_response
-
-
-
-
-class QRServiceValidationHandler(QRServiceHandler, RoomService):
-    def public_chat_link(self,request, *args, **kwargs):
-        room = self.create_room(kwargs['link_id'], kwargs['company'], kwargs['event'].lower(), kwargs['link_id'], public_QR=True)
-        return Response({'room': room})
-        
-
-
-
-class createPublicRoomApi(APIView):
-    def post(self, request, *args, **kwargs):
-        user_id = request.data.get('user_id')
-        org_id = request.data.get('org_id')
-        product_name = request.data.get('product_name')
-        portfolio_name = request.data.get('portfolio_name')
-        api_key = request.data.get('api_key')
-
-        url = 'https://100105.pythonanywhere.com/api/v3/process-services/?type=api_service&api_key=<USER API KEY>'
-         
+'''
