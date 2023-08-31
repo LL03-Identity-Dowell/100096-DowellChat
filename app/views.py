@@ -308,7 +308,7 @@ class createOpenChatRoom(RoomController):
 @method_decorator(csrf_exempt, name='dispatch')
 class QRServiceHandler(APIView):
     def get(self, request, *args, **kwargs):
-        rooms = self.room_filter(workspace_id=kwargs['workspace_id'], public_QR=True)
+        rooms = self.room_filter(workspace_id=kwargs['workspace_id'])
         print('rooms :', rooms)
         return Response({'rm_s': rooms})
 
