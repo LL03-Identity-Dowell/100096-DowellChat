@@ -107,7 +107,7 @@ class RoomService(APIView):
     """update message ROOM BY ID"""
 
     def create_message(self, request):
-        type_ = request.data.get('type_')
+        type_ = request.data.get('type')
         room_id = request.data.get('room_id')
         message_data = request.data.get('message_data')
         side = request.data.get('side')
