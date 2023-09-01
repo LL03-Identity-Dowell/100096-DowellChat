@@ -39,11 +39,11 @@ export const LivingLabChat = () => {
         `https://100096.pythonanywhere.com/room_list1/${productTitle}/${dataContext.collectedData.orgId}`
       )
       .then((response) => {
-        if (response.data.rooms.length > 0) {
-          setRooms(response.data.rooms);
-          setSelectedRoomId(response.data.firstroom.room_id);
+        if (response?.data?.rooms.length > 0) {
+          setRooms(response?.data?.rooms);
+          setSelectedRoomId(response?.data?.firstroom.room_id);
         } else {
-          setRooms(response.data.rooms);
+          setRooms(response?.data?.rooms);
           setSelectedRoomId("Room ID");
           setMessages([]);
         }
@@ -56,7 +56,7 @@ export const LivingLabChat = () => {
     axios
       .get(`https://100096.pythonanywhere.com/send_message/${roomId}`)
       .then((response) => {
-        setMessages(response.data.messages);
+        setMessages(response?.data?.messages);
       });
   };
 
@@ -79,6 +79,7 @@ export const LivingLabChat = () => {
     setIsLoading(false);
   };
 
+  
   return (
     <div className="flex h-screen justify-around pt-4 gap-2 pb-2">
       <div className="flex w-11/12 ">

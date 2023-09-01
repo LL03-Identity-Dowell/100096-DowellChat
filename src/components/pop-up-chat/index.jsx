@@ -2,45 +2,17 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import DataContext from "../../context/data-context";
 
-export const PopUp = ({
+export const PopUpChat = ({
   setRooms,
   notify,
   roomId,
   setSelectedRoomId,
   setShowPopUp,
-  activate
-  // delete
 }) => {
   const dataContext = useContext(DataContext);
   const [isLoading, setIsLoading] = useState(false);
-  let chat = true
   const handleRoomDelete = () => {
-    setIsLoading(true);
-   if(!activate){
-    axios
-    .get(
-      `https://100096.pythonanywhere.com/delete-customer-support-room/?session_id=${dataContext.collectedData.sessionId}&room_id=${roomId}`
-    )
-    .then(() => {
-      notify("Room Deleted Successfully!", "success");
-      axios
-        .get(
-          `https://100096.pythonanywhere.com/room_list1/Login/${dataContext.collectedData.orgId}`
-        )
-        .then((response) => {
-          setRooms(response.data.rooms);
-          setSelectedRoomId(response.data.firstroom.room_id);
-        });
-      setIsLoading(false);
-      setShowPopUp(false);
-    })
-    .catch((reason) => {
-      notify(reason.response.data.status, "error");
-      setShowPopUp(false);
-      setIsLoading(false);
-    });
-   }
-   else {
+    setIsLoading(true); 
   const  data = {
       "type": "delete_room",
       "room_id": "64edd973bb5e27de179c721c",
@@ -57,7 +29,6 @@ export const PopUp = ({
       setShowPopUp(false);
       setIsLoading(false);
     });
-   }
   };
   return (
     <>
