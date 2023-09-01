@@ -21,24 +21,24 @@ export const PopUp = ({
     .get(
       `https://100096.pythonanywhere.com/delete-customer-support-room/?session_id=${dataContext.collectedData.sessionId}&room_id=${roomId}`
     )
-    .then(() => {
-      notify("Room Deleted Successfully!", "success");
-      axios
-        .get(
+      .then(() => {
+        notify("Room Deleted Successfully!", "success");
+        axios
+          .get(
           `https://100096.pythonanywhere.com/room_list1/Login/${dataContext.collectedData.orgId}`
-        )
-        .then((response) => {
-          setRooms(response.data.rooms);
-          setSelectedRoomId(response.data.firstroom.room_id);
-        });
-      setIsLoading(false);
-      setShowPopUp(false);
-    })
-    .catch((reason) => {
-      notify(reason.response.data.status, "error");
-      setShowPopUp(false);
-      setIsLoading(false);
-    });
+          )
+          .then((response) => {
+            setRooms(response.data.rooms);
+            setSelectedRoomId(response.data.firstroom.room_id);
+          });
+        setIsLoading(false);
+        setShowPopUp(false);
+      })
+      .catch((reason) => {
+        notify(reason.response.data.status, "error");
+        setShowPopUp(false);
+        setIsLoading(false);
+      });
    }
    else {
   const  data = {

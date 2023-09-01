@@ -17,13 +17,14 @@ import { InvitePopup } from "../../components/invite-popup";
 
 export const LivingLabChat = () => {
   const dataContext = useContext(DataContext);
-  const [productTitle, setProductTitle] = useState("Sales-Agent-Login");
+  const [productTitle, setProductTitle] = useState("SALESAGENTLOGIN");
   const [rooms, setRooms] = useState();
   const [selectedRoomId, setSelectedRoomId] = useState("Room ID");
   const [messages, setMessages] = useState(undefined);
   const [showPopUp, setShowPopUp] = useState(false);
   const [showInvitePopup, setShowInvitePopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [masterLink, setMasterLink] = useState("");
 
   useEffect(() => {
     if (dataContext.collectedData) {
@@ -34,16 +35,25 @@ export const LivingLabChat = () => {
 
   useEffect(() => {
     setRooms(undefined);
+    setMessages([]);
     axios
       .get(
-        `https://100096.pythonanywhere.com/room_list1/${productTitle}/${dataContext.collectedData.orgId}`
+        `https://100096.pythonanywhere.com/api/v2/room-list/?org_id=${dataContext.collectedData.orgId}&product_name=${productTitle}`
       )
       .then((response) => {
+<<<<<<< HEAD
         if (response?.data?.rooms.length > 0) {
           setRooms(response?.data?.rooms);
           setSelectedRoomId(response?.data?.firstroom.room_id);
         } else {
           setRooms(response?.data?.rooms);
+=======
+        if (response.data.response?.length > 0) {
+          setRooms(response.data.response);
+          setSelectedRoomId(response.data.last_room_details._id);
+        } else {
+          setRooms([]);
+>>>>>>> 8e8a2af41a079fad0e1bd463737900bc6144003a
           setSelectedRoomId("Room ID");
           setMessages([]);
         }
@@ -54,9 +64,15 @@ export const LivingLabChat = () => {
     setSelectedRoomId(roomId);
     setMessages(undefined);
     axios
-      .get(`https://100096.pythonanywhere.com/send_message/${roomId}`)
+      .get(
+        `https://100096.pythonanywhere.com/api/v2/room-service/?type=get_messages&room_id=${roomId}`
+      )
       .then((response) => {
+<<<<<<< HEAD
         setMessages(response?.data?.messages);
+=======
+        setMessages(response.data.response.data);
+>>>>>>> 8e8a2af41a079fad0e1bd463737900bc6144003a
       });
   };
 
@@ -73,10 +89,30 @@ export const LivingLabChat = () => {
     showInvitePopup ? setShowInvitePopup(false) : setShowInvitePopup(true);
   };
 
-  const handleInvite = () => {
+  const handleInvite = (selectedOption, selectedProduct) => {
     setIsLoading(true);
-    console.log("handle invite");
-    setIsLoading(false);
+    const data = {
+      workspace_id: dataContext.collectedData.orgId,
+      qr_ids: selectedOption,
+      product_name: selectedProduct,
+    };
+    axios
+      .post(
+        `https://100096.pythonanywhere.com/api/v2/create_master_link/some_company/`,
+        data
+      )
+      .then((response) => {
+        let string = "";
+        for (let i = 0; i < response.data.qr_response.length; i++) {
+          string = string + response.data.qr_response[i];
+        }
+        setMasterLink(JSON.parse(string).qrcodes[0].masterlink);
+        setIsLoading(false);
+      })
+      .catch((reason) => {
+        console.log(reason);
+        setIsLoading(false);
+      });
   };
 
   
@@ -182,7 +218,7 @@ export const LivingLabChat = () => {
                   rooms.map((room, index) => (
                     <Room
                       key={index}
-                      roomId={room.room_id}
+                      roomId={room._id}
                       roomName={room.room_name}
                       fetchRoomMessages={getMessages}
                     />
@@ -219,7 +255,7 @@ export const LivingLabChat = () => {
                         >
                           {
                             <Message
-                              message={message.message}
+                              message={message.message_data}
                               messageType={message.message_type}
                               color={
                                 message.side ? "bg-blue-600" : "bg-gray-300"
@@ -281,6 +317,7 @@ export const LivingLabChat = () => {
           handleShowInvitePopup={handleShowInvitePopup}
           isLoading={isLoading}
           handelInvite={handleInvite}
+          masterLink={masterLink}
         />
       )}
       <ToastContainer />

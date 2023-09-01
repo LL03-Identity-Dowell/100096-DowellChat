@@ -1,19 +1,30 @@
 import Select from "react-select";
 import DataContext from "../../context/data-context";
 import { useContext, useEffect, useState } from "react";
+import { availableProducts } from "../../utils/constants";
 
 export const InvitePopup = ({
   isLoading,
   handleShowInvitePopup,
   handelInvite,
+  masterLink,
 }) => {
   const { userportfolio } = useContext(DataContext).collectedData;
   const [selectOptions, setSelectOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [idCount, setIdCount] = useState(0);
   const [step, setStep] = useState("select number");
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState("");
 
   const tabs = ["select number", "select Ids", "select name"];
+
+  useEffect(() => {
+    if (masterLink !== "") {
+      setStep("");
+    }
+  }, [masterLink]);
+
   useEffect(() => {
     const options = [];
     for (let i = 0; i < userportfolio?.length; i++) {
@@ -32,9 +43,30 @@ export const InvitePopup = ({
     }
     setSelectOptions(selectedOption);
     setSelectedOptions(selectedOption);
+    setSelectedIds(selectedOption.map((item) => item.value));
   }, [idCount, userportfolio]);
   const handleTabChange = (tabName) => {
     setStep(tabName);
+  };
+
+  const handleCopyClick = () => {
+    const copyTextElement = document.getElementById("copyText");
+
+    const range = document.createRange();
+    range.selectNode(copyTextElement);
+
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    try {
+      document.execCommand("copy");
+      console.log("Text copied to clipboard");
+    } catch (error) {
+      console.error("Unable to copy text:", error);
+    }
+
+    selection.removeAllRanges();
   };
   return (
     <>
@@ -63,10 +95,12 @@ export const InvitePopup = ({
             <div className="flex flex-col w-full items-center">
               <div
                 className={`flex w-full ${
-                  step !== "select number" ? "justify-between" : "justify-end"
+                  step !== "select number" && masterLink === ""
+                    ? "justify-between"
+                    : "justify-end"
                 } px-5 pb-3`}
               >
-                {step !== "select number" && (
+                {step !== "select number" && masterLink === "" && (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -106,12 +140,13 @@ export const InvitePopup = ({
               </div>
               {step === "select number" && (
                 <>
-                  <label className="w-4/5" htmlFor="selectNumber">
+                  <label className="w-4/5  pb-2" htmlFor="selectNumber">
                     Number of Ids <strong className="text-red-600">*</strong>
                   </label>
                   <input
                     name="selectNumber"
                     type="number"
+                    value={idCount}
                     min={1}
                     required
                     placeholder="Enter Number of Ids"
@@ -132,7 +167,7 @@ export const InvitePopup = ({
               )}
               {step === "select Ids" && (
                 <>
-                  <label className="w-4/5" htmlFor="availableIds">
+                  <label className="w-4/5  pb-2" htmlFor="availableIds">
                     Select id <strong className="text-red-600">*</strong>
                   </label>
                   <Select
@@ -142,6 +177,11 @@ export const InvitePopup = ({
                     classNamePrefix="select"
                     isMulti
                     isSearchable={false}
+                    onChange={(value) => {
+                      setSelectedIds(
+                        value.map((item) => item.value.toString())
+                      );
+                    }}
                   />
                   <button
                     className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
@@ -155,23 +195,55 @@ export const InvitePopup = ({
               )}
               {step === "select name" && (
                 <>
-                  <label className="w-4/5" htmlFor="selectName">
-                    Enter Name <strong className="text-red-600">*</strong>
+                  <label className="w-4/5 pb-2" htmlFor="selectName">
+                    Available Products
+                    <strong className="text-red-600">*</strong>
                   </label>
-                  <input
+                  <select
+                    defaultValue=""
+                    onChange={(event) => {
+                      setSelectedProduct(event.target.value);
+                    }}
+                    className="w-4/5 h-11 p-2 border outline-none"
+                  >
+                    <option value="">Select Product Name</option>
+                    {availableProducts.map((item, index) => (
+                      <option key={index} value={item.productName}>
+                        {item.productName}
+                      </option>
+                    ))}
+                  </select>
+                  {/* <input
                     name="selectName"
                     type="text"
                     placeholder="Enter Number of chat"
                     onChange={setIdCount}
                     className="w-4/5 h-11 p-2 border outline-none"
-                  />
+                  /> */}
                   <button
                     className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
-                    onClick={handelInvite}
+                    onClick={() => {
+                      const product = availableProducts.filter(
+                        (item) => item.productName === selectedProduct
+                      )[0];
+                      const obj = {};
+                      obj[product.productName] = product.id;
+                      console.log(obj);
+                      handelInvite(selectedIds, obj);
+                    }}
                   >
                     Generate QR
                   </button>
                 </>
+              )}
+              {masterLink !== "" && (
+                <span
+                  id="copyText"
+                  className="flex w-full text-center hover:cursor-pointer text-lg"
+                  onClick={handleCopyClick}
+                >
+                  {masterLink}
+                </span>
               )}
             </div>
           </div>

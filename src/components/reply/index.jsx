@@ -33,15 +33,16 @@ export const Reply = ({ roomId, setMessages, rooms }) => {
       if (type === "IMAGE") {
         fileToBase64(message).then((response) => {
           data = {
-            message: response,
-            user_id: dataContext.collectedData.userId,
-            message_type: type,
-            org_id: dataContext.collectedData.orgId,
+            type: "create_message",
+            room_id: roomId,
+            message_data: message,
             side: true,
+            auther: "client",
+            message_type: type,
           };
           axios
             .post(
-              `https://100096.pythonanywhere.com/send_message/${roomId}/`,
+              `https://100096.pythonanywhere.com/api/v2/room-service/`,
               data
             )
             .then((response) => {
