@@ -41,11 +41,11 @@ export const LivingLabChat = () => {
         `https://100096.pythonanywhere.com/api/v2/room-list/?org_id=${dataContext.collectedData.orgId}&product_name=${productTitle}`
       )
       .then((response) => {
-        if (response?.data?.rooms.length > 0) {
-          setRooms(response?.data?.rooms);
-          setSelectedRoomId(response?.data?.firstroom.room_id);
+        if (response.data.response?.length > 0) {
+          setRooms(response.data.response);
+          setSelectedRoomId(response.data.last_room_details._id);
         } else {
-          setRooms(response?.data?.rooms);
+          setRooms([]);
           setSelectedRoomId("Room ID");
           setMessages([]);
         }
@@ -60,7 +60,7 @@ export const LivingLabChat = () => {
         `https://100096.pythonanywhere.com/api/v2/room-service/?type=get_messages&room_id=${roomId}`
       )
       .then((response) => {
-        setMessages(response?.data?.messages);
+        setMessages(response.data.response.data);
       });
   };
 
