@@ -41,19 +41,11 @@ export const LivingLabChat = () => {
         `https://100096.pythonanywhere.com/api/v2/room-list/?org_id=${dataContext.collectedData.orgId}&product_name=${productTitle}`
       )
       .then((response) => {
-<<<<<<< HEAD
         if (response?.data?.rooms.length > 0) {
           setRooms(response?.data?.rooms);
           setSelectedRoomId(response?.data?.firstroom.room_id);
         } else {
           setRooms(response?.data?.rooms);
-=======
-        if (response.data.response?.length > 0) {
-          setRooms(response.data.response);
-          setSelectedRoomId(response.data.last_room_details._id);
-        } else {
-          setRooms([]);
->>>>>>> 8e8a2af41a079fad0e1bd463737900bc6144003a
           setSelectedRoomId("Room ID");
           setMessages([]);
         }
@@ -68,11 +60,7 @@ export const LivingLabChat = () => {
         `https://100096.pythonanywhere.com/api/v2/room-service/?type=get_messages&room_id=${roomId}`
       )
       .then((response) => {
-<<<<<<< HEAD
         setMessages(response?.data?.messages);
-=======
-        setMessages(response.data.response.data);
->>>>>>> 8e8a2af41a079fad0e1bd463737900bc6144003a
       });
   };
 
@@ -115,7 +103,6 @@ export const LivingLabChat = () => {
       });
   };
 
-  
   return (
     <div className="flex h-screen justify-around pt-4 gap-2 pb-2">
       <div className="flex w-11/12 ">
