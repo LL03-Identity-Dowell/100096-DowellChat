@@ -1,47 +1,51 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import DataContext from "../../context/data-context";
+import React, { useState, useEffect } from "react";
+// import { useNavigate, useParams } from "react-router-dom";
+// import DataContext from "../../context/data-context";
 import axios from "axios";
 import { ChatHeader } from "../../components/chat-header";
-import { Message } from "../../components/message";
-import { Reply } from "../../components/reply";
-import { PopUp } from "../../components/pop-up";
-import { ToastContainer, toast } from "react-toastify";
+// import { Message } from "../../components/message";
+// import { Reply } from "../../components/reply";
+// import { PopUp } from "../../components/pop-up";
+// import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ReplyChat } from "../../components/replyChat";
-import { MessageChat } from "../../components/messageChat";
-import { PopUpChat } from "../../components/pop-up-chat";
+// import { MessageChat } from "../../components/messageChat";
+// import { PopUpChat } from "../../components/pop-up-chat";
+import { useParams } from "react-router-dom";
+import { Message } from "../../components/message";
 
 const SecondRoute = () => {
-  const dataContext = useContext(DataContext);
-  const [productTitle, setProductTitle] = useState("Sales-Agent-Login");
-  const [rooms, setRooms] = useState();
-  const [selectedRoomId, setSelectedRoomId] = useState("Room ID");
+  // const dataContext = useContext(DataContext);
+  // const [productTitle, setProductTitle] = useState("Sales-Agent-Login");
+  // const [rooms, setRooms] = useState();
+  // const [selectedRoomId, setSelectedRoomId] = useState("Room ID");
   const [messages, setMessages] = useState(undefined);
-  const [showPopUp, setShowPopUp] = useState(false);
-  const [showInvitePopup, setShowInvitePopup] = useState(false);
-  const [activateDelete, setActiveDelete] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [showPopUp, setShowPopUp] = useState(false);
+  // const [showInvitePopup, setShowInvitePopup] = useState(false);
+  // const [activateDelete, setActiveDelete] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   let chatApi = true;
-  const { collectedData } = dataContext;
-  const getMessages = () => {
+  // const { collectedData } = dataContext;
+
+  const { roomId } = useParams();
+
+  // console.log(localStorage.getItem("collectedData"));
+
+  const getMessages = (roomId) => {
+    // setSelectedRoomId(roomId);
     setMessages(undefined);
     axios
       .get(
-        `https://100096.pythonanywhere.com/api/v2/room-service/?type=get_messages`
+        `https://100096.pythonanywhere.com/api/v2/room-service/?type=get_messages&room_id=${roomId}`
       )
-      .then((res) => {
-        const { response } = res?.data;
-        setMessages(response);
+      .then((response) => {
+        setMessages(response.data.response.data);
       });
   };
   useEffect(() => {
-    getMessages();
-  }, []);
+    getMessages(roomId);
+  }, [roomId]);
 
-  const handleShowInvitePopup = () => {
-    showInvitePopup ? setShowInvitePopup(false) : setShowInvitePopup(true);
-  };
   return (
     <div className="w-full h-full flex justify-center items-center max-h-full mt-24">
       <div className="w-full h-full flex justify-center items-center max-h-full">
@@ -49,28 +53,29 @@ const SecondRoute = () => {
           <div className="flex h-full flex-col border-t-2 border-l-2 border-r-2">
             <ChatHeader
               chatApi={chatApi}
-              profileImage={collectedData}
-              roomId={selectedRoomId}
-              setShowPopUp={setShowPopUp}
+              // profileImage={collectedData}
+              roomId={roomId}
+              // setShowPopUp={setShowPopUp}
             />
-            <div className="flex flex-col-reverse h-[400px] overflow-auto border-l-2 border-r-2">
+            <div className="flex flex-col-reverse h-[480px] border-x overflow-auto">
               {messages ? (
                 <div className="flex flex-col-reverse h-max px-3">
-                  {messages?.data
-                    ?.toReversed()
-                    .map(({ message, ...rest }, index) => (
-                      <div
-                        key={index}
-                        className={`flex ${
-                          message ? "justify-end" : "justify-start"
-                        } w-full pb-3`}
-                      >
-                        <MessageChat
-                          message={message}
-                          color={message ? "bg-blue-600" : "bg-gray-300"}
+                  {messages.toReversed().map((message, index) => (
+                    <div
+                      key={index}
+                      className={`flex ${
+                        message.side ? "justify-end" : "justify-start"
+                      } w-full pb-3`}
+                    >
+                      {
+                        <Message
+                          message={message.message_data}
+                          messageType={message.message_type}
+                          color={message.side ? "bg-blue-600" : "bg-gray-300"}
                         />
-                      </div>
-                    ))}
+                      }
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <div className="flex h-full min-w-max items-center justify-center text-center">
@@ -96,14 +101,14 @@ const SecondRoute = () => {
               )}
             </div>
             <ReplyChat
-              roomId={selectedRoomId}
+              roomId={roomId}
               setMessages={setMessages}
-              rooms={rooms}
+              // rooms={rooms}
             />
           </div>
         </div>
       </div>
-      {showPopUp ? (
+      {/* {showPopUp ? (
         <PopUpChat
           activate={activateDelete}
           notify={(toastMessage, toastType) => {
@@ -114,7 +119,7 @@ const SecondRoute = () => {
           setSelectedRoomId={setSelectedRoomId}
           setShowPopUp={setShowPopUp}
         />
-      ) : null}
+      ) : null} */}
     </div>
   );
 };

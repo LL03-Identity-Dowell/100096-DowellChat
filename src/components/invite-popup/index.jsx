@@ -2,12 +2,14 @@ import Select from "react-select";
 import DataContext from "../../context/data-context";
 import { useContext, useEffect, useState } from "react";
 import { availableProducts } from "../../utils/constants";
+// import { useNavigate } from "react-router-dom";
 
 export const InvitePopup = ({
   isLoading,
   handleShowInvitePopup,
   handelInvite,
-  masterLink,
+  masterLinks,
+  qrImage,
 }) => {
   const { userportfolio } = useContext(DataContext).collectedData;
   const [selectOptions, setSelectOptions] = useState([]);
@@ -17,13 +19,15 @@ export const InvitePopup = ({
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
 
+  //   const navigate = useNavigate();
+
   const tabs = ["select number", "select Ids", "select name"];
 
   useEffect(() => {
-    if (masterLink !== "") {
+    if (masterLinks?.length) {
       setStep("");
     }
-  }, [masterLink]);
+  }, [masterLinks]);
 
   useEffect(() => {
     const options = [];
@@ -37,13 +41,15 @@ export const InvitePopup = ({
         }
       }
     }
-    const selectedOption = [];
-    for (let i = 0; i < idCount; i++) {
-      selectedOption.push(options[i]);
+    if (options.length) {
+      const selectedOption = [];
+      for (let i = 0; i < idCount; i++) {
+        selectedOption.push(options[i]);
+      }
+      setSelectOptions(selectedOption);
+      setSelectedOptions(selectedOption);
+      setSelectedIds(selectedOption.map((item) => item.value));
     }
-    setSelectOptions(selectedOption);
-    setSelectedOptions(selectedOption);
-    setSelectedIds(selectedOption.map((item) => item.value));
   }, [idCount, userportfolio]);
   const handleTabChange = (tabName) => {
     setStep(tabName);
@@ -61,18 +67,20 @@ export const InvitePopup = ({
 
     try {
       document.execCommand("copy");
-      console.log("Text copied to clipboard");
+      //   console.log("Text copied to clipboard");
     } catch (error) {
       console.error("Unable to copy text:", error);
     }
 
     selection.removeAllRanges();
+    window.location.href = copyTextElement.innerText;
+    // navigate(copyTextElement.innerText, { replace: true });
   };
   return (
     <>
       <div className="fixed top-0 bottom-0 left-0 right-0 backdrop-blur-sm">
         {isLoading ? (
-          <div className="flex fixed w-[600px] justify-center items-center bg-gray-100 rounded-lg top-1/2 left-1/2 h-56 max-w-96 shadow-lg -translate-x-1/2 -translate-y-1/2">
+          <div className="flex fixed w-[600px] min-h-[288px] justify-center items-center bg-gray-100 rounded-lg top-1/2 left-1/2 h-56 max-w-96 shadow-lg -translate-x-1/2 -translate-y-1/2">
             <svg
               aria-hidden="true"
               className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -91,37 +99,15 @@ export const InvitePopup = ({
             </svg>
           </div>
         ) : (
-          <div className="flex fixed w-[600px] h-72 flex-col gap-10 justify-center items-center bg-gray-100 rounded-lg top-1/2 left-1/2  max-w-96 shadow-lg -translate-x-1/2 -translate-y-1/2">
-            <div className="flex flex-col w-full items-center">
-              <div
-                className={`flex w-full ${
-                  step !== "select number" && masterLink === ""
-                    ? "justify-between"
-                    : "justify-end"
-                } px-5 pb-3`}
-              >
-                {step !== "select number" && masterLink === "" && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5 text-gray-500 hover:cursor-pointer"
-                    onClick={() => {
-                      handleTabChange(
-                        tabs[tabs.findIndex((item) => item === step) - 1]
-                      );
-                    }}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-                    />
-                  </svg>
-                )}
-
+          <div className="flex fixed w-[600px] min-h-[288px] pt-4 pb-4 flex-col gap-10 bg-gray-100 rounded-lg top-1/2 left-1/2  max-w-96 shadow-lg -translate-x-1/2 -translate-y-1/2">
+            <div
+              className={`flex w-full ${
+                step !== "select number" && masterLinks?.length === 0
+                  ? "justify-between"
+                  : "justify-end"
+              } px-5 pb-3`}
+            >
+              {step !== "select number" && masterLinks?.length === 0 && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -129,121 +115,158 @@ export const InvitePopup = ({
                   strokeWidth={1.5}
                   stroke="currentColor"
                   className="w-5 h-5 text-gray-500 hover:cursor-pointer"
-                  onClick={handleShowInvitePopup}
+                  onClick={() => {
+                    handleTabChange(
+                      tabs[tabs.findIndex((item) => item === step) - 1]
+                    );
+                  }}
                 >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
+                    d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
                   />
                 </svg>
-              </div>
-              {step === "select number" && (
-                <>
-                  <label className="w-4/5  pb-2" htmlFor="selectNumber">
-                    Number of Ids <strong className="text-red-600">*</strong>
-                  </label>
-                  <input
-                    name="selectNumber"
-                    type="number"
-                    value={idCount}
-                    min={1}
-                    required
-                    placeholder="Enter Number of Ids"
-                    onChange={(event) => {
-                      setIdCount(event.target.value);
-                    }}
-                    className="w-4/5 h-11 p-2 border outline-none"
-                  />
-                  <button
-                    className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
-                    onClick={() => {
-                      handleTabChange("select Ids");
-                    }}
-                  >
-                    Continue
-                  </button>
-                </>
               )}
-              {step === "select Ids" && (
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5 text-gray-500 hover:cursor-pointer"
+                onClick={() => {
+                  setStep("select number");
+
+                  handleShowInvitePopup();
+                }}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </div>
+            <div className="flex flex-col w-full justify-center h-max items-center">
+              {userportfolio?.length > 0 ? (
                 <>
-                  <label className="w-4/5  pb-2" htmlFor="availableIds">
-                    Select id <strong className="text-red-600">*</strong>
-                  </label>
-                  <Select
-                    options={selectOptions}
-                    defaultValue={selectedOptions}
-                    className="basic-multi-select w-4/5 outline-none"
-                    classNamePrefix="select"
-                    isMulti
-                    isSearchable={false}
-                    onChange={(value) => {
-                      setSelectedIds(
-                        value.map((item) => item.value.toString())
-                      );
-                    }}
-                  />
-                  <button
-                    className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
-                    onClick={() => {
-                      handleTabChange("select name");
-                    }}
-                  >
-                    Continue
-                  </button>
+                  {step === "select number" && (
+                    <>
+                      <label className="w-4/5  pb-2" htmlFor="selectNumber">
+                        Number of Ids
+                        <strong className="text-red-600">*</strong>
+                      </label>
+                      <input
+                        name="selectNumber"
+                        type="number"
+                        value={idCount}
+                        min={1}
+                        required
+                        placeholder="Enter Number of Ids"
+                        onChange={(event) => {
+                          setIdCount(event.target.value);
+                        }}
+                        className="w-4/5 h-11 p-2 border outline-none"
+                      />
+                      <button
+                        className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
+                        onClick={() => {
+                          handleTabChange("select Ids");
+                        }}
+                      >
+                        Continue
+                      </button>
+                    </>
+                  )}
+                  {step === "select Ids" && (
+                    <>
+                      <label className="w-4/5  pb-2" htmlFor="availableIds">
+                        Select id <strong className="text-red-600">*</strong>
+                      </label>
+                      <Select
+                        options={selectOptions}
+                        defaultValue={selectedOptions}
+                        className="basic-multi-select w-4/5 outline-none"
+                        classNamePrefix="select"
+                        isMulti
+                        isSearchable={false}
+                        onChange={(value) => {
+                          setSelectedIds(
+                            value.map((item) => item.value.toString())
+                          );
+                        }}
+                      />
+                      <button
+                        className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
+                        onClick={() => {
+                          handleTabChange("select name");
+                        }}
+                      >
+                        Continue
+                      </button>
+                    </>
+                  )}
+                  {step === "select name" && (
+                    <>
+                      <label className="w-4/5 pb-2" htmlFor="selectName">
+                        Available Products
+                        <strong className="text-red-600">*</strong>
+                      </label>
+                      <select
+                        defaultValue=""
+                        onChange={(event) => {
+                          setSelectedProduct(event.target.value);
+                        }}
+                        className="w-4/5 h-11 p-2 border outline-none"
+                      >
+                        <option value="">Select Product Name</option>
+                        {availableProducts.map((item, index) => (
+                          <option key={index} value={item.productName}>
+                            {item.productName}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
+                        onClick={() => {
+                          const product = availableProducts.filter(
+                            (item) => item.productName === selectedProduct
+                          )[0];
+                          const obj = {};
+                          obj[product.productName] = product.id;
+                          handelInvite(selectedIds, obj);
+                        }}
+                      >
+                        Generate QR
+                      </button>
+                    </>
+                  )}
+                  {masterLinks?.length > 0 && (
+                    <>
+                      <img src={qrImage} alt="QR" width={200} height={20} />
+                      <div className="w-full max-h-[200px] overflow-y-auto p-3">
+                        {masterLinks?.map((masterLink) => (
+                          <a
+                            href={masterLink.response.link}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="appearance-none text-blue-600 block overflow-hidden text-ellipsis"
+                          >
+                            {masterLink.response.link}
+                          </a>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </>
-              )}
-              {step === "select name" && (
+              ) : (
                 <>
-                  <label className="w-4/5 pb-2" htmlFor="selectName">
-                    Available Products
-                    <strong className="text-red-600">*</strong>
-                  </label>
-                  <select
-                    defaultValue=""
-                    onChange={(event) => {
-                      setSelectedProduct(event.target.value);
-                    }}
-                    className="w-4/5 h-11 p-2 border outline-none"
-                  >
-                    <option value="">Select Product Name</option>
-                    {availableProducts.map((item, index) => (
-                      <option key={index} value={item.productName}>
-                        {item.productName}
-                      </option>
-                    ))}
-                  </select>
-                  {/* <input
-                    name="selectName"
-                    type="text"
-                    placeholder="Enter Number of chat"
-                    onChange={setIdCount}
-                    className="w-4/5 h-11 p-2 border outline-none"
-                  /> */}
-                  <button
-                    className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
-                    onClick={() => {
-                      const product = availableProducts.filter(
-                        (item) => item.productName === selectedProduct
-                      )[0];
-                      const obj = {};
-                      obj[product.productName] = product.id;
-                      console.log(obj);
-                      handelInvite(selectedIds, obj);
-                    }}
-                  >
-                    Generate QR
-                  </button>
+                  <div className="flex w-full mt-12 justify-center items-center">
+                    <span>No ids found in portfolio.</span>
+                  </div>
                 </>
-              )}
-              {masterLink !== "" && (
-                <span
-                  id="copyText"
-                  className="flex w-full text-center hover:cursor-pointer text-lg"
-                  onClick={handleCopyClick}
-                >
-                  {masterLink}
-                </span>
               )}
             </div>
           </div>

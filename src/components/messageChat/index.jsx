@@ -1,5 +1,4 @@
 export const MessageChat = ({ message, color }) => {
-  console.log("messageChat", message);
   let messageType = false;
   const imageDataUrl = `data:image/png;base64,${message}`;
   return (
@@ -7,7 +6,9 @@ export const MessageChat = ({ message, color }) => {
       {messageType === "IMAGE" ? (
         <img src={imageDataUrl} alt="media" />
       ) : (
-        <p className="break-words">{typeof message === "string" ? message : ""}</p>
+        <p className="break-words">
+          {typeof message === "string" ? message : ""}
+        </p>
       )}
 
       {/* <p className="break-words">{message}</p> */}

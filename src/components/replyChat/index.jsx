@@ -5,9 +5,8 @@ import DataContext from "../../context/data-context";
 
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import { toast } from "react-toastify";
 
-export const ReplyChat = ({ roomId, setMessages, rooms }) => {
+export const ReplyChat = ({ roomId, setMessages }) => {
   const dataContext = useContext(DataContext);
   const [message, setMessage] = useState(undefined);
   const [showPicker, setShowPicker] = useState(false);
@@ -27,6 +26,17 @@ export const ReplyChat = ({ roomId, setMessages, rooms }) => {
     });
   }
 
+  const getMessages = (roomId) => {
+    setMessages(undefined);
+    axios
+      .get(
+        `https://100096.pythonanywhere.com/api/v2/room-service/?type=get_messages&room_id=${roomId}`
+      )
+      .then((response) => {
+        setMessages(response.data.response.data);
+      });
+  };
+
   const sendMessage = (message, type, error) => {
     if (message !== "") {
       let data = {};
@@ -44,15 +54,15 @@ export const ReplyChat = ({ roomId, setMessages, rooms }) => {
               `https://100096.pythonanywhere.com/api/v2/room-service/`,
               data
             )
-            .then((response) => {
-              setMessages(response.data.messages);
+            .then(() => {
+              getMessages(roomId);
               setMessage("");
             });
         });
       } else {
         data = {
           type: "create_message",
-          room_id: "64ed7d75a57293efb539eb19",
+          room_id: roomId,
           message_data: message,
           side: true,
           author: "client",
@@ -60,9 +70,8 @@ export const ReplyChat = ({ roomId, setMessages, rooms }) => {
         };
         axios
           .post(`https://100096.pythonanywhere.com/api/v2/room-service/`, data)
-          .then((res) => {
-            const { response } = res?.data;
-            setMessages(response);
+          .then(() => {
+            getMessages(roomId);
             setMessage("");
           });
       }
@@ -83,19 +92,7 @@ export const ReplyChat = ({ roomId, setMessages, rooms }) => {
   const handleShowEmojiPicker = () => {
     setShowPicker(!showPicker);
   };
-  const chatSend = async (type) => {
-    const data = await axios.post(
-      "https://100096.pythonanywhere.com/api/v2/room-service/",
-      {
-        type: "create_message",
-        room_id: "",
-        message_data: message,
-        side: true,
-        message_type: type,
-      }
-    );
-    console.log(data);
-  };
+
   return (
     <div className="flex items-center border-t h-fit border-b-2 border-l-2 border-r-2">
       <textarea

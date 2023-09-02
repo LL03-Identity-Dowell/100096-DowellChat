@@ -25,11 +25,16 @@ export const CustomerSupport = () => {
   const [showInvitePopup, setShowInvitePopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [masterLink, setMasterLink] = useState("");
+  const [qrImage, setQrImage] = useState("");
 
   useEffect(() => {
     if (dataContext.collectedData) {
       sessionStorage.setItem("sessionId", dataContext.collectedData.sessionId);
       sessionStorage.setItem("id", dataContext.collectedData.id);
+      localStorage.setItem(
+        "collectedData",
+        JSON.stringify(dataContext.collectedData)
+      );
     }
   }, [dataContext.collectedData]);
 
@@ -83,6 +88,7 @@ export const CustomerSupport = () => {
       workspace_id: dataContext.collectedData.orgId,
       qr_ids: selectedOption,
       product_name: selectedProduct,
+      base_url: "https://ll03-identity-dowell.github.io/100096-DowellChat/#",
     };
     axios
       .post(
@@ -94,7 +100,8 @@ export const CustomerSupport = () => {
         for (let i = 0; i < response.data.qr_response.length; i++) {
           string = string + response.data.qr_response[i];
         }
-        setMasterLink(JSON.parse(string).qrcodes[0].masterlink);
+        setMasterLink(JSON.parse(string).qrcodes[0].links);
+        setQrImage(JSON.parse(string).qrcodes[0].qrcode_image_url);
         setIsLoading(false);
       })
       .catch((reason) => {
@@ -231,26 +238,34 @@ export const CustomerSupport = () => {
                 />
                 <div className="flex flex-col-reverse h-4/5 overflow-auto">
                   {messages ? (
-                    <div className="flex flex-col-reverse h-max px-3">
-                      {messages.toReversed().map((message, index) => (
-                        <div
-                          key={index}
-                          className={`flex ${
-                            message.side ? "justify-end" : "justify-start"
-                          } w-full pb-3`}
-                        >
-                          {
-                            <Message
-                              message={message.message_data}
-                              messageType={message.message_type}
-                              color={
-                                message.side ? "bg-blue-600" : "bg-gray-300"
+                    <>
+                      {messages.length > 0 ? (
+                        <div className="flex flex-col-reverse h-max px-3">
+                          {messages.toReversed().map((message, index) => (
+                            <div
+                              key={index}
+                              className={`flex ${
+                                message.side ? "justify-end" : "justify-start"
+                              } w-full pb-3`}
+                            >
+                              {
+                                <Message
+                                  message={message.message_data}
+                                  messageType={message.message_type}
+                                  color={
+                                    message.side ? "bg-blue-600" : "bg-gray-300"
+                                  }
+                                />
                               }
-                            />
-                          }
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
+                      ) : (
+                        <div className="flex h-full min-w-max items-center justify-center text-center">
+                          <h2 className="text-gray-500">No Messages found.</h2>
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <div className="flex h-full min-w-max items-center justify-center text-center">
                       <div role="status">
@@ -303,7 +318,8 @@ export const CustomerSupport = () => {
           handleShowInvitePopup={handleShowInvitePopup}
           isLoading={isLoading}
           handelInvite={handleInvite}
-          masterLink={masterLink}
+          masterLinks={masterLink}
+          qrImage={qrImage}
         />
       )}
       <ToastContainer />

@@ -8,56 +8,56 @@ export const PopUp = ({
   roomId,
   setSelectedRoomId,
   setShowPopUp,
-  activate
+  activate,
   // delete
 }) => {
   const dataContext = useContext(DataContext);
   const [isLoading, setIsLoading] = useState(false);
-  let chat = true
+  let chat = true;
   const handleRoomDelete = () => {
     setIsLoading(true);
-   if(!activate){
-    axios
-    .get(
-      `https://100096.pythonanywhere.com/delete-customer-support-room/?session_id=${dataContext.collectedData.sessionId}&room_id=${roomId}`
-    )
-      .then(() => {
-        notify("Room Deleted Successfully!", "success");
-        axios
-          .get(
-          `https://100096.pythonanywhere.com/room_list1/Login/${dataContext.collectedData.orgId}`
-          )
-          .then((response) => {
-            setRooms(response.data.rooms);
-            setSelectedRoomId(response.data.firstroom.room_id);
-          });
-        setIsLoading(false);
-        setShowPopUp(false);
-      })
-      .catch((reason) => {
-        notify(reason.response.data.status, "error");
-        setShowPopUp(false);
-        setIsLoading(false);
-      });
-   }
-   else {
-  const  data = {
-      "type": "delete_room",
-      "room_id": "64edd973bb5e27de179c721c",
-      "is_active": false 
+    if (!activate) {
+      axios
+        .get(
+          `https://100096.pythonanywhere.com/delete-customer-support-room/?session_id=${dataContext.collectedData.sessionId}&room_id=${roomId}`
+        )
+        .then(() => {
+          notify("Room Deleted Successfully!", "success");
+          axios
+            .get(
+              `https://100096.pythonanywhere.com/room_list1/Login/${dataContext.collectedData.orgId}`
+            )
+            .then((response) => {
+              setRooms(response.data.rooms);
+              setSelectedRoomId(response.data.firstroom.room_id);
+            });
+          setIsLoading(false);
+          setShowPopUp(false);
+        })
+        .catch((reason) => {
+          notify(reason.response.data.status, "error");
+          setShowPopUp(false);
+          setIsLoading(false);
+        });
+    } else {
+      const data = {
+        type: "delete_room",
+        room_id: "64edd973bb5e27de179c721c",
+        is_active: false,
+      };
+      axios
+        .post("https://100096.pythonanywhere.com/api/v2/room-service/", data)
+        .then((res) => {
+          notify("Room Deleted Successfully!", "success");
+          setIsLoading(false);
+          setShowPopUp(false);
+        })
+        .catch((reason) => {
+          notify(reason.response.data.status, "error");
+          setShowPopUp(false);
+          setIsLoading(false);
+        });
     }
-    axios.post('https://100096.pythonanywhere.com/api/v2/room-service/',data).then((res) => {
-      notify("Room Deleted Successfully!", "success");
-      console.log(res)
-      setIsLoading(false);
-      setShowPopUp(false);
-    })
-    .catch((reason) => {
-      notify(reason.response.data.status, "error");
-      setShowPopUp(false);
-      setIsLoading(false);
-    });
-   }
   };
   return (
     <>

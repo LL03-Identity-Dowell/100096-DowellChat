@@ -1,14 +1,17 @@
-export const ChatHeader = ({ profileImage, roomId, setShowPopUp,chatApi }) => {
+export const ChatHeader = ({ profileImage, roomId, setShowPopUp, chatApi }) => {
+  const collectedData = JSON.parse(localStorage.getItem("collectedData"));
   return (
     <div className="flex h-16 justify-between items-center p-3 border-b-2">
       <div className="flex gap-3">
         <img
-          src={chatApi ? profileImage?.profileImage : profileImage}
+          src={chatApi ? collectedData?.profileImage : profileImage}
           alt="user"
           className="object-cover rounded-full w-12 h-12"
         />
         <div className="flex flex-col">
-          <span className="text-base font-bold">{chatApi ? profileImage?.userName : roomId}</span>
+          <span className="text-base font-bold">
+            {chatApi ? collectedData?.userName : roomId}
+          </span>
           <span className="text-blue-400 text-sm">Active Now</span>
         </div>
       </div>
@@ -45,7 +48,7 @@ export const ChatHeader = ({ profileImage, roomId, setShowPopUp,chatApi }) => {
         <div
           className="hover:cursor-pointer"
           onClick={() => {
-            setShowPopUp(true);
+            // setShowPopUp(true);
           }}
         >
           <svg
