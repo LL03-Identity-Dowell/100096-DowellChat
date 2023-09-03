@@ -247,8 +247,9 @@ export const InvitePopup = ({
                     <>
                       <img src={qrImage} alt="QR" width={200} height={20} />
                       <div className="w-full max-h-[200px] overflow-y-auto p-3">
-                        {masterLinks?.map((masterLink) => (
+                        {masterLinks?.map((masterLink, index) => (
                           <a
+                            key={index}
                             href={masterLink.response.link}
                             target="_blank"
                             rel="noreferrer"

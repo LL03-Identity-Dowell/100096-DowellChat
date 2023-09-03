@@ -41,33 +41,7 @@ export const FirstLoadComponent = () => {
     const collectedData = { sessionId: sessionId, id: id };
     dataContext.setCollectedData(collectedData);
 
-    if (id === "100093") {
-      axios
-        .post("https://100093.pythonanywhere.com/api/userinfo/", {
-          session_id: sessionId,
-        })
-        .then((response) => {
-          if (response.data.portfolio_info) {
-            if (checkProduct(response.data.portfolio_info)) {
-              const collectedData = {
-                userName: response.data.userinfo.username,
-                sessionId: sessionId,
-                id: id,
-                email: response.data.userinfo.email,
-                profileImage: response.data.userinfo.profile_img,
-                orgId: response.data.userinfo.client_admin_id,
-                userId: response.data.userinfo.userID,
-                phone: response.data.userinfo.phone,
-                userCountry: response.data.userinfo.user_country,
-                userportfolio: response.data.userportfolio,
-              };
-              dataContext.setCollectedData(collectedData);
-            }
-          } else {
-            window.location.href = "https://100014.pythonanywhere.com/en/";
-          }
-        });
-    } else {
+    if (id === "100014") {
       axios
         .post("https://100014.pythonanywhere.com/api/userinfo/", {
           session_id: sessionId,
@@ -85,8 +59,34 @@ export const FirstLoadComponent = () => {
                 userId: response.data.userinfo.userID,
                 phone: response.data.userinfo.phone,
                 userCountry: response.data.userinfo.user_country,
+                userportfolio: response.data.selected_product.userportfolio,
+              };
+              dataContext.setCollectedData(collectedData);
+            }
+          } else {
+            window.location.href = "https://100014.pythonanywhere.com/en/";
+          }
+        });
+    } else {
+      axios
+        .post("https://100093.pythonanywhere.com/api/userinfo/", {
+          session_id: sessionId,
+        })
+        .then((response) => {
+          if (response.data.portfolio_info) {
+            if (checkProduct(response.data.portfolio_info)) {
+              const collectedData = {
+                userName: response.data.userinfo.username,
+                sessionId: sessionId,
+                id: id,
+                email: response.data.userinfo.email,
+                profileImage: response.data.userinfo.profile_img,
+                orgId: response.data.userinfo.client_admin_id,
+                userId: response.data.userinfo.userID,
+                phone: response.data.userinfo.phone,
+                userCountry: response.data.userinfo.user_country,
                 timezone: response.data.userinfo.timezone,
-                userportfolio: response.data.userportfolio,
+                userportfolio: response.data.selected_product.userportfolio,
               };
               dataContext.setCollectedData(collectedData);
 
