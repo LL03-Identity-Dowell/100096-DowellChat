@@ -24,7 +24,7 @@ export const LivingLabChat = () => {
   const [showPopUp, setShowPopUp] = useState(false);
   const [showInvitePopup, setShowInvitePopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [masterLink, setMasterLink] = useState([]);
+  const [masterLink, setMasterLink] = useState("");
   const [qrImage, setQrImage] = useState("");
 
   useEffect(() => {
@@ -100,9 +100,8 @@ export const LivingLabChat = () => {
         for (let i = 0; i < response.data.qr_response.length; i++) {
           string = string + response.data.qr_response[i];
         }
-        setMasterLink(JSON.parse(string).qrcodes[0].links);
+        setMasterLink(JSON.parse(string).qrcodes[0].masterlink);
         setQrImage(JSON.parse(string).qrcodes[0].qrcode_image_url);
-        console.log(JSON.parse(string));
         setIsLoading(false);
       })
       .catch((reason) => {
