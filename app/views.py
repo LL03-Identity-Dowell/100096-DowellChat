@@ -371,7 +371,7 @@ class QRServiceHandler(APIView):
         return response["data"]
 
     def get_httpURL(self, base_url, qr_id, event, workspace_id):
-        return f'{base_url}/init/chat/public/{workspace_id}/{event}/{qr_id}/' 
+        return f'{base_url}/init/chat/{workspace_id}/{event}/{qr_id}/?public=true' 
     
     
 
