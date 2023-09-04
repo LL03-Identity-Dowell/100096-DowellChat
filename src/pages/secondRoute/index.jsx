@@ -32,6 +32,7 @@ const SecondRoute = () => {
   // console.log(localStorage.getItem("collectedData"));
 
   const getMessages = (roomId) => {
+    console.log("here");
     // setSelectedRoomId(roomId);
     setMessages(undefined);
     axios
