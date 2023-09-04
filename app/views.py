@@ -370,8 +370,8 @@ class QRServiceHandler(APIView):
         response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None)) 
         return response["data"]
 
-    def get_httpURL(self, base_url, qr_id, product_name, workspace_id):
-        return f'{base_url}/init/chat/public/{product_name}/?workspace_id={workspace_id}&link_id={qr_id}' 
+    def get_httpURL(self, base_url, qr_id, event, workspace_id):
+        return f'{base_url}/init/chat/{workspace_id}/{event}/{qr_id}/?public=true' 
     
     
 
