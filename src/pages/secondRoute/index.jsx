@@ -42,8 +42,8 @@ const SecondRoute = () => {
       });
   };
   useEffect(() => {
-    getMessages("64f708f83dc8dd88337297c2");
-  }, [orgId]);
+    getMessages(roomId);
+  }, [roomId]);
 
   return (
     <div className="w-full h-full flex justify-center items-center max-h-full mt-24">
