@@ -18,10 +18,10 @@ export const ChatHeader = ({
           <span className="text-base font-bold">
             {chatApi ? collectedData?.userName : roomId}
           </span>
-          <span className="text-sm font-bold">{portfolioName}</span>
+          {/* <span className="text-sm font-bold">{portfolioName}</span>
           {!chatApi && (
             <span className="text-sm font-bold">{portfolioName}</span>
-          )}
+          )} */}
           <span className="text-blue-400 text-sm">Active Now</span>
         </div>
       </div>
