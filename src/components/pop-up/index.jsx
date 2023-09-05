@@ -13,7 +13,7 @@ export const PopUp = ({
 }) => {
   const dataContext = useContext(DataContext);
   const [isLoading, setIsLoading] = useState(false);
-  let chat = true;
+  // let chat = true;
   const handleRoomDelete = () => {
     setIsLoading(true);
     if (!activate) {

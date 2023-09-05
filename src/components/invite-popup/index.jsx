@@ -2,6 +2,7 @@ import Select from "react-select";
 import DataContext from "../../context/data-context";
 import { useContext, useEffect, useState } from "react";
 import { availableProducts } from "../../utils/constants";
+import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
 export const InvitePopup = ({
@@ -11,17 +12,26 @@ export const InvitePopup = ({
   masterLinks,
   qrImage,
 }) => {
-  const { userportfolio } = useContext(DataContext).collectedData;
+  const { userportfolio, orgId } = useContext(DataContext).collectedData;
   const [selectOptions, setSelectOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [idCount, setIdCount] = useState(0);
   const [step, setStep] = useState("select number");
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
+  const [qrIds, setQrIds] = useState([]);
 
   //   const navigate = useNavigate();
 
   const tabs = ["select number", "select Ids", "select name"];
+
+  useEffect(() => {
+    axios
+      .get(`https://100096.pythonanywhere.com/api/v2/get_QR_Id/${orgId}/`)
+      .then((response) => {
+        setQrIds(response.data.qr_id_list);
+      });
+  }, [orgId]);
 
   useEffect(() => {
     if (masterLinks?.length) {
@@ -34,10 +44,12 @@ export const InvitePopup = ({
     for (let i = 0; i < userportfolio?.length; i++) {
       if (userportfolio[i].member_type === "public") {
         for (let j = 0; j < userportfolio[i].username.length; j++) {
-          options.push({
-            value: userportfolio[i].username[j],
-            label: userportfolio[i].username[j],
-          });
+          if (qrIds?.indexOf(userportfolio[i].username[j]) === -1) {
+            options.push({
+              value: userportfolio[i].username[j],
+              label: userportfolio[i].username[j],
+            });
+          }
         }
       }
     }
@@ -50,7 +62,7 @@ export const InvitePopup = ({
       setSelectedOptions(selectedOption);
       setSelectedIds(selectedOption.map((item) => item.value));
     }
-  }, [idCount, userportfolio]);
+  }, [idCount, qrIds, userportfolio]);
   const handleTabChange = (tabName) => {
     setStep(tabName);
   };
@@ -246,14 +258,20 @@ export const InvitePopup = ({
                   {masterLinks?.length > 0 && (
                     <>
                       <img src={qrImage} alt="QR" width={200} height={20} />
-                      <a
-                        href={masterLinks}
-                        target="_blank"
-                        rel="noreferrer"
-                        className=" text-blue-600 whitespace-nowrap block w-[550px] overflow-hidden text-ellipsis"
-                      >
-                        {masterLinks}
-                      </a>
+                      <div className="flex w-[550px] pl-2 mx-4 items-center justify-between border border-gray-300">
+                        <span
+                          id="copyText"
+                          className=" whitespace-nowrap block  overflow-hidden text-ellipsis"
+                        >
+                          {masterLinks}
+                        </span>
+                        <button
+                          className="bg-blue-600 p-2 text-white"
+                          onClick={handleCopyClick}
+                        >
+                          Copy
+                        </button>
+                      </div>
                     </>
                   )}
                 </>

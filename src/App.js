@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { FirstLoadComponent } from "./pages/first-load-page";
 import SecondRoute from "./pages/secondRoute";
 
-export const App = (workspace_id, event, qr_id) => {
+export const App = () => {
   return (
     <Routes>
       <Route path="/">

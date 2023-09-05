@@ -96,12 +96,8 @@ export const LivingLabChat = () => {
         data
       )
       .then((response) => {
-        let string = "";
-        for (let i = 0; i < response.data.qr_response.length; i++) {
-          string = string + response.data.qr_response[i];
-        }
-        setMasterLink(JSON.parse(string).qrcodes[0].masterlink);
-        setQrImage(JSON.parse(string).qrcodes[0].qrcode_image_url);
+        setMasterLink(response.data.qr_response.qrcodes[0].masterlink);
+        setQrImage(response.data.qr_response.qrcodes[0].qrcode_image_url);
         setIsLoading(false);
       })
       .catch((reason) => {
