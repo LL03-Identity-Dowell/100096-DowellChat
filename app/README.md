@@ -309,6 +309,63 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_messages&room_id=room_id`
 }
 ```
 
+## 5. Get QR Ids By org_id
+
+_Get_ to `Api_url/api/v2/get_QR_Id/6385c0f18eca0fb652c94558/`
+**Query Parameters:**
+
+- `org_id`: "org_id"
+
+**Response:**
+
+- **Status:** 200 OK
+- **Content:**
+
+```json
+{
+  "qr_id_list": [
+    "ZiQ7qUH73Q83",
+    "Gr4t0YhpMfVa",
+    "E37l1lMsbsJK",
+    "uSGUUNoxhzEX",
+    "E37l1lMsbsJK",
+    "uSGUUNoxhzEX"
+  ]
+}
+```
+
+## 6 . create public room for
+
+_Get_ to `Api_url/api/v2/init/6385c0f18eca0fb652c94558/WORKFLOWAI/g6tWCp5trVRO/`
+
+**Response:**
+
+- **Status:** 200 OK
+- **Content:**
+
+```json
+{
+  "room": {
+    "success": true,
+    "message": "Room created successfully",
+    "inserted_id": "64f6bf10492215a52e7af43f",
+    "response": {
+      "eventId": "FB101000000001693892367#565077",
+      "user_id": "g6tWCp5trVRO",
+      "org_id": "6385c0f18eca0fb652c94558",
+      "portfolio_name": "g6tWCp5trVRO",
+      "room_room_id": "11-g6tWCp5trVRO",
+      "product_name": "WORKFLOWAI",
+      "message": {
+        "receiver": "How may I help you"
+      },
+      "isLogin": false,
+      "is_active": true
+    }
+  }
+}
+```
+
 ## Sale Agent chat api
 
 Api_url = `https://100096.pythonanywhere.com/`
