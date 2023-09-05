@@ -332,7 +332,8 @@ class QRServiceHandler(APIView):
         pn = request.data.get('product_name')
         base_url = str(request.data.get('base_url'))
         product_name__key = str()
-
+        # for i in QR_ids:
+        #     print(i)
         try:
             product_name__key = [*pn][0]
             product_name_value = [*pn.value()][0]
@@ -347,7 +348,7 @@ class QRServiceHandler(APIView):
 
         links = list()
         for qr_hash in QR_ids:
-            rm_link = self.get_httpURL(base_url, qr_hash, product_name__key, workspace_id)
+            rm_link = self.get_httpURL(base_url, qr_hash, product_name__key, workspace_id,)
             links.append(rm_link)
 
         QR_server_response = self.save_links_2mgdb(workspace_id, links, product_name__key)  
@@ -382,7 +383,7 @@ class QRServiceHandler(APIView):
         return response["data"]
 
     def get_httpURL(self, base_url, qr_id, event, workspace_id):
-        return f'{base_url}/init/chat/{workspace_id}/{event}/{qr_id}/?public=true' 
+        return f'{base_url}/init/chat/{workspace_id}/{event}/{qr_id["qrid"]}/{qr_id["portfolioName"]}/?public=true' 
     
     
 
