@@ -27,11 +27,9 @@ const SecondRoute = () => {
         sessionStorage.setItem("roomId", response.data.inserted_id);
         setRoomId(response.data.inserted_id);
       });
-  }, [orgId, portfolio_name, product_name, roomId, userId]);
+  }, [orgId, portfolio_name, product_name, userId]);
 
   const getMessages = (roomId) => {
-    // console.log("here");
-    // setSelectedRoomId(roomId);
     setMessages(undefined);
     console.log(roomId);
     axios
