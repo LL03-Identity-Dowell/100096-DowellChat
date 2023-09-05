@@ -76,7 +76,7 @@ _Post_ to `Api_url/api/v2/room-service/`
   "room_id": "64ed7d75a57293efb539eb19",
   "message_data": "message",
   "side": true,
-  "auther": "client",
+  "author": "client",
   "message_type": "text"
 }
 ```
@@ -258,7 +258,7 @@ _Post_ to `Api_url/api/v2/room-service/`
   "room_id": "64ed7d75a57293efb539eb19",
   "message_data": "message",
   "side": true,
-  "auther": "client",
+  "author": "client",
   "message_type": "text"
 }
 ```
@@ -306,6 +306,63 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_messages&room_id=room_id`
       "is_active": false
     }
   ]
+}
+```
+
+## 5. Get QR Ids By org_id
+
+_Get_ to `Api_url/api/v2/get_QR_Id/6385c0f18eca0fb652c94558/`
+**Query Parameters:**
+
+- `org_id`: "org_id"
+
+**Response:**
+
+- **Status:** 200 OK
+- **Content:**
+
+```json
+{
+  "qr_id_list": [
+    "ZiQ7qUH73Q83",
+    "Gr4t0YhpMfVa",
+    "E37l1lMsbsJK",
+    "uSGUUNoxhzEX",
+    "E37l1lMsbsJK",
+    "uSGUUNoxhzEX"
+  ]
+}
+```
+
+## 6 . create public room for
+
+_Get_ to `Api_url/api/v2/init/6385c0f18eca0fb652c94558/WORKFLOWAI/g6tWCp5trVRO/`
+
+**Response:**
+
+- **Status:** 200 OK
+- **Content:**
+
+```json
+{
+  "room": {
+    "success": true,
+    "message": "Room created successfully",
+    "inserted_id": "64f6bf10492215a52e7af43f",
+    "response": {
+      "eventId": "FB101000000001693892367#565077",
+      "user_id": "g6tWCp5trVRO",
+      "org_id": "6385c0f18eca0fb652c94558",
+      "portfolio_name": "g6tWCp5trVRO",
+      "room_room_id": "11-g6tWCp5trVRO",
+      "product_name": "WORKFLOWAI",
+      "message": {
+        "receiver": "How may I help you"
+      },
+      "isLogin": false,
+      "is_active": true
+    }
+  }
 }
 ```
 
@@ -395,7 +452,7 @@ _Post_ to `Api_url/api/v2/room-service/`
   "room_id": "64ed7d75a57293efb539eb19",
   "message_data": "message",
   "side": true,
-  "auther": "client",
+  "author": "client",
   "message_type": "text"
 }
 ```

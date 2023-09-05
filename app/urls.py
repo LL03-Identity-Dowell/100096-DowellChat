@@ -11,5 +11,6 @@ urlpatterns = [
 
     # ""  QR code API methods""
     path('create_master_link/<str:workspace_id>/', QRServiceHandler.as_view(), name='create_master_link'),
+    path('get_QR_Id/<str:org_id>/', QRServiceValidationHandler.as_view(), name='get_QR_Id'),
     path('init/<str:org_id>/<str:product_name>/<str:user_id>/', QRServiceValidationHandler.as_view(), name='validate-public-link'),
 ]
