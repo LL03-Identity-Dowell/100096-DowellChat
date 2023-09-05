@@ -1,13 +1,13 @@
 import axios from "axios";
-import { useState, useRef, useContext } from "react";
+import { useState, useRef } from "react";
 
-import DataContext from "../../context/data-context";
+// import DataContext from "../../context/data-context";
 
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 
 export const ReplyChat = ({ roomId, setMessages }) => {
-  const dataContext = useContext(DataContext);
+  // const dataContext = useContext(DataContext);
   const [message, setMessage] = useState(undefined);
   const [showPicker, setShowPicker] = useState(false);
   const fileInputRef = useRef(null);
@@ -43,11 +43,12 @@ export const ReplyChat = ({ roomId, setMessages }) => {
       if (type === "IMAGE") {
         fileToBase64(message).then((response) => {
           data = {
-            message: response,
-            user_id: dataContext.collectedData.userId,
-            message_type: type,
-            org_id: dataContext.collectedData.orgId,
+            type: "create_message",
+            room_id: roomId,
+            message_data: message,
             side: false,
+            author: "client",
+            message_type: type,
           };
           axios
             .post(

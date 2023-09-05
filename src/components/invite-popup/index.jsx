@@ -91,7 +91,6 @@ export const InvitePopup = ({
     }
 
     selection.removeAllRanges();
-    window.location.href = copyTextElement.innerText;
     // navigate(copyTextElement.innerText, { replace: true });
   };
   return (

@@ -24,15 +24,16 @@ const SecondRoute = () => {
     axios
       .post(`https://100096.pythonanywhere.com/api/v2/room-control/`, data)
       .then((response) => {
-        setRoomId(response.data?.room?.inserted_id);
-        console.log(response.data?.room?.message);
+        sessionStorage.setItem("roomId", response.data.inserted_id);
+        setRoomId(response.data.inserted_id);
       });
-  }, [orgId, portfolio_name, product_name, userId]);
+  }, [orgId, portfolio_name, product_name, roomId, userId]);
 
   const getMessages = (roomId) => {
     // console.log("here");
     // setSelectedRoomId(roomId);
     setMessages(undefined);
+    console.log(roomId);
     axios
       .get(
         `https://100096.pythonanywhere.com/api/v2/room-service/?type=get_messages&room_id=${roomId}`
@@ -42,7 +43,9 @@ const SecondRoute = () => {
       });
   };
   useEffect(() => {
-    getMessages(roomId);
+    if (roomId) {
+      getMessages(roomId);
+    }
   }, [roomId]);
 
   return (
@@ -95,7 +98,7 @@ const SecondRoute = () => {
               )}
             </div>
             <ReplyChat
-              roomId={"64f708f83dc8dd88337297c2"}
+              roomId={roomId}
               setMessages={setMessages}
               // rooms={[1]}
             />
