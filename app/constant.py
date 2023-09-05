@@ -16,6 +16,14 @@ chat = [
     "ABCDE",
 ]
 
+PublicChatIDReport = [
+    "chat",
+    "chat",
+    "PublicChatIDReport",
+    "PublicChatIDReport",
+    "1233001",
+    "ABCDE"
+]
 
 event_services = [
     "chat",
