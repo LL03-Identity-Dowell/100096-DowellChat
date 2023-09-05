@@ -350,8 +350,10 @@ class QRServiceHandler(APIView):
             rm_link = self.get_httpURL(base_url, qr_hash, product_name__key, workspace_id)
             links.append(rm_link)
 
-        QR_server_response = self.save_links_2mgdb(workspace_id, links, product_name__key)       #   print(QR_server_response.text)
-        if QR_server_response['is_success']:
+        QR_server_response = self.save_links_2mgdb(workspace_id, links, product_name__key)  
+        print(QR_server_response.text)
+        QR_server_response=json.loads(QR_server_response.text)  
+        if "qrcodes" in QR_server_response.keys():
             field = {
                 'org_id': workspace_id,
                 'QR_ids': QR_ids,
@@ -359,7 +361,7 @@ class QRServiceHandler(APIView):
                 'links': links,
             }
             response = json.loads(dowellconnection(*PublicChatIDReport, "insert", field, update_field= None))
-
+            print(response)
 
         try:
             return Response({
@@ -401,8 +403,12 @@ class QRServiceValidationHandler(QRServiceHandler, RoomService):
                 'org_id': org_id,
             }
             response = json.loads(dowellconnection(*PublicChatIDReport, "fetch", field, update_field= None))
-            
-
+            qr_id_list = []
+            data = response['data']
+            for i in data:
+                qr_id_list.extend(i["QR_ids"])
+            print(qr_id_list)
+            return JsonResponse({'qr_id_list': qr_id_list})
         except:
             return org_id
 
