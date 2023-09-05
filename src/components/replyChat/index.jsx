@@ -47,7 +47,7 @@ export const ReplyChat = ({ roomId, setMessages }) => {
             user_id: dataContext.collectedData.userId,
             message_type: type,
             org_id: dataContext.collectedData.orgId,
-            side: true,
+            side: false,
           };
           axios
             .post(
@@ -64,7 +64,7 @@ export const ReplyChat = ({ roomId, setMessages }) => {
           type: "create_message",
           room_id: roomId,
           message_data: message,
-          side: true,
+          side: false,
           author: "client",
           message_type: type,
         };

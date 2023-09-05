@@ -9,22 +9,28 @@ import { Message } from "../../components/message";
 const SecondRoute = () => {
   // const collectedData = JSON.parse(localStorage.getItem("collectedData"));
   const [messages, setMessages] = useState(undefined);
+  const [roomId, setRoomId] = useState("");
   let chatApi = true;
 
-  const { roomId, product_name, orgId } = useParams();
+  const { userId, product_name, orgId, portfolio_name } = useParams();
 
   useEffect(() => {
+    const data = {
+      user_id: userId,
+      org_id: orgId,
+      portfolio_name: portfolio_name,
+      product_name: product_name,
+    };
     axios
-      .post(
-        `https://100096.pythonanywhere.com/api/v2/init/${orgId}/${product_name}/${roomId}/`
-      )
+      .post(`https://100096.pythonanywhere.com/api/v2/room-control/`, data)
       .then((response) => {
+        setRoomId(response.data?.room?.inserted_id);
         console.log(response.data?.room?.message);
       });
-  }, [orgId, product_name, roomId]);
+  }, [orgId, portfolio_name, product_name, userId]);
 
   const getMessages = (roomId) => {
-    console.log("here");
+    // console.log("here");
     // setSelectedRoomId(roomId);
     setMessages(undefined);
     axios
@@ -36,8 +42,8 @@ const SecondRoute = () => {
       });
   };
   useEffect(() => {
-    getMessages(roomId);
-  }, [roomId]);
+    getMessages("64f708f83dc8dd88337297c2");
+  }, [orgId]);
 
   return (
     <div className="w-full h-full flex justify-center items-center max-h-full mt-24">
@@ -52,14 +58,14 @@ const SecondRoute = () => {
                     <div
                       key={index}
                       className={`flex ${
-                        message.side ? "justify-end" : "justify-start"
+                        message.side ? "justify-start" : "justify-end"
                       } w-full pb-3`}
                     >
                       {
                         <Message
                           message={message.message_data}
                           messageType={message.message_type}
-                          color={message.side ? "bg-blue-600" : "bg-gray-300"}
+                          color={message.side ? "bg-gray-300" : "bg-blue-600"}
                         />
                       }
                     </div>
@@ -89,9 +95,9 @@ const SecondRoute = () => {
               )}
             </div>
             <ReplyChat
-              roomId={roomId}
+              roomId={"64f708f83dc8dd88337297c2"}
               setMessages={setMessages}
-              // rooms={rooms}
+              // rooms={[1]}
             />
           </div>
         </div>

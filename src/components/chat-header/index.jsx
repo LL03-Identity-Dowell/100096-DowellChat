@@ -1,4 +1,10 @@
-export const ChatHeader = ({ profileImage, roomId, setShowPopUp, chatApi }) => {
+export const ChatHeader = ({
+  profileImage,
+  roomId,
+  setShowPopUp,
+  chatApi,
+  portfolioName,
+}) => {
   const collectedData = JSON.parse(localStorage.getItem("collectedData"));
   return (
     <div className="flex h-16 justify-between items-center p-3 border-b-2">
@@ -12,6 +18,10 @@ export const ChatHeader = ({ profileImage, roomId, setShowPopUp, chatApi }) => {
           <span className="text-base font-bold">
             {chatApi ? collectedData?.userName : roomId}
           </span>
+          <span className="text-sm font-bold">{portfolioName}</span>
+          {!chatApi && (
+            <span className="text-sm font-bold">{portfolioName}</span>
+          )}
           <span className="text-blue-400 text-sm">Active Now</span>
         </div>
       </div>

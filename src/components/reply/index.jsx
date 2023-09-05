@@ -1,14 +1,14 @@
 import axios from "axios";
-import { useState, useRef, useContext } from "react";
+import { useState, useRef } from "react";
 
-import DataContext from "../../context/data-context";
+// import DataContext from "../../context/data-context";
 
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { toast } from "react-toastify";
 
-export const Reply = ({ roomId, setMessages, rooms }) => {
-  const dataContext = useContext(DataContext);
+export const Reply = ({ roomId, setMessages, rooms, setSelectedRoomId }) => {
+  // const dataContext = useContext(DataContext);
   const [message, setMessage] = useState(undefined);
   const [showPicker, setShowPicker] = useState(false);
   const fileInputRef = useRef(null);
@@ -27,8 +27,20 @@ export const Reply = ({ roomId, setMessages, rooms }) => {
     });
   }
 
+  const getMessages = (roomId) => {
+    setSelectedRoomId(roomId);
+    setMessages(undefined);
+    axios
+      .get(
+        `https://100096.pythonanywhere.com/api/v2/room-service/?type=get_messages&room_id=${roomId}`
+      )
+      .then((response) => {
+        setMessages(response.data.response.data);
+      });
+  };
+
   const sendMessage = (message, type) => {
-    if (message !== "" && rooms.length !== 0) {
+    if (message !== "" && rooms?.length !== 0) {
       let data = {};
       if (type === "IMAGE") {
         fileToBase64(message).then((response) => {
@@ -37,7 +49,7 @@ export const Reply = ({ roomId, setMessages, rooms }) => {
             room_id: roomId,
             message_data: message,
             side: true,
-            auther: "client",
+            author: "client",
             message_type: type,
           };
           axios
@@ -46,29 +58,28 @@ export const Reply = ({ roomId, setMessages, rooms }) => {
               data
             )
             .then((response) => {
-              setMessages(response.data.messages);
+              getMessages(roomId);
               setMessage("");
             });
         });
       } else {
         data = {
-          message: message,
-          user_id: dataContext.collectedData.userId,
+          type: "create_message",
+          room_id: roomId,
+          message_data: message,
+          side: true,
+          author: "client",
           message_type: type,
-          org_id: dataContext.collectedData.orgId,
         };
         axios
-          .post(
-            `https://100096.pythonanywhere.com/send_message/${roomId}/`,
-            data
-          )
+          .post(`https://100096.pythonanywhere.com/api/v2/room-service/`, data)
           .then((response) => {
-            setMessages(response.data.messages);
+            getMessages(roomId);
             setMessage("");
           });
       }
     } else {
-      rooms.length === 0
+      rooms?.length === 0
         ? toast("No Room Selected!", { type: "warning" })
         : toast("Please Enter Message", { type: "warning" });
     }

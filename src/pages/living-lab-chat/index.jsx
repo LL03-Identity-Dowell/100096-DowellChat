@@ -26,6 +26,7 @@ export const LivingLabChat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [masterLink, setMasterLink] = useState("");
   const [qrImage, setQrImage] = useState("");
+  const [portfolioName, setPortfolioName] = useState("portfolio");
 
   useEffect(() => {
     if (dataContext.collectedData) {
@@ -52,6 +53,7 @@ export const LivingLabChat = () => {
         } else {
           setRooms([]);
           setSelectedRoomId("Room ID");
+          setPortfolioName("portfolio");
           setMessages([]);
         }
       });
@@ -66,6 +68,7 @@ export const LivingLabChat = () => {
       )
       .then((response) => {
         setMessages(response.data.response.data);
+        setPortfolioName(response.data.response.data.portfolio_name);
       });
   };
 
@@ -83,6 +86,7 @@ export const LivingLabChat = () => {
   };
 
   const handleInvite = (selectedOption, selectedProduct) => {
+    console.log(selectedOption);
     setIsLoading(true);
     const data = {
       workspace_id: dataContext.collectedData.orgId,
@@ -231,6 +235,7 @@ export const LivingLabChat = () => {
                 <ChatHeader
                   profileImage={profileImage}
                   roomId={selectedRoomId}
+                  portfolioName={portfolioName}
                   setShowPopUp={setShowPopUp}
                 />
                 <div className="flex flex-col-reverse h-4/5 overflow-auto">
@@ -290,6 +295,7 @@ export const LivingLabChat = () => {
                   roomId={selectedRoomId}
                   setMessages={setMessages}
                   rooms={rooms}
+                  setSelectedRoomId={setSelectedRoomId}
                 />
               </div>
             </div>

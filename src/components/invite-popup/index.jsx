@@ -27,7 +27,7 @@ export const InvitePopup = ({
 
   useEffect(() => {
     axios
-      .get(`https://100096.pythonanywhere.com/api/v2/get_QR_Id/${orgId}/`)
+      .post(`https://100096.pythonanywhere.com/api/v2/get_QR_Id/${orgId}/`)
       .then((response) => {
         setQrIds(response.data.qr_id_list);
       });
@@ -48,6 +48,7 @@ export const InvitePopup = ({
             options.push({
               value: userportfolio[i].username[j],
               label: userportfolio[i].username[j],
+              portfolioName: userportfolio[i].portfolio_name,
             });
           }
         }
@@ -60,7 +61,12 @@ export const InvitePopup = ({
       }
       setSelectOptions(selectedOption);
       setSelectedOptions(selectedOption);
-      setSelectedIds(selectedOption.map((item) => item.value));
+      setSelectedIds(
+        selectedOption.map((item) => ({
+          qrid: item.value,
+          portfolioName: item.portfolioName,
+        }))
+      );
     }
   }, [idCount, qrIds, userportfolio]);
   const handleTabChange = (tabName) => {
