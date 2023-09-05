@@ -311,7 +311,7 @@ _Get_ to `Api_url/api/v2/room-service/?type=get_messages&room_id=room_id`
 
 ## 5. Get QR Ids By org_id
 
-_Get_ to `Api_url/api/v2/get_QR_Id/6385c0f18eca0fb652c94558/`
+_Post_ to `Api_url/api/v2/get_QR_Id/6385c0f18eca0fb652c94558/`
 **Query Parameters:**
 
 - `org_id`: "org_id"
