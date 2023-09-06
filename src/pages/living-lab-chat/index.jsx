@@ -71,6 +71,7 @@ export const LivingLabChat = () => {
             }, 5000)
           );
         } else {
+          clearInterval(intervalId);
           setRooms([]);
           setSelectedRoomId("Room ID");
           setPortfolioName("portfolio");
