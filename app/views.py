@@ -397,21 +397,34 @@ class QRServiceValidationHandler(QRServiceHandler, RoomService):
         except:
             return room_create_response
         
-    def post(self,request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         org_id = kwargs['org_id']
+        
         try:
             field = {
                 'org_id': org_id,
             }
-            response = json.loads(dowellconnection(*PublicChatIDReport, "fetch", field, update_field= None))
+            response = json.loads(dowellconnection(*PublicChatIDReport, "fetch", field, update_field=None))
             qr_id_list = []
-            data = response['data']
-            for i in data:
-                qr_id_list.extend(i["QR_ids"])
-            print(qr_id_list)
-            return JsonResponse({'qr_id_list': qr_id_list})
-        except:
-            return org_id
+
+            data = response.get('data', [])
+            
+            for item in data:
+                qr_ids = item.get('QR_ids', []) 
+                for qr_id in qr_ids:
+                    qrid = qr_id.get('qrid')
+                    if qrid:
+                        qr_id_list.append(qrid)
+
+            if qr_id_list:
+                return JsonResponse({'qr_id_list': qr_id_list})
+            else:
+                return JsonResponse({"status": "QR IDs not found"})
+
+        except json.JSONDecodeError as e:
+            return JsonResponse({"status": f"JSON decoding error: {str(e)}"})
+        except Exception as e:
+            return JsonResponse({"status": f"An error occurred: {str(e)}"})
 
 
 
