@@ -16,6 +16,7 @@ export const Room = ({
             fetchRoomMessages(roomId);
           }, 5000)
         );
+        fetchRoomMessages(roomId);
       }}
       className={`flex min-w-fit items-center hover:cursor-pointer gap-3 mb-3`}
     >
