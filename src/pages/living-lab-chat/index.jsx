@@ -217,16 +217,18 @@ export const LivingLabChat = () => {
               </div>
               <div className="flex flex-col overflow-auto pt-5 pl-4">
                 {rooms && rooms.length !== 0 ? (
-                  rooms.map((room, index) => (
-                    <Room
-                      key={index}
-                      roomId={room._id}
-                      roomName={room.room_name}
-                      fetchRoomMessages={getMessages}
-                      intervalId={intervalId}
-                      setIntervalId={setIntervalId}
-                    />
-                  ))
+                  rooms
+                    .toReversed()
+                    .map((room, index) => (
+                      <Room
+                        key={index}
+                        roomId={room._id}
+                        roomName={room.room_name}
+                        fetchRoomMessages={getMessages}
+                        intervalId={intervalId}
+                        setIntervalId={setIntervalId}
+                      />
+                    ))
                 ) : (
                   <>
                     {rooms && rooms.length === 0 ? (

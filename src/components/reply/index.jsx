@@ -29,7 +29,7 @@ export const Reply = ({ roomId, setMessages, rooms, setSelectedRoomId }) => {
 
   const getMessages = (roomId) => {
     setSelectedRoomId(roomId);
-    setMessages(undefined);
+    // setMessages(undefined);
     axios
       .get(
         `https://100096.pythonanywhere.com/api/v2/room-service/?type=get_messages&room_id=${roomId}`
