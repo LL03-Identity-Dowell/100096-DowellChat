@@ -4,6 +4,8 @@ export const ChatHeader = ({
   setShowPopUp,
   chatApi,
   portfolioName,
+  name,
+  myId
 }) => {
   const collectedData = JSON.parse(localStorage.getItem("collectedData"));
   return (
@@ -16,7 +18,8 @@ export const ChatHeader = ({
         />
         <div className="flex flex-col">
           <span className="text-base font-bold">
-            {chatApi ? collectedData?.userName : roomId}
+            {/* {chatApi ? collectedData?.userName : roomId} */}
+            {myId}
           </span>
           {/* <span className="text-sm font-bold">{portfolioName}</span>
           {!chatApi && (
