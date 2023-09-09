@@ -419,7 +419,7 @@ class QRServiceValidationHandler(QRServiceHandler, RoomService):
             if qr_id_list:
                 return JsonResponse({'qr_id_list': qr_id_list})
             else:
-                return JsonResponse({"status": "QR IDs not found"})
+                return JsonResponse({"qr_id_list": qr_id_list})
 
         except json.JSONDecodeError as e:
             return JsonResponse({"status": f"JSON decoding error: {str(e)}"})
