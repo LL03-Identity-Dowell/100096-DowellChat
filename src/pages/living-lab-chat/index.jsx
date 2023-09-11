@@ -29,7 +29,7 @@ export const LivingLabChat = () => {
   const [portfolioName, setPortfolioName] = useState("portfolio");
   const [intervalId, setIntervalId] = useState();
   const [active, setActive] = useState()
-  const [myId, setMyId] = useState('')
+  const [myId, setMyId] = useState()
   
 
   useEffect(() => {
@@ -69,6 +69,7 @@ export const LivingLabChat = () => {
           setRooms(response.data.response);
           setSelectedRoomId(response.data.last_room_details._id);
           setSelectedRoomId(response.data.last_room_details.portfolio_name);
+          setMyId(response.data.last_room_details.portfolio_name)
           clearInterval(intervalId);
           setIntervalId(
             setInterval(() => {
