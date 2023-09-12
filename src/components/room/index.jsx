@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
 import roomProfileImage from "../../assets/images/avatar.png";
 
 export const Room = ({
@@ -9,17 +7,15 @@ export const Room = ({
   intervalId,
   setIntervalId,
   name,
-  selected,
   active,
   setActive,
   setMyId,
-  myId
 }) => {
   return (
     <div
       onClick={() => {
-        setMyId(name)
-        setActive(roomId)
+        setMyId(name);
+        setActive(roomId);
         clearInterval(intervalId);
         setIntervalId(
           setInterval(() => {
@@ -29,7 +25,7 @@ export const Room = ({
         fetchRoomMessages(roomId);
       }}
       className={`flex nav min-w-fit items-center hover:cursor-pointer gap-3 mb-3 ${
-        active == roomId ? "bg-gray-200 rounded-md" : null
+        active === roomId ? "bg-gray-200 rounded-md" : null
       }
       `}
     >

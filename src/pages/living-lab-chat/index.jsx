@@ -28,9 +28,8 @@ export const LivingLabChat = () => {
   const [qrImage, setQrImage] = useState("");
   const [portfolioName, setPortfolioName] = useState("portfolio");
   const [intervalId, setIntervalId] = useState();
-  const [active, setActive] = useState()
-  const [myId, setMyId] = useState()
-  
+  const [active, setActive] = useState();
+  const [myId, setMyId] = useState();
 
   useEffect(() => {
     if (dataContext.collectedData) {
@@ -69,7 +68,7 @@ export const LivingLabChat = () => {
           setRooms(response.data.response);
           setSelectedRoomId(response.data.last_room_details._id);
           setSelectedRoomId(response.data.last_room_details.portfolio_name);
-          setMyId(response.data.last_room_details.portfolio_name)
+          setMyId(response.data.last_room_details.portfolio_name);
           clearInterval(intervalId);
           setIntervalId(
             setInterval(() => {
@@ -231,9 +230,9 @@ export const LivingLabChat = () => {
                         key={index}
                         myId={myId}
                         setMyId={setMyId}
-                        name={room.portfolio_name}
+                        name={room._id}
                         roomId={room._id}
-                        roomName={room.room_name}
+                        roomName={room.portfolio_name}
                         selected={selectedRoomId}
                         fetchRoomMessages={getMessages}
                         intervalId={intervalId}
@@ -258,8 +257,8 @@ export const LivingLabChat = () => {
             <div className="w-2/3">
               <div className="flex h-full flex-col">
                 <ChatHeader
-                myId={myId}
-                name={portfolioName}
+                  myId={myId}
+                  name={portfolioName}
                   profileImage={profileImage}
                   roomId={selectedRoomId}
                   portfolioName={portfolioName}
