@@ -49,12 +49,12 @@ const SecondRoute = () => {
   }, [roomId]);
 
   return (
-    <div className="w-full h-full flex justify-center items-center max-h-full mt-24">
+    <div className="w-full  h-full box-border flex justify-center items-center">
       <div className="w-full h-full flex justify-center items-center max-h-full">
-        <div className="w-1/2">
-          <div className="flex h-full flex-col border-t-2 border-l-2 border-r-2">
+        <div className="min-w-[375px] w-1/2">
+          <div className="flex min-h-[667px] h-full flex-col box-border border-t-2 border-l-2 border-r-2">
             <ChatHeader chatApi={chatApi} roomId={roomId} />
-            <div className="flex flex-col-reverse h-[480px] border-x overflow-auto">
+            <div className="flex flex-col-reverse h-[480px] box-border border-x overflow-auto">
               {messages ? (
                 <div className="flex flex-col-reverse h-max px-3">
                   {messages.toReversed().map((message, index) => (
