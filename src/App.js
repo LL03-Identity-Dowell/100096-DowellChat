@@ -9,7 +9,7 @@ export const App = () => {
         <Route exect path="/:pageName" element={<FirstLoadComponent />}></Route>
         <Route
           exect
-          path="/init/chat/:orgId/:product_name/:userId/:portfolio_name"
+          path="/:pageName/init/chat/:orgId/:product_name/:userId/:portfolio_name"
           element={<SecondRoute />}
         />
       </Route>

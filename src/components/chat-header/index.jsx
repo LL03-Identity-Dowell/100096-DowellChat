@@ -10,7 +10,7 @@ export const ChatHeader = ({
   const collectedData = JSON.parse(localStorage.getItem("collectedData"));
   return (
     <div className="flex h-16 justify-between items-center p-3 border-b-2">
-      <div className="flex gap-3">
+      <div className={`${myId ? 'flex gap-3' : 'flex flex-col'}`}>
         <img
           src={chatApi ? collectedData?.profileImage : profileImage}
           alt="user"
@@ -25,17 +25,17 @@ export const ChatHeader = ({
           {!chatApi && (
             <span className="text-sm font-bold">{portfolioName}</span>
           )} */}
-          <span className="text-blue-400 text-sm">Active Now</span>
+          <span className="text-blue-400 text-xs lg:text-base">Active Now</span>
         </div>
       </div>
-      <div className="flex gap-4 justify-end">
+      <div className="flex gap-2 lg:gap-4 justify-end">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-5 h-5 text-blue-400"
+          className="w-4 h-4 lg:w-5 lg:h-5 text-blue-400"
         >
           <path
             strokeLinecap="round"
@@ -49,7 +49,7 @@ export const ChatHeader = ({
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-5 h-5 text-blue-400"
+          className="w-4 h-4 lg:w-5 lg:h-5 text-blue-400"
         >
           <path
             strokeLinecap="round"
@@ -70,7 +70,7 @@ export const ChatHeader = ({
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-5 h-5 text-blue-400"
+            className="w-4 h-4 lg:w-5 lg:h-5 text-blue-400"
           >
             <path
               strokeLinecap="round"
@@ -85,7 +85,7 @@ export const ChatHeader = ({
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-5 h-5 text-blue-400"
+          className="w-4 h-4 lg:w-5 lg:h-5 text-blue-400"
         >
           <path
             strokeLinecap="round"
