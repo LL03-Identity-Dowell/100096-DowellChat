@@ -26,7 +26,6 @@ export const LivingLabChat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [masterLink, setMasterLink] = useState("");
   const [qrImage, setQrImage] = useState("");
-  const [portfolioName, setPortfolioName] = useState("portfolio");
   const [intervalId, setIntervalId] = useState();
   const [active, setActive] = useState();
   const [myId, setMyId] = useState();
@@ -51,7 +50,6 @@ export const LivingLabChat = () => {
       )
       .then((response) => {
         setMessages(response.data.response.data);
-        setPortfolioName(response.data.response.data.portfolio_name);
       });
   };
 
@@ -68,7 +66,7 @@ export const LivingLabChat = () => {
           setRooms(response.data.response);
           setSelectedRoomId(response.data.last_room_details._id);
           setSelectedRoomId(response.data.last_room_details.portfolio_name);
-          setMyId(response.data.last_room_details.portfolio_name);
+          setMyId(response.data.last_room_details.user_id);
           clearInterval(intervalId);
           setIntervalId(
             setInterval(() => {
@@ -79,7 +77,6 @@ export const LivingLabChat = () => {
           clearInterval(intervalId);
           setRooms([]);
           setSelectedRoomId("Room ID");
-          setPortfolioName("portfolio");
           setMessages([]);
         }
       });
@@ -230,7 +227,7 @@ export const LivingLabChat = () => {
                         key={index}
                         myId={myId}
                         setMyId={setMyId}
-                        name={room._id}
+                        name={room.user_id}
                         roomId={room._id}
                         roomName={room.portfolio_name}
                         selected={selectedRoomId}
@@ -258,10 +255,7 @@ export const LivingLabChat = () => {
               <div className="flex h-full flex-col">
                 <ChatHeader
                   myId={myId}
-                  name={portfolioName}
                   profileImage={profileImage}
-                  roomId={selectedRoomId}
-                  portfolioName={portfolioName}
                   setShowPopUp={setShowPopUp}
                 />
                 <div className="flex flex-col-reverse h-4/5 overflow-auto">

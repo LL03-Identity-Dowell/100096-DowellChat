@@ -1,12 +1,4 @@
-export const ChatHeader = ({
-  profileImage,
-  roomId,
-  setShowPopUp,
-  chatApi,
-  portfolioName,
-  name,
-  myId
-}) => {
+export const ChatHeader = ({ profileImage, chatApi, myId }) => {
   const collectedData = JSON.parse(localStorage.getItem("collectedData"));
   return (
     <div className="flex h-16 justify-between items-center p-3 border-b-2">

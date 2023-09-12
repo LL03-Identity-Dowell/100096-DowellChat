@@ -54,7 +54,7 @@ export const InvitePopup = ({
         }
       }
     }
-    if (options.length) {
+    if (options.length > idCount) {
       const selectedOption = [];
       for (let i = 0; i < idCount; i++) {
         selectedOption.push(options[i]);
@@ -63,6 +63,15 @@ export const InvitePopup = ({
       setSelectedOptions(selectedOption);
       setSelectedIds(
         selectedOption.map((item) => ({
+          qrid: item.value,
+          portfolioName: item.portfolioName,
+        }))
+      );
+    } else {
+      setSelectOptions(options);
+      setSelectedOptions(options);
+      setSelectedIds(
+        options.map((item) => ({
           qrid: item.value,
           portfolioName: item.portfolioName,
         }))
@@ -205,7 +214,7 @@ export const InvitePopup = ({
                       <Select
                         options={selectOptions}
                         defaultValue={selectedOptions}
-                        className="basic-multi-select w-4/5 outline-none"
+                        className="basic-multi-select w-4/5 h-20 overflow-auto outline-none"
                         classNamePrefix="select"
                         isMulti
                         isSearchable={false}
@@ -215,6 +224,12 @@ export const InvitePopup = ({
                           );
                         }}
                       />
+                      {selectOptions.length < idCount && (
+                        <span className="text-red-500 pt-1">
+                          Not Enough Available IDs only {selectOptions.length}{" "}
+                          IDs are selected.
+                        </span>
+                      )}
                       <button
                         className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
                         onClick={() => {
