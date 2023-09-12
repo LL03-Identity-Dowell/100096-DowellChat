@@ -95,7 +95,7 @@ export const ReplyChat = ({ roomId, setMessages }) => {
   };
 
   return (
-    <div className="flex items-center border-t h-fit border-b-2 border-l-2 border-r-2">
+    <div className="flex flex-col lg:flex-row items-center border-t h-fit border-b-2 border-l-2 border-r-2">
       <textarea
         value={message}
         rows={4}
@@ -105,7 +105,7 @@ export const ReplyChat = ({ roomId, setMessages }) => {
           setMessage(event.target.value);
         }}
       />
-      <div className="flex gap-5 pr-2">
+      <div className="flex gap-5 pr-2 pb-2">
         <div
           className="relative hover:cursor-pointer"
           onClick={handleButtonClick}
@@ -116,7 +116,7 @@ export const ReplyChat = ({ roomId, setMessages }) => {
             viewBox="0 0 24 24"
             strokeWidth={2.5}
             stroke="currentColor"
-            className="w-5 h-5 text-[#0D6EFD]"
+            className="w-4 h-4 lg:w-5 lg:h-5 text-[#0D6EFD]"
           >
             <path
               strokeLinecap="round"
@@ -139,7 +139,7 @@ export const ReplyChat = ({ roomId, setMessages }) => {
             viewBox="0 0 24 24"
             strokeWidth={2.5}
             stroke="currentColor"
-            className="w-5 h-5 text-[#0D6EFD]"
+            className="w-4 h-4 lg:w-5 lg:h-5 text-[#0D6EFD]"
           >
             <path
               strokeLinecap="round"
@@ -173,7 +173,7 @@ export const ReplyChat = ({ roomId, setMessages }) => {
             viewBox="0 0 24 24"
             strokeWidth={2.5}
             stroke="currentColor"
-            className={`w-5 h-5  ${
+            className={`w-4 h-4 lg:w-5 lg:h-5  ${
               showPicker ? "text-red-400" : "text-[#0D6EFD]"
             }`}
           >
@@ -192,7 +192,7 @@ export const ReplyChat = ({ roomId, setMessages }) => {
             viewBox="0 0 24 24"
             strokeWidth={2.5}
             stroke="currentColor"
-            className="w-5 h-5 text-[#0D6EFD]"
+            className="w-4 h-4 lg:w-5 lg:h-5 text-[#0D6EFD]"
           >
             <path
               strokeLinecap="round"
@@ -214,7 +214,7 @@ export const ReplyChat = ({ roomId, setMessages }) => {
             viewBox="0 0 24 24"
             strokeWidth={2.5}
             stroke="currentColor"
-            className="w-5 h-5 text-[#0D6EFD]"
+            className="w-4 h-4 lg:w-5 lg:h-5 text-[#0D6EFD]"
           >
             <path
               strokeLinecap="round"
