@@ -334,7 +334,8 @@ class QRServiceHandler(APIView):
         pn = request.data.get('product_name')
         base_url = str(request.data.get('base_url'))
         product_name__key = str()
-
+        # for i in QR_ids:
+        #     print(i)
         try:
             product_name__key = [*pn][0]
             product_name_value = [*pn.value()][0]
@@ -349,7 +350,7 @@ class QRServiceHandler(APIView):
 
         links = list()
         for qr_hash in QR_ids:
-            rm_link = self.get_httpURL(base_url, qr_hash, product_name__key, workspace_id)
+            rm_link = self.get_httpURL(base_url, qr_hash, product_name__key, workspace_id,)
             links.append(rm_link)
 
         QR_server_response = self.save_links_2mgdb(workspace_id, links, product_name__key)  
@@ -384,7 +385,7 @@ class QRServiceHandler(APIView):
         return response["data"]
 
     def get_httpURL(self, base_url, qr_id, event, workspace_id):
-        return f'{base_url.strip()}/init/chat/{workspace_id.strip()}/{event.strip()}/{qr_id.strip()}/?public=true' 
+        return f'{base_url.strip()}/init/chat/{workspace_id.strip()}/{event.strip()}/{qr_id.strip()}/?public=true'
     
     
 
@@ -398,21 +399,34 @@ class QRServiceValidationHandler(QRServiceHandler, RoomService):
         except:
             return room_create_response
         
-    def post(self,request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         org_id = kwargs['org_id']
+        
         try:
             field = {
                 'org_id': org_id,
             }
-            response = json.loads(dowellconnection(*PublicChatIDReport, "fetch", field, update_field= None))
+            response = json.loads(dowellconnection(*PublicChatIDReport, "fetch", field, update_field=None))
             qr_id_list = []
-            data = response['data']
-            for i in data:
-                qr_id_list.extend(i["QR_ids"])
-            print(qr_id_list)
-            return JsonResponse({'qr_id_list': qr_id_list})
-        except:
-            return org_id
+
+            data = response.get('data', [])
+            
+            for item in data:
+                qr_ids = item.get('QR_ids', []) 
+                for qr_id in qr_ids:
+                    qrid = qr_id.get('qrid')
+                    if qrid:
+                        qr_id_list.append(qrid)
+
+            if qr_id_list:
+                return JsonResponse({'qr_id_list': qr_id_list})
+            else:
+                return JsonResponse({"qr_id_list": qr_id_list})
+
+        except json.JSONDecodeError as e:
+            return JsonResponse({"status": f"JSON decoding error: {str(e)}"})
+        except Exception as e:
+            return JsonResponse({"status": f"An error occurred: {str(e)}"})
 
 
 
