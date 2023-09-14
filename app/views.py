@@ -322,6 +322,8 @@ class QRServiceHandler(APIView):
             "links": [{'link': l} for l in links],
             "document_name":job_name
         }
+
+        print(payload)
         response = requests.post(url, json=payload)
         #   print(response.text)
         return response
@@ -382,7 +384,7 @@ class QRServiceHandler(APIView):
         return response["data"]
 
     def get_httpURL(self, base_url, qr_id, event, workspace_id):
-        return f'{base_url}/init/chat/{workspace_id}/{event}/{qr_id}/?public=true' 
+        return f'{base_url.strip()}/init/chat/{workspace_id.strip()}/{event.strip()}/{qr_id.strip()}/?public=true' 
     
     
 
