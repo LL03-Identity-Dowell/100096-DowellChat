@@ -52,7 +52,7 @@ const SecondRoute = () => {
     <div className="w-full  h-full box-border flex justify-center items-center">
       <div className="w-full h-full flex justify-center items-center max-h-full">
         <div className="min-w-[375px] w-1/2">
-          <div className="flex min-h-[667px] h-full flex-col box-border border-t-2 border-l-2 border-r-2">
+          <div className="public-chat">
             <ChatHeader chatApi={chatApi} roomId={roomId} />
             <div className="flex flex-col-reverse h-[480px] box-border border-x overflow-auto">
               {messages ? (

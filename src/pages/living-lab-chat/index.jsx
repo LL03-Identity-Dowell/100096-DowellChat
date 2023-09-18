@@ -107,7 +107,7 @@ export const LivingLabChat = () => {
     };
     axios
       .post(
-        `https://100096.pythonanywhere.com/api/v2/create_master_link/some_company/`,
+        `https://100096.pythonanywhere.com/api/v2/create_master_link/`,
         data
       )
       .then((response) => {

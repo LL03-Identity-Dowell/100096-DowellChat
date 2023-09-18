@@ -20,10 +20,11 @@ export const InvitePopup = ({
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
   const [qrIds, setQrIds] = useState([]);
+  const [key, setKey] = useState(0);
 
   //   const navigate = useNavigate();
 
-  const tabs = ["select number", "select Ids", "select name"];
+  const tabs = ["select number", "show QR"];
 
   useEffect(() => {
     axios
@@ -34,8 +35,33 @@ export const InvitePopup = ({
   }, [orgId]);
 
   useEffect(() => {
+    setKey(idCount);
+  }, [idCount]);
+
+  useEffect(() => {
+    <Select
+      key={idCount}
+      options={selectOptions}
+      defaultValue={selectedOptions}
+      className="basic-multi-select w-4/5 h-20 overflow-auto outline-none"
+      classNamePrefix="select"
+      isMulti
+      isSearchable={false}
+      onChange={(value) => {
+        setSelectedIds(value.map((item) => item.value.toString()));
+      }}
+    />;
+  }, [idCount, selectOptions, selectedOptions]);
+
+  useEffect(() => {
     if (masterLinks?.length) {
       setStep("");
+    }
+  }, [masterLinks]);
+
+  useEffect(() => {
+    if (masterLinks.length > 0) {
+      setStep("show QR");
     }
   }, [masterLinks]);
 
@@ -44,7 +70,7 @@ export const InvitePopup = ({
     for (let i = 0; i < userportfolio?.length; i++) {
       if (userportfolio[i].member_type === "public") {
         for (let j = 0; j < userportfolio[i].username.length; j++) {
-          if (qrIds?.indexOf(userportfolio[i].username[j]) === -1) {
+          if (true) {
             options.push({
               value: userportfolio[i].username[j],
               label: userportfolio[i].username[j],
@@ -59,7 +85,7 @@ export const InvitePopup = ({
       for (let i = 0; i < idCount; i++) {
         selectedOption.push(options[i]);
       }
-      setSelectOptions(selectedOption);
+      setSelectOptions(options);
       setSelectedOptions(selectedOption);
       setSelectedIds(
         selectedOption.map((item) => ({
@@ -180,88 +206,85 @@ export const InvitePopup = ({
                 <>
                   {step === "select number" && (
                     <>
-                      <label className="w-4/5  pb-2" htmlFor="selectNumber">
-                        Number of Ids
-                        <strong className="text-red-600">*</strong>
-                      </label>
-                      <input
-                        name="selectNumber"
-                        type="number"
-                        value={idCount}
-                        min={1}
-                        required
-                        placeholder="Enter Number of Ids"
-                        onChange={(event) => {
-                          setIdCount(event.target.value);
-                        }}
-                        className="w-4/5 h-11 p-2 border outline-none"
-                      />
+                      <div className="mb-5 pr-6">
+                        <h1 className="text-lg font-bold text-green-700">
+                          Share Public Chat
+                        </h1>
+                      </div>
+
+                      <div className="flex flex-col w-full justify-center items-center">
+                        <div className="flex flex-col w-4/5 mb-2">
+                          <label className="mb-2" htmlFor="selectNumber">
+                            Number of Ids
+                            <strong className="text-red-600">*</strong>
+                          </label>
+                          <input
+                            name="selectNumber"
+                            type="number"
+                            value={idCount}
+                            min={1}
+                            required
+                            placeholder="Enter Number of Ids"
+                            onChange={(event) => {
+                              setIdCount(event.target.value);
+                            }}
+                            className="h-11 p-2 border outline-none"
+                          />
+                        </div>
+                        <div className="flex flex-col w-4/5 mb-2">
+                          <label className="mb-2" htmlFor="availableIds">
+                            Select id{" "}
+                            <strong className="text-red-600">*</strong>
+                          </label>
+                          <Select
+                            key={`select_${key}`}
+                            options={selectOptions}
+                            defaultValue={
+                              selectedOptions.length && selectedOptions
+                            }
+                            className="basic-multi-select outline-none"
+                            classNamePrefix="select"
+                            isMulti
+                            isSearchable={false}
+                            onChange={(value) => {
+                              setSelectedIds(
+                                value.map((item) => item.value.toString())
+                              );
+                            }}
+                          />
+                          {selectOptions.length < idCount && (
+                            <span className="text-red-500 pt-1">
+                              Not Enough Available IDs only{" "}
+                              {selectOptions.length} IDs are selected.
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex flex-col w-4/5 mb-2">
+                          <label className="pb-2" htmlFor="selectName">
+                            Available Products
+                            <strong className="text-red-600">*</strong>
+                          </label>
+                          <select
+                            defaultValue=""
+                            onChange={(event) => {
+                              setSelectedProduct(event.target.value);
+                            }}
+                            className="h-11 p-2 border outline-none"
+                          >
+                            <option value="">Select Product Name</option>
+                            {availableProducts.map((item, index) => (
+                              <option key={index} value={item.productName}>
+                                {item.productName}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
                       <button
-                        className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
-                        onClick={() => {
-                          handleTabChange("select Ids");
-                        }}
-                      >
-                        Continue
-                      </button>
-                    </>
-                  )}
-                  {step === "select Ids" && (
-                    <>
-                      <label className="w-4/5  pb-2" htmlFor="availableIds">
-                        Select id <strong className="text-red-600">*</strong>
-                      </label>
-                      <Select
-                        options={selectOptions}
-                        defaultValue={selectedOptions}
-                        className="basic-multi-select w-4/5 h-20 overflow-auto outline-none"
-                        classNamePrefix="select"
-                        isMulti
-                        isSearchable={false}
-                        onChange={(value) => {
-                          setSelectedIds(
-                            value.map((item) => item.value.toString())
-                          );
-                        }}
-                      />
-                      {selectOptions.length < idCount && (
-                        <span className="text-red-500 pt-1">
-                          Not Enough Available IDs only {selectOptions.length}{" "}
-                          IDs are selected.
-                        </span>
-                      )}
-                      <button
-                        className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
-                        onClick={() => {
-                          handleTabChange("select name");
-                        }}
-                      >
-                        Continue
-                      </button>
-                    </>
-                  )}
-                  {step === "select name" && (
-                    <>
-                      <label className="w-4/5 pb-2" htmlFor="selectName">
-                        Available Products
-                        <strong className="text-red-600">*</strong>
-                      </label>
-                      <select
-                        defaultValue=""
-                        onChange={(event) => {
-                          setSelectedProduct(event.target.value);
-                        }}
-                        className="w-4/5 h-11 p-2 border outline-none"
-                      >
-                        <option value="">Select Product Name</option>
-                        {availableProducts.map((item, index) => (
-                          <option key={index} value={item.productName}>
-                            {item.productName}
-                          </option>
-                        ))}
-                      </select>
-                      <button
-                        className="bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md"
+                        className="btn-primary"
+                        disabled={
+                          selectedIds.length === 0 || selectedProduct === ""
+                        }
                         onClick={() => {
                           const product = availableProducts.filter(
                             (item) => item.productName === selectedProduct
@@ -275,7 +298,7 @@ export const InvitePopup = ({
                       </button>
                     </>
                   )}
-                  {masterLinks?.length > 0 && (
+                  {step === "show QR" && masterLinks?.length > 0 && (
                     <>
                       <img src={qrImage} alt="QR" width={200} height={20} />
                       <div className="flex w-[550px] pl-2 mx-4 items-center justify-between border border-gray-300">

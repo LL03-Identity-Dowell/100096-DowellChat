@@ -2,3 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+.select__menu > div {
+  @apply max-h-20 overflow-auto;
+}
+
+.select__value-container {
+  @apply !max-h-36 !overflow-auto;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white mt-4 px-4 py-2 w-36 rounded-md shadow-md;
+}
+
+.btn-primary:disabled {
+  @apply bg-opacity-50 cursor-not-allowed;
+}
+
+.public-chat {
+  @apply flex h-1/3 flex-col box-border border-t-2 border-l-2 border-r-2;
+}
+
+@media screen and (max-width: 375px) {
+  .public-chat {
+    @apply h-screen;
+  }
+}
