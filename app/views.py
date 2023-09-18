@@ -329,7 +329,7 @@ class QRServiceHandler(APIView):
         return response
 
     def post(self, request, *args, **kwargs):
-        workspace_id = str(request.data.get('workspace_id')) or str(kwargs['workspace_id'])
+        workspace_id = str(request.data.get('workspace_id'))
         QR_ids = list(request.data.get('qr_ids'))
         pn = request.data.get('product_name')
         base_url = str(request.data.get('base_url'))
