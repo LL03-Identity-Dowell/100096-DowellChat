@@ -323,13 +323,13 @@ class QRServiceHandler(APIView):
             "document_name":job_name
         }
 
-        print(payload)
+        #   print(payload)
         response = requests.post(url, json=payload)
         #   print(response.text)
         return response
 
     def post(self, request, *args, **kwargs):
-        workspace_id = str(request.data.get('workspace_id')) or str(kwargs['workspace_id'])
+        workspace_id = str(request.data.get('workspace_id'))
         QR_ids = list(request.data.get('qr_ids'))
         pn = request.data.get('product_name')
         base_url = str(request.data.get('base_url'))
@@ -350,7 +350,7 @@ class QRServiceHandler(APIView):
 
         links = list()
         for qr_hash in QR_ids:
-            rm_link = self.get_httpURL(base_url, qr_hash, product_name__key, workspace_id,)
+            rm_link = self.get_httpURL(base_url, qr_hash['qrid'], product_name__key, workspace_id,)
             links.append(rm_link)
 
         QR_server_response = self.save_links_2mgdb(workspace_id, links, product_name__key)  
