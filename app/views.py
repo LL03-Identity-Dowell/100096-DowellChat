@@ -386,7 +386,7 @@ class QRServiceHandler(APIView):
 
     def get_httpURL(self, base_url, qr_id, event, workspace_id, portfolio_name):
         return f'{base_url.strip()}/#/init/chat/{workspace_id.strip()}/{event.strip()}/{qr_id.strip()}/{portfolio_name.strip()}/?public=true'
-        /#/init/chat/:orgId/:product_name/:userId/:portfolio_name
+    
     
     
 
