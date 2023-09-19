@@ -70,7 +70,7 @@ export const InvitePopup = ({
     for (let i = 0; i < userportfolio?.length; i++) {
       if (userportfolio[i].member_type === "public") {
         for (let j = 0; j < userportfolio[i].username.length; j++) {
-          if (qrIds?.indexOf(userportfolio[i].username[j]) === -1) {
+          if (true) {
             options.push({
               value: userportfolio[i].username[j],
               label: userportfolio[i].username[j],
@@ -248,7 +248,12 @@ export const InvitePopup = ({
                             isSearchable={false}
                             onChange={(value) => {
                               setSelectedIds(
-                                value.map((item) => item.value.toString())
+                                value.map((item) => {
+                                  return {
+                                    qrid: item.value.toString(),
+                                    portfolioName: item.portfolioName,
+                                  };
+                                })
                               );
                             }}
                           />
