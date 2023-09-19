@@ -76,3 +76,15 @@ def generate_room_id(product_name, user_id):
         }
     else:
         return "Invalid Product"
+    
+def processApiService(api_key):
+    """The purpose of this request is to process the API key 
+    and determine if it is valid for the specified API service."""
+    url = f'https://100105.pythonanywhere.com/api/v3/process-services/?type=api_service&api_key={api_key}'
+    
+    payload = {
+        "service_id" : "DOWELL10014"
+    }
+    response = requests.post(url, json=payload)
+
+    return json.loads(response.text)
