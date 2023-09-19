@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ChatHeader } from "../../components/chat-header";
+// import { ChatHeader } from "../../components/chat-header";
 import "react-toastify/dist/ReactToastify.css";
 import { ReplyChat } from "../../components/replyChat";
 import { useParams } from "react-router-dom";
 import { Message } from "../../components/message";
+import dowellLogo from "../../assets/images/dowell.png";
 
 const SecondRoute = () => {
   // const collectedData = JSON.parse(localStorage.getItem("collectedData"));
   const [messages, setMessages] = useState(undefined);
   const [roomId, setRoomId] = useState("");
-  let chatApi = true;
+  // let chatApi = true;
 
   const { userId, product_name, orgId, portfolio_name } = useParams();
 
@@ -53,8 +54,19 @@ const SecondRoute = () => {
       <div className="w-full h-full flex justify-center items-center max-h-full">
         <div className="min-w-[375px] w-1/2">
           <div className="public-chat">
-            <ChatHeader chatApi={chatApi} roomId={roomId} />
-            <div className="flex flex-col-reverse h-[480px] box-border border-x overflow-auto">
+            <div className="flex h-16 justify-between items-center bg-white p-3">
+              <div className="flex items-center gap-x-3">
+                <img
+                  src={dowellLogo}
+                  alt="dowell"
+                  className="object-cover rounded-full w-12 h-12"
+                />
+                <span>{portfolio_name}</span>
+              </div>
+              <span className="text-gray-400">{orgId}</span>
+            </div>
+            {/* <ChatHeader chatApi={chatApi} roomId={roomId} /> */}
+            <div className="flex flex-col-reverse bg-[#F0F0F0] h-[480px] box-border border-x overflow-auto">
               {messages ? (
                 <div className="flex flex-col-reverse h-max px-3">
                   {messages.toReversed().map((message, index) => (
@@ -68,7 +80,11 @@ const SecondRoute = () => {
                         <Message
                           message={message.message_data}
                           messageType={message.message_type}
-                          color={message.side ? "bg-gray-300" : "bg-blue-600"}
+                          style={
+                            message.side
+                              ? "bg-white rounded-e-2xl rounded-bl-2xl"
+                              : "bg-[#54BF5F] rounded-s-2xl rounded-br-2xl"
+                          }
                         />
                       }
                     </div>

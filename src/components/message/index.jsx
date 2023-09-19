@@ -1,7 +1,7 @@
-export const Message = ({ message, messageType, color }) => {
+export const Message = ({ message, messageType, style }) => {
   const imageDataUrl = `data:image/png;base64,${message}`;
   return (
-    <div className={`block h-fit max-w-sm rounded-md ${color} p-4`}>
+    <div className={`block  max-w-sm ${style} px-6 py-2`}>
       {messageType === "IMAGE" ? (
         <img src={imageDataUrl} alt="media" />
       ) : (
