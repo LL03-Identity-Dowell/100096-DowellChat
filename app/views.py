@@ -350,6 +350,9 @@ class QRServiceHandler(APIView):
 
         links = list()
         for qr_hash in QR_ids:
+            print(qr_hash)
+            qr_hash  = json.loads(qr_hash)
+            print(type(qr_hash))
             rm_link = self.get_httpURL(base_url, qr_hash['qrid'], product_name__key, workspace_id, qr_hash['portfolioName'])
             links.append(rm_link)
 
@@ -385,7 +388,7 @@ class QRServiceHandler(APIView):
         return response["data"]
 
     def get_httpURL(self, base_url, qr_id, event, workspace_id, portfolio_name):
-        return f'{base_url.strip()}/#/init/chat/{workspace_id.strip()}/{event.strip()}/{qr_id.strip()}/{portfolio_name.strip()}/?public=true'
+        return f'{base_url.strip()}/init/chat/{workspace_id.strip()}/{event.strip()}/{qr_id.strip()}/{portfolio_name.strip()}/?public=true'
     
     
     
