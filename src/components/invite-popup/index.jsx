@@ -70,7 +70,7 @@ export const InvitePopup = ({
     for (let i = 0; i < userportfolio?.length; i++) {
       if (userportfolio[i].member_type === "public") {
         for (let j = 0; j < userportfolio[i].username.length; j++) {
-          if (true) {
+          if (qrIds?.indexOf(userportfolio[i].username[j]) === -1) {
             options.push({
               value: userportfolio[i].username[j],
               label: userportfolio[i].username[j],
