@@ -350,9 +350,6 @@ class QRServiceHandler(APIView):
 
         links = list()
         for qr_hash in QR_ids:
-            print(qr_hash)
-            qr_hash  = json.loads(qr_hash)
-            print(type(qr_hash))
             rm_link = self.get_httpURL(base_url, qr_hash['qrid'], product_name__key, workspace_id, qr_hash['portfolioName'])
             links.append(rm_link)
 
