@@ -10,6 +10,8 @@ import pdb
 from .helper import *
 from .constant import *
 
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+import uuid
 
 from django.http import HttpResponse
 
@@ -78,7 +80,7 @@ class RoomService(APIView):
             else:
                 return{
                     "success": False,
-                    "message": "Failed to create room",
+                    "message": "Failed to create room ",
                 }
         else:
             return Response({
@@ -512,3 +514,62 @@ class QRServiceValidationHandler(QRServiceHandler, RoomService):
             ev_response = self.create_event(event_name=event['name'], room_count=event['room_count'], workspace_id=['workspace_id'])      #   event = RoomEvent.objects.create(event_name=event_name, room_count=len(QR_ids), organization=company_id)        #   num_links = int(request.POST.get('your-surname'))
         return ev_response
 '''
+
+class PublicCreateRoom(RoomService):
+    def post(self, request):
+        try:
+            api_key = request.query_params['api_key']
+
+            authentication_res = processApiService(api_key)
+
+            if authentication_res['success'] == False:
+                return Response(authentication_res)
+            
+            user_id = str(uuid.uuid4()).replace("-",'')
+
+            org_id = request.data.get('org_id')
+            product_name = request.data.get('product_name')
+            portfolio_name = request.data.get('portfolio_name')
+            response = self.roomFilter(user_id, org_id, product_name, portfolio_name)
+
+            
+            
+            if response:
+                return Response({
+                    "success": True,
+                    "message": "Room filter successfully",
+                    "inserted_id": response[0]["_id"],
+                    "response": response[0]
+                })
+            else:
+                try:
+                    response = self.create_room(user_id, org_id, product_name, portfolio_name, isLogin = True)
+                    if response:
+                        return Response({
+                            "success": True,
+                            "message": "Room created successfully",
+                            "inserted_id": response["inserted_id"],
+                            "response": response['response']
+                        })
+                    
+                except Exception as e:
+                    return Response({
+                            "success": False,
+                            "message": f"Failed to create room {str(e)}",
+                        })
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+    
+
+    def roomFilter(self,user_id, org_id, product_name, portfolio_name):
+        field = {
+            "user_id": user_id,
+            'org_id': org_id,
+            'product_name': product_name,
+            'portfolio_name': portfolio_name,
+            'is_active': True
+        }
+
+        response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None)) 
+        return response["data"]
