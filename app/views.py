@@ -515,6 +515,31 @@ class QRServiceValidationHandler(QRServiceHandler, RoomService):
 '''
 
 class PublicCreateRoom(RoomService):
+    def get(self, request):
+        try:
+            api_key = request.query_params['api_key']
+
+            authentication_res = processApiService(api_key)
+
+            if authentication_res['success'] == False:
+                return Response(authentication_res)
+            
+            room_id = request.GET.get('room_id')
+
+            field = {
+                "room_room_id": room_id
+            }
+            response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None))
+            return Response({
+                "success": True,
+                "message": "Room deatils based on room_id",
+                "response": response["data"],
+            })
+            
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+
     def post(self, request):
         try:
             api_key = request.query_params['api_key']
