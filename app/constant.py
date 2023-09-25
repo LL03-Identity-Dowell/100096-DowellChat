@@ -54,5 +54,6 @@ product_details = {
     'LIVINGLABCHAT' : 26,
     'SALESAGENT':27,
     'LOGIN':28,
-    'PUBLIC_QR': 29
+    'PUBLIC_QR': 29,
+    "PUBLICCHAT" : 30
 }

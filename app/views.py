@@ -62,7 +62,7 @@ class RoomService(APIView):
                 "user_id": data["user_id"],
                 "org_id": data["org_id"],
                 "portfolio_name": data["portfolio_name"],
-                "room_room_id": room_name["room_name"],
+                # "room_id": room_name["room_name"],
                 "product_name": data["product_name"],
                 "message": data["message"],
                 "isLogin": isLogin,
@@ -75,7 +75,7 @@ class RoomService(APIView):
                     "success": True,
                     "message": "Room created successfully",
                     "inserted_id": response["inserted_id"],
-                    "response": field
+                    "response": {**field,"room_id": response["inserted_id"],}
                 }
             else:
                 return{
@@ -516,6 +516,52 @@ class QRServiceValidationHandler(QRServiceHandler, RoomService):
 '''
 
 class PublicCreateRoom(RoomService):
+    def get(self, request):
+        try:
+            api_key = request.query_params['api_key']
+
+            authentication_res = processApiService(api_key)
+
+            if authentication_res['success'] == False:
+                return Response(authentication_res)
+            
+            user_id = str(uuid.uuid4()).replace("-",'')
+
+            org_id = api_key.replace("-",'')
+            product_name = "PUBLICCHAT"
+            portfolio_name = f'{org_id}{product_name}'
+            response = self.roomFilter(user_id, org_id, product_name, portfolio_name)
+
+            
+            
+            if response:
+                return Response({
+                    "success": True,
+                    "message": "Room filter successfully",
+                    "inserted_id": response[0]["_id"],
+                    "response": response[0]
+                })
+            else:
+                try:
+                    response = self.create_room(user_id, org_id, product_name, portfolio_name, isLogin = True)
+                    if response:
+                        return Response({
+                            "success": True,
+                            "message": "Room created successfully",
+                            "inserted_id": response["inserted_id"],
+                            "response": response['response']
+                        })
+                    
+                except Exception as e:
+                    return Response({
+                            "success": False,
+                            "message": f"Failed to create room {str(e)}",
+                        })
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+        
+        
     def post(self, request):
         try:
             api_key = request.query_params['api_key']
