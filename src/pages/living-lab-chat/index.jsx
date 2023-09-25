@@ -132,7 +132,7 @@ export const LivingLabChat = () => {
                 {sessionStorage.getItem("sessionId")}
               </span>
               <Products
-                pageName="customer-support"
+                pageName="living-lab-chat"
                 setProductTitle={setProductTitle}
                 selectedProduct={productTitle}
               />

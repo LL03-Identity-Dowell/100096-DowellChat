@@ -12,6 +12,41 @@ export const FirstLoadComponent = () => {
   const [customerSupportEligible, setCustomerSupportEligible] = useState(false);
   const [livingLabChatEligible, setLivingLabChatEligible] = useState(false);
   const dataContext = React.useContext(DataContext);
+
+  function checkstatus() {
+    // var lav = document.getElementById("useronline-status-icons");
+    // axios
+    //   .get("https://100014.pythonanywhere.com/en/live_status")
+    //   .then((response) => {
+    //     console.log(response.data);
+    //   });
+    // AJAX GET request
+    // $.ajax({
+    //   url: 'https://100014.pythonanywhere.com/en/live_status',
+    //   type: 'GET',
+    //   success: function(data) {
+    //     lav.style.color="green"
+    //   //   lav.innerHTML = JSON.stringify(data);
+    //   },
+    //   error: function(error) {
+    //   //   console.error(error);
+    //    lav.style.color="red"
+    //   }
+    // });
+    // AJAX POST request
+    // $.ajax({
+    //   url: 'https://100014.pythonanywhere.com/en/live_status',
+    //   type: 'POST',
+    //   data: JSON.stringify({ session_id:"f5u2udocbu8e3mg12hw9tb1h0h5wzcbe",product: "Living Lab Admin"}),
+    //   contentType: 'application/json',
+    //   success: function(data) {
+    //     console.log(data);
+    //   },
+    //   error: function(error) {
+    //     console.error(error);
+    //   }
+    // });
+  }
   const checkProduct = (portfolio_info) => {
     for (let i = 0; i < portfolio_info.length; i++) {
       if (
@@ -233,15 +268,22 @@ export const FirstLoadComponent = () => {
 
         if (sessionId) {
           getUserData(sessionId, id);
+          checkstatus();
         } else {
           window.location.href = "https://100014.pythonanywhere.com/en/";
         }
       } else {
         const session_id = sessionStorage.getItem("sessionId");
         const id = sessionStorage.getItem("id");
-        session_id
-          ? getUserData(session_id, id)
-          : (window.location.href = "https://100014.pythonanywhere.com/en/");
+        if (session_id) {
+          getUserData(session_id, id);
+          checkstatus();
+        } else {
+          window.location.href = "https://100014.pythonanywhere.com/en/";
+        }
+        // session_id
+        //   ? getUserData(session_id, id)
+        //   : (window.location.href = "https://100014.pythonanywhere.com/en/");
       }
     } else {
       window.location.href = "https://100014.pythonanywhere.com/en/";

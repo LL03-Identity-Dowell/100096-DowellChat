@@ -52,9 +52,9 @@ const SecondRoute = () => {
   return (
     <div className="w-full  h-full box-border flex justify-center items-center">
       <div className="w-full h-full flex justify-center items-center max-h-full">
-        <div className="min-w-[375px] w-1/2">
-          <div className="public-chat">
-            <div className="flex h-16 justify-between items-center bg-white p-3">
+        <div className="min-w-[375px] w-full lg:w-1/2 ">
+          <div className="public-chat ">
+            <div className="flex h-[10vh] justify-between items-center bg-white p-3">
               <div className="flex items-center gap-x-3">
                 <img
                   src={dowellLogo}
@@ -66,7 +66,7 @@ const SecondRoute = () => {
               <span className="text-gray-400">{orgId}</span>
             </div>
             {/* <ChatHeader chatApi={chatApi} roomId={roomId} /> */}
-            <div className="flex flex-col-reverse bg-[#F0F0F0] h-[480px] box-border border-x overflow-auto">
+            <div className="flex flex-col-reverse bg-[#F0F0F0] h-[80vh] box-border border-x overflow-auto">
               {messages ? (
                 <div className="flex flex-col-reverse h-max px-3">
                   {messages.toReversed().map((message, index) => (

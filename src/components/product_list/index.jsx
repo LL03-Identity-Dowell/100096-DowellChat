@@ -44,7 +44,7 @@ export const Products = ({
     "#6B8E23",
   ];
   useEffect(() => {
-    if (pageName === "customer-support") {
+    if (pageName === "living-lab-chat") {
       axios
         .get(
           `https://100096.pythonanywhere.com/client_product_list/${dataContext.collectedData.orgId}`

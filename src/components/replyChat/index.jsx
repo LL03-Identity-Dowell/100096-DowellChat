@@ -96,7 +96,7 @@ export const ReplyChat = ({ roomId, setMessages }) => {
 
   return (
     <div className="bg-[#F0F0F0]">
-      <div className="flex items-center rounded-3xl px-3 bg-white ">
+      <div className="flex items-center h-[10vh] rounded-3xl px-3 bg-white ">
         <div
           className="relative hover:cursor-pointer"
           onClick={handleShowEmojiPicker}
@@ -133,7 +133,7 @@ export const ReplyChat = ({ roomId, setMessages }) => {
           type="text"
           value={message}
           placeholder="Type message here..."
-          className="w-full h-14 pl-1 focus:outline-none"
+          className="w-full h-[10vh] pl-1 focus:outline-none"
           onChange={(event) => {
             setMessage(event.target.value);
           }}
@@ -144,11 +144,10 @@ export const ReplyChat = ({ roomId, setMessages }) => {
             onClick={handleButtonClick}
           >
             <svg
-              width="25"
-              height="25"
               viewBox="0 0 35 35"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="h-[5vh] w-[5vh]"
             >
               <path
                 d="M14.6504 20.4167C12.4542 18.2117 12.6525 14.4375 15.0923 11.989L22.1623 4.8927C24.6021 2.4427 28.3602 2.24437 30.5579 4.44791C32.7542 6.65291 32.5558 10.4271 30.116 12.8771L26.581 16.4252"
@@ -178,11 +177,12 @@ export const ReplyChat = ({ roomId, setMessages }) => {
             }}
           >
             <svg
-              width="45"
-              height="30"
+              // width="45"
+              // height="30"
               viewBox="0 0 40 35"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="h-[5vh] w-[5vh]"
             >
               <path
                 d="M0 2.69232V14.1346L23.0769 17.5L0 20.8654V32.3077L40 17.5L0 2.69232Z"

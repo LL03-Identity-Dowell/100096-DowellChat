@@ -1,7 +1,10 @@
 import Select from "react-select";
 import DataContext from "../../context/data-context";
 import { useContext, useEffect, useState } from "react";
-import { availableProducts } from "../../utils/constants";
+import {
+  availableProducts,
+  customerSupportProducts,
+} from "../../utils/constants";
 import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
@@ -37,21 +40,6 @@ export const InvitePopup = ({
   useEffect(() => {
     setKey(idCount);
   }, [idCount]);
-
-  useEffect(() => {
-    <Select
-      key={idCount}
-      options={selectOptions}
-      defaultValue={selectedOptions}
-      className="basic-multi-select w-4/5 h-20 overflow-auto outline-none"
-      classNamePrefix="select"
-      isMulti
-      isSearchable={false}
-      onChange={(value) => {
-        setSelectedIds(value.map((item) => item.value.toString()));
-      }}
-    />;
-  }, [idCount, selectOptions, selectedOptions]);
 
   useEffect(() => {
     if (masterLinks?.length) {
@@ -277,11 +265,18 @@ export const InvitePopup = ({
                             className="h-11 p-2 border outline-none"
                           >
                             <option value="">Select Product Name</option>
-                            {availableProducts.map((item, index) => (
-                              <option key={index} value={item.productName}>
-                                {item.productName}
-                              </option>
-                            ))}
+
+                            {window.location.hash.includes("/customer-support")
+                              ? customerSupportProducts.map((item, index) => (
+                                  <option key={index} value={item.productName}>
+                                    {item.productName}
+                                  </option>
+                                ))
+                              : availableProducts.map((item, index) => (
+                                  <option key={index} value={item.productName}>
+                                    {item.productName}
+                                  </option>
+                                ))}
                           </select>
                         </div>
                       </div>
@@ -291,9 +286,15 @@ export const InvitePopup = ({
                           selectedIds.length === 0 || selectedProduct === ""
                         }
                         onClick={() => {
-                          const product = availableProducts.filter(
-                            (item) => item.productName === selectedProduct
-                          )[0];
+                          const product = window.location.hash.includes(
+                            "/customer-support"
+                          )
+                            ? customerSupportProducts.filter(
+                                (item) => item.productName === selectedProduct
+                              )[0]
+                            : availableProducts.filter(
+                                (item) => item.productName === selectedProduct
+                              )[0];
                           const obj = {};
                           obj[product.productName] = product.id;
                           handelInvite(selectedIds, obj);

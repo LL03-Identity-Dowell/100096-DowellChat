@@ -16,6 +16,12 @@ export const availableProducts = [
   { productName: "DOWELLCSC", id: 25 },
   { productName: "LIVINGLABCHAT", id: 26 },
   { productName: "SALESAGENT", id: 27 },
+];
+
+export const customerSupportProducts = [
   { productName: "LOGIN", id: 28 },
-  { productName: "PUBLIC_QR", id: 29 },
+  { productName: "DOWELLMAILL", id: 29 },
+  { productName: "EXTENSION", id: 30 },
+  { productName: "LIVINGLABADMIN", id: 31 },
+  { productName: "SALESAGENT", id: 32 },
 ];
