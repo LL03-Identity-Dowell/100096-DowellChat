@@ -530,33 +530,33 @@ class PublicCreateRoom(RoomService):
             org_id = api_key.replace("-",'')
             product_name = "PUBLICCHAT"
             portfolio_name = f'{org_id}{product_name}'
-            response = self.roomFilter(user_id, org_id, product_name, portfolio_name)
+            # response = self.roomFilter(user_id, org_id, product_name, portfolio_name)
 
             
             
-            if response:
-                return Response({
-                    "success": True,
-                    "message": "Room filter successfully",
-                    "inserted_id": response[0]["_id"],
-                    "response": response[0]
-                })
-            else:
-                try:
-                    response = self.create_room(user_id, org_id, product_name, portfolio_name, isLogin = True)
-                    if response:
-                        return Response({
-                            "success": True,
-                            "message": "Room created successfully",
-                            "inserted_id": response["inserted_id"],
-                            "response": response['response']
-                        })
-                    
-                except Exception as e:
+            # if response:
+            #     return Response({
+            #         "success": True,
+            #         "message": "Room filter successfully",
+            #         "inserted_id": response[0]["_id"],
+            #         "response": response[0]
+            #     })
+            # else:
+            try:
+                response = self.create_room(user_id, org_id, product_name, portfolio_name, isLogin = True)
+                if response:
                     return Response({
-                            "success": False,
-                            "message": f"Failed to create room {str(e)}",
-                        })
+                        "success": True,
+                        "message": "Room created successfully",
+                        "inserted_id": response["inserted_id"],
+                        "response": response['response']
+                    })
+                
+            except Exception as e:
+                return Response({
+                        "success": False,
+                        "message": f"Failed to create room {str(e)}",
+                    })
         except Exception as e:
             return Response(
                 {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
