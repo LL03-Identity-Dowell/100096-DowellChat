@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    "daphne",
+    # "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -41,10 +41,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     "notifications",
-    "channels",
+    # "channels",
     "customer_support",
     'rest_framework',
-    "app"
+    "app",
+
+    "api",
 ]
 
 MIDDLEWARE = [
@@ -79,7 +81,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "Chat.wsgi.application"
-ASGI_APPLICATION = "Chat.asgi.application"
+# ASGI_APPLICATION = "Chat.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -138,21 +140,21 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ORIGIN_ALLOW_ALL = True
 
 
-CHANNEL_LAYERS={
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        'CONFIG' : {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
+# CHANNEL_LAYERS={
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         'CONFIG' : {
+#             "hosts": [('127.0.0.1', 6379)],
+#         },
+#     },
+# }
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',  # Redis server location
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django_redis.cache.RedisCache',
+#         'LOCATION': 'redis://127.0.0.1:6379/1',  # Redis server location
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+#         }
+#     }
+# }
