@@ -18,7 +18,7 @@ class CreateRoomServiceSerializer(serializers.Serializer):
     ('LOGIN','LOGIN'),
     ('PUBLIC_QR', 'PUBLIC_QR'),
     ('PUBLICCHAT','PUBLICCHAT'),
-    ('DOWELLMAILL','DOWELLMAILL'),
+    ('DOWELLMAIL','DOWELLMAIL'),
     ('EXTENSION','EXTENSION'),
     ('LIVINGLABADMIN','LIVINGLABADMIN')
 
