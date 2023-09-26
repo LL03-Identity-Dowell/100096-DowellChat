@@ -17,7 +17,7 @@ import { InvitePopup } from "../../components/invite-popup";
 
 export const CustomerSupport = () => {
   const dataContext = useContext(DataContext);
-  const [productTitle, setProductTitle] = useState("SALESAGENTLOGIN");
+  const [productTitle, setProductTitle] = useState("LOGIN");
   const [rooms, setRooms] = useState();
   const [selectedRoomId, setSelectedRoomId] = useState("Room ID");
   const [messages, setMessages] = useState();

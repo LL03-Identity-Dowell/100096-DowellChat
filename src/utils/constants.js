@@ -16,6 +16,7 @@ export const availableProducts = [
   { productName: "DOWELLCSC", id: 25 },
   { productName: "LIVINGLABCHAT", id: 26 },
   { productName: "SALESAGENT", id: 27 },
+  { productName: "PUBLICCHAT", id: 30 },
 ];
 
 export const customerSupportProducts = [
@@ -24,4 +25,5 @@ export const customerSupportProducts = [
   { productName: "EXTENSION", id: 30 },
   { productName: "LIVINGLABADMIN", id: 31 },
   { productName: "SALESAGENT", id: 32 },
+  { productName: "PUBLICCHAT", id: 30 },
 ];
