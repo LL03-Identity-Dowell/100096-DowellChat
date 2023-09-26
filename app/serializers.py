@@ -18,6 +18,9 @@ class CreateRoomServiceSerializer(serializers.Serializer):
     ('LOGIN','LOGIN'),
     ('PUBLIC_QR', 'PUBLIC_QR'),
     ('PUBLICCHAT','PUBLICCHAT'),
+    ('DOWELLMAILL','DOWELLMAILL'),
+    ('EXTENSION','EXTENSION'),
+    ('LIVINGLABADMIN','LIVINGLABADMIN')
 
     ) 
     user_id = serializers.CharField(allow_null=False, allow_blank=False)
