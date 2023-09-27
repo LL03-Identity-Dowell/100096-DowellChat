@@ -3,10 +3,11 @@ async_mode = None
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from django.http import HttpResponse
-from app.serializers import *
+from .serializers import *
 from app.helper import *
 from app.constant import *
 from rest_framework.response import Response
+from .models import Message
 
 #Socket imports
 import socketio
@@ -54,16 +55,24 @@ def message_event(sid, message):
     serializer = MessageSerializer(data=data)
     if serializer.is_valid():
         
-        field = {
-            "room_id": room_id,
-            "message_data": message_data,
-            "side": side,
-            "author": author,
-            "message_type": message_type,
-            "read": True,
-        }     
-        response = json.loads(dowellconnection(*chat, "insert", field, update_field=None))
-        return sio.emit('my_response', {'data': message['message_data'], 'sid':sid})
+        # field = {
+        #     "room_id": room_id,
+        #     "message_data": message_data,
+        #     "side": side,
+        #     "author": author,
+        #     "message_type": message_type,
+        #     "read": True,
+        # }     
+        # response = json.loads(dowellconnection(*chat, "insert", field, update_field=None))
+        Message.objects.create(
+            type = type,
+            room_id = room_id,
+            message_data = message_data,
+            side = side,
+            author = author,
+            message_type = message_type
+        )
+        return sio.emit('my_response', {'data': message['message_data'], 'sid':sid}, skip_sid=sid)
     else:
         return sio.emit('my_response', {'data': 'Invalid Data', 'sid':sid})
 
@@ -74,14 +83,24 @@ def disconnect_request(sid):
     sio.disconnect(sid)
 
 
-message={
-    'data':"Hello Everyone"
-}
+message=["Hello Everyone", "This is the second message"]
+    
+
 @sio.event
-def connect(sid, environ):
-    # messages = Message.objects.all()
-    # serializer = MessageSerializer(messages, many = True)
-    sio.emit('my_response', {'data': message['data'], 'count': 0}, room=sid)
+def connect(sid, environ, query_para):
+    # url = 'https://100096.pythonanywhere.com/api/v2/room-service/?type=get_messages&room_id=64f6ff29c4a02ffba74d1e2e'
+    # response = requests.get(url)
+    # res = json.loads(response.text)
+    # message = res['response']['data']
+    # for i in message:
+    #     sio.emit('my_response', {'data': i['message_data'], 'count': 0}, room=sid)
+    print(query_para)
+    messages = Message.objects.filter(room_id="test123").all()
+    if messages.count()==0:
+        sio.emit('my_response', {'data': "Hey how may i help you", 'count': 0}, room=sid)
+    else:
+        for message in messages:
+            sio.emit('my_response', {'data': str(message.message_data), 'count': 0}, room=sid)
 
 
 @sio.event
@@ -89,41 +108,3 @@ def disconnect(sid):
     print('Client disconnected')
 
 
-def create_message(self, request):
-        type = request.data.get('type')
-        room_id = request.data.get('room_id')
-        message_data = request.data.get('message_data')
-        side = request.data.get('side')
-        author = request.data.get('author')
-        message_type = request.data.get('message_type')
-        data = {
-            "type": type,
-            "room_id": room_id,
-            "message_data": message_data,
-            "side": side,
-            "author": author,
-            "message_type": message_type,
-        }
-        serializer = MessageSerializer(data=data)
-        if serializer.is_valid():
-            
-            field = {
-                "room_id": room_id,
-                "message_data": message_data,
-                "side": side,
-                "author": author,
-                "message_type": message_type,
-                "read": True,
-            }     
-            response = json.loads(dowellconnection(*chat, "insert", field, update_field=None))
-            return Response({
-                "success": True,
-                "message": "Message updated successfully",
-                "response": response,
-            })
-        else:
-            return Response({
-                "success": False,
-                "message": "Invalid data",
-                "errors": serializer.errors,
-            }, status=status.HTTP_400_BAD_REQUEST)
