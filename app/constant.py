@@ -54,7 +54,7 @@ product_details = {
     'LIVINGLABCHAT' : 26,
     'SALESAGENT':27,
     'LOGIN':28,
-    'DOWELLMAILL':29,
+    'DOWELLMAIL':29,
     'EXTENSION':30,
     'LIVINGLABADMIN':31,
     "PUBLICCHAT" : 32
