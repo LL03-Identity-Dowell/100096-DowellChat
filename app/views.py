@@ -62,7 +62,7 @@ class RoomService(APIView):
                 "user_id": data["user_id"],
                 "org_id": data["org_id"],
                 "portfolio_name": data["portfolio_name"],
-                "room_room_id": room_name["room_name"],
+                # "room_id": room_name["room_name"],
                 "product_name": data["product_name"],
                 "message": data["message"],
                 "isLogin": isLogin,
@@ -75,7 +75,7 @@ class RoomService(APIView):
                     "success": True,
                     "message": "Room created successfully",
                     "inserted_id": response["inserted_id"],
-                    "response": field
+                    "response": {**field,"room_id": response["inserted_id"],}
                 }
             else:
                 return{
@@ -352,7 +352,7 @@ class QRServiceHandler(APIView):
 
         links = list()
         for qr_hash in QR_ids:
-            rm_link = self.get_httpURL(base_url, qr_hash['qrid'], product_name__key, workspace_id,)
+            rm_link = self.get_httpURL(base_url, qr_hash['qrid'], product_name__key, workspace_id, qr_hash['portfolioName'])
             links.append(rm_link)
 
         QR_server_response = self.save_links_2mgdb(workspace_id, links, product_name__key)  
@@ -386,8 +386,9 @@ class QRServiceHandler(APIView):
         response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None)) 
         return response["data"]
 
-    def get_httpURL(self, base_url, qr_id, event, workspace_id):
-        return f'{base_url.strip()}/init/chat/{workspace_id.strip()}/{event.strip()}/{qr_id.strip()}/?public=true'
+    def get_httpURL(self, base_url, qr_id, event, workspace_id, portfolio_name):
+        return f'{base_url.strip()}/init/chat/{workspace_id.strip()}/{event.strip()}/{qr_id.strip()}/{portfolio_name.strip()}/?public=true'
+    
     
     
 
@@ -539,7 +540,43 @@ class PublicCreateRoom(RoomService):
         except Exception as e:
             return Response(
                 {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+            user_id = str(uuid.uuid4()).replace("-",'')
 
+            org_id = api_key.replace("-",'')
+            product_name = "PUBLICCHAT"
+            portfolio_name = f'{org_id}{product_name}'
+            # response = self.roomFilter(user_id, org_id, product_name, portfolio_name)
+
+            
+            
+            # if response:
+            #     return Response({
+            #         "success": True,
+            #         "message": "Room filter successfully",
+            #         "inserted_id": response[0]["_id"],
+            #         "response": response[0]
+            #     })
+            # else:
+            try:
+                response = self.create_room(user_id, org_id, product_name, portfolio_name, isLogin = True)
+                if response:
+                    return Response({
+                        "success": True,
+                        "message": "Room created successfully",
+                        "inserted_id": response["inserted_id"],
+                        "response": response['response']
+                    })
+                
+            except Exception as e:
+                return Response({
+                        "success": False,
+                        "message": f"Failed to create room {str(e)}",
+                    })
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+        
+      
     def post(self, request):
         try:
             api_key = request.query_params['api_key']
