@@ -634,3 +634,106 @@ class PublicCreateRoom(RoomService):
 
         response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None)) 
         return response["data"]
+
+
+class Login(RoomService):
+   
+    def post(self, request):
+        try:
+            user_id = request.data.get('user_id')
+            product_name = request.data.get('product_name')
+            org_id = str(uuid.uuid4()).replace("-",'')
+            portfolio_name = f"{product_name}{user_id}"
+            response = self.roomFilter(user_id, org_id, product_name, portfolio_name)
+
+            
+            if response:
+                return Response({
+                    "success": True,
+                    "message": "Room filter successfully",
+                    "inserted_id": response[0]["_id"],
+                    "response": response[0]
+                })
+            else:
+                try:
+                    response = self.create_room(user_id, org_id, product_name, portfolio_name, isLogin = True)
+                    if response:
+                        return Response({
+                            "success": True,
+                            "message": "Room created successfully",
+                            "inserted_id": response["inserted_id"],
+                            "response": response['response']
+                        })
+                    
+                except Exception as e:
+                    return Response({
+                            "success": False,
+                            "message": f"Failed to create room {str(e)}",
+                        })
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+    
+
+    def roomFilter(self,user_id, org_id, product_name, portfolio_name):
+        field = {
+            "user_id": user_id,
+            'org_id': org_id,
+            'product_name': product_name,
+            'portfolio_name': portfolio_name,
+            'is_active': True
+        }
+
+        response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None)) 
+        return response["data"]
+
+class Extension(RoomService):
+   
+    def post(self, request):
+        try:
+            user_id = request.data.get('user_id')
+            product_name = request.data.get('product_name')
+            org_id = request.data.get('org_id')
+            portfolio_name = request.data.get('portfolio_name')
+            response = self.roomFilter(user_id, org_id, product_name, portfolio_name)
+
+            
+            if response:
+                return Response({
+                    "success": True,
+                    "message": "Room filter successfully",
+                    "inserted_id": response[0]["_id"],
+                    "response": response[0]
+                })
+            else:
+                try:
+                    response = self.create_room(user_id, org_id, product_name, portfolio_name, isLogin = True)
+                    if response:
+                        return Response({
+                            "success": True,
+                            "message": "Room created successfully",
+                            "inserted_id": response["inserted_id"],
+                            "response": response['response']
+                        })
+                    
+                except Exception as e:
+                    return Response({
+                            "success": False,
+                            "message": f"Failed to create room {str(e)}",
+                        })
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+    
+
+    def roomFilter(self,user_id, org_id, product_name, portfolio_name):
+        field = {
+            "user_id": user_id,
+            'org_id': org_id,
+            'product_name': product_name,
+            'portfolio_name': portfolio_name,
+            'is_active': True
+        }
+
+        response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None)) 
+        return response["data"]
