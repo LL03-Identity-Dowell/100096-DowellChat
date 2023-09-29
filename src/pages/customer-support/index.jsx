@@ -65,7 +65,6 @@ export const CustomerSupport = () => {
           // setRooms(response.data.response);
           setRooms(response.data.response);
           setSelectedRoomId(response.data.last_room_details._id);
-          setSelectedRoomId(response.data.last_room_details.portfolio_name);
           setMyId(response.data.last_room_details.user_id);
           clearInterval(intervalId);
           setIntervalId(
