@@ -78,19 +78,20 @@ export const CustomerSupport = () => {
           setRooms([]);
           setSelectedRoomId("Room ID");
           setMessages([]);
+          setMyId("Room ID");
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataContext.collectedData.orgId, productTitle]);
 
   useEffect(() => {
-    if (selectedRoomId && selectedRoomId !== "Room ID") {
+    if (selectedRoomId && selectedRoomId !== "Room ID" && myId !== "Room ID") {
       getMessages(selectedRoomId);
     } else {
       setMessages([]);
       setSelectedRoomId("Room ID");
     }
-  }, [selectedRoomId, productTitle]);
+  }, [selectedRoomId, myId]);
 
   const handleShowInvitePopup = () => {
     showInvitePopup ? setShowInvitePopup(false) : setShowInvitePopup(true);

@@ -15,15 +15,15 @@ export const availableProducts = [
   { productName: "CUSTOMEREXPERIENCE", id: 24 },
   { productName: "DOWELLCSC", id: 25 },
   { productName: "LIVINGLABCHAT", id: 26 },
-  { productName: "SALESAGENT", id: 27 },
-  { productName: "PUBLICCHAT", id: 30 },
+
+  { productName: "PUBLICCHAT", id: 32 },
 ];
 
 export const customerSupportProducts = [
+  { productName: "SALESAGENT", id: 27 },
   { productName: "LOGIN", id: 28 },
-  { productName: "DOWELLMAILL", id: 29 },
+  { productName: "DOWELLMAIL", id: 29 },
   { productName: "EXTENSION", id: 30 },
   { productName: "LIVINGLABADMIN", id: 31 },
-  { productName: "SALESAGENT", id: 32 },
-  { productName: "PUBLICCHAT", id: 30 },
+  { productName: "PUBLICCHAT", id: 32 },
 ];
