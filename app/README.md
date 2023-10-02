@@ -565,3 +565,79 @@ _Get_ to `Api_url/api/v2/room-service/`
   }
 }
 ```
+
+## 7. Login
+_Post_ to `Api_url/api/v2/login/`
+
+
+- Request body
+
+```json
+{
+  "user_id": "ABCD12345",
+  "org_id": "DOWELL12345",
+
+}
+```
+
+- Response 200
+
+```json
+{
+  "success": true,
+  "message": "Room created successfully",
+  "inserted_id": "651687bbff672eb4616037b7",
+  "response": {
+    "eventId": "FB10100000001695975354#9018712",
+    "user_id": "13-3700b6adce4a41d392c298be682ec550",
+    "org_id": "fb06c88719004461acc26134cd421343",
+    "portfolio_name": "WIFIQRCODE13-3700b6adce4a41d392c298be682ec550",
+    "product_name": "WIFIQRCODE",
+    "message": {
+      "receiver": "How may I help you"
+    },
+    "isLogin": true,
+    "is_active": true,
+    "room_id": "651687bbff672eb4616037b7"
+  }
+}
+```
+
+## 8. Extension
+_Post_ to `Api_url/api/v2/extension/`
+
+
+- Request body
+
+```json
+{
+  "user_id": "ABCD12345",
+  "org_id": "DOWELL12345",
+  "portfolio_name": "umair",
+  "product_name": "WIFIQRCODE"
+
+}
+```
+
+- Response 200
+
+```json
+{
+    "success": true,
+    "message": "Room filter successfully",
+    "inserted_id": "6516772afa40f284cce7a26a",
+    "response": {
+        "_id": "6516772afa40f284cce7a26a",
+        "eventId": "FB10100000001695971113#6467628",
+        "user_id": "13-3700b6adce4a41d392c298be682ec550",
+        "org_id": "DOWELL12345",
+        "portfolio_name": "umair",
+        "product_name": "WIFIQRCODE",
+        "message": {
+            "receiver": "How may I help you"
+        },
+        "isLogin": true,
+        "is_active": true
+    }
+}
+```
