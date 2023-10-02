@@ -45,7 +45,7 @@ export const ReplyChat = ({ roomId, setMessages }) => {
           data = {
             type: "create_message",
             room_id: roomId,
-            message_data: message,
+            message_data: response,
             side: false,
             author: "client",
             message_type: type,

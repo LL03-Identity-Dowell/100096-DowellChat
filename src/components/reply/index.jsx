@@ -47,7 +47,7 @@ export const Reply = ({ roomId, setMessages, rooms, setSelectedRoomId }) => {
           data = {
             type: "create_message",
             room_id: roomId,
-            message_data: message,
+            message_data: response,
             side: true,
             author: "client",
             message_type: type,
