@@ -36,15 +36,29 @@ def background_thread():
         
 @sio.event
 def join(sid, message):
-    sio.enter_room(sid, message['room'])
-    # sio.emit('my_response', {'data': 'Left room: ' + message['room']},
-    #          room=sid)
+    room = message['room']
+    sio.enter_room(sid, room)
     messages = Message.objects.filter(room_id=message['room']).all()
+
     if messages.count()==0:
-        sio.emit('my_response', {'data': "Hey how may i help you", 'count': 0}, room=message['room'])
+        sio.emit('my_response', {'data': "Hey how may i help you", 'count': 0}, room=sid)
     else:
         for i in messages:
-            sio.emit('my_response', {'data': str(i.message_data), 'count': 0}, room=message['room'])
+            sio.emit('my_response', {'data': str(i.message_data), 'count': 0}, room=sid)
+    # else:
+    #     # Determine if the user is a new joiner or an existing member
+    #     user_rooms = sio.rooms(sid)
+    #     new_joiner = room not in user_rooms
+
+    #     if new_joiner:
+    #         # Broadcast previous messages to the new user
+    #         for message in messages:
+    #             sio.emit('my_response', {'data': str(message.message_data), 'count': 0}, room=sid)
+    #     else:
+    #         # User is an existing member, do not broadcast the message to them
+    #         pass
+
+
 
 @sio.event
 def leave(sid, message):
