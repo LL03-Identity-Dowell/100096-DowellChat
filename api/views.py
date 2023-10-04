@@ -34,7 +34,30 @@ def background_thread():
         sio.emit('my_response', {'data': 'Server generated event'},
                  namespace='/test')
         
+@sio.event
+def join(sid, message):
+    sio.enter_room(sid, message['room'])
+    # sio.emit('my_response', {'data': 'Left room: ' + message['room']},
+    #          room=sid)
+    messages = Message.objects.filter(room_id=message['room']).all()
+    if messages.count()==0:
+        sio.emit('my_response', {'data': "Hey how may i help you", 'count': 0}, room=message['room'])
+    else:
+        for i in messages:
+            sio.emit('my_response', {'data': str(i.message_data), 'count': 0}, room=message['room'])
 
+@sio.event
+def leave(sid, message):
+    sio.leave_room(sid, message['room'])
+    sio.emit('my_response', {'data': 'Left room: ' + message['room']},
+             room=message['room'])
+
+def close_room(sid, message):
+    sio.emit('my_response',
+             {'data': 'Room ' + message['room'] + ' is closing.'},
+             room=message['room'])
+    sio.close_room(message['room'])
+    
 @sio.event
 def message_event(sid, message):
     type = message['type']
@@ -72,12 +95,12 @@ def message_event(sid, message):
             author = author,
             message_type = message_type
         )
-        return sio.emit('my_response', {'data': message['message_data'], 'sid':sid}, skip_sid=sid)
+        return sio.emit('my_response', {'data': message['message_data'], 'sid':sid},  room=message['room_id'])
     else:
-        return sio.emit('my_response', {'data': 'Invalid Data', 'sid':sid})
+        return sio.emit('my_response', {'data': 'Invalid Data', 'sid':sid}, room=message['room'])
 
     
-        
+#   skip_sid=sid,      
 @sio.event
 def disconnect_request(sid):
     sio.disconnect(sid)
@@ -94,17 +117,11 @@ def connect(sid, environ, query_para):
     # message = res['response']['data']
     # for i in message:
     #     sio.emit('my_response', {'data': i['message_data'], 'count': 0}, room=sid)
-    print(query_para)
-    messages = Message.objects.filter(room_id="test123").all()
-    if messages.count()==0:
-        sio.emit('my_response', {'data': "Hey how may i help you", 'count': 0}, room=sid)
-    else:
-        for message in messages:
-            sio.emit('my_response', {'data': str(message.message_data), 'count': 0}, room=sid)
-
-
-@sio.event
-def disconnect(sid):
-    print('Client disconnected')
-
-
+    # print(query_para)
+    # messages = Message.objects.filter(room_id="test123").all()
+    # if messages.count()==0:
+    #     sio.emit('my_response', {'data': "Hey how may i help you", 'count': 0}, room=sid)
+    # else:
+    #     for message in messages:
+    #         sio.emit('my_response', {'data': str(message.message_data), 'count': 0}, room=sid)
+    sio.emit('my_response', {'data': "Welcome to Dowell Chat", 'count': 0}, room=sid)
