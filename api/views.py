@@ -1,4 +1,5 @@
 async_mode = None
+import os
 
 from django.shortcuts import render
 from rest_framework.decorators import api_view
@@ -18,13 +19,12 @@ thread = None
 
 # Create your views here.
 
-@api_view(['GET'])
 def index(request):
     global thread
     if thread is None:
         thread = sio.start_background_task(background_thread)
-    # return HttpResponse(open(os.path.join(basedir, 'static/index.html')))
-    return HttpResponse('Hello')
+    # return HttpResponse(open(os.path.join(basedir, 'frontend/index.html')))
+    return render(request, 'api/index.html' )    
 
 def background_thread():
     count = 0
