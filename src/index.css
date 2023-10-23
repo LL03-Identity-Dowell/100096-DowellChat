@@ -22,7 +22,7 @@
   @apply flex h-screen flex-col box-border border-t-2 border-l-2 border-r-2;
 }
 
-:root {
+/* :root {
 	--hue: 223;
 	--bg: hsl(var(--hue),90%,95%);
 	--fg: hsl(var(--hue),90%,5%);
@@ -53,7 +53,6 @@ main {
 	animation-name: worm2;
 }
 
-/* Dark theme */
 @media (prefers-color-scheme: dark) {
 	:root {
 		--bg: hsl(var(--hue),90%,5%);
@@ -64,7 +63,6 @@ main {
 	}
 }
 
-/* Animation */
 @keyframes worm1 {
 	from {
 		stroke-dashoffset: 0;
@@ -91,4 +89,81 @@ main {
 	to {
 		stroke-dashoffset: -358;
 	}
-}
+} */
+
+.livingLab {
+	font-size: 48px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	display: inline-block;
+	color: #FFF;
+	letter-spacing: 2px;
+	position: relative;
+	box-sizing: border-box;
+	animation: animloader1 3s linear 4s infinite alternate-reverse;
+  }
+  
+  .livingLab::before{
+	content: 'Living Lab Chat';
+	white-space: nowrap;
+	position: absolute;
+	left: 0;
+	top: 0;
+	color: green;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	box-sizing: border-box;
+	animation: animloader 4s linear;
+  }
+
+  .customerSupport {
+	font-size: 48px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	display: inline-block;
+	color: #FFF;
+	letter-spacing: 2px;
+	position: relative;
+	box-sizing: border-box;
+	animation: animloader1 3s linear 4s infinite alternate-reverse;
+  }
+  
+  .customerSupport::before{
+	content: 'Customer Support';
+	white-space: nowrap;
+	position: absolute;
+	left: 0;
+	top: 0;
+	color: green;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	box-sizing: border-box;
+	animation: animloader 4s linear;
+  }
+  
+
+  
+  @keyframes animloader {
+	0% {
+	  width: 0%;
+	  color: #FF3D00;
+	}
+	50%{
+		color: greenyellow;
+	}
+	100% {
+	  width: 100%;
+	  color: green;
+	}
+  }
+  
+  @keyframes animloader1 {
+	  0% {
+		  transform: translate(50px)
+	  }
+	  100%{
+		  transform: translate(0px)
+	  }
+  }
