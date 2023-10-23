@@ -63,7 +63,6 @@ const SecondRoute = () => {
                 />
                 <span>{portfolio_name}</span>
               </div>
-              <span className="text-gray-400">{orgId}</span>
             </div>
             {/* <ChatHeader chatApi={chatApi} roomId={roomId} /> */}
             <div className="flex flex-col-reverse bg-[#F0F0F0] h-[80vh] box-border border-x overflow-auto">

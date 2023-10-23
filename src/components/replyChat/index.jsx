@@ -94,6 +94,13 @@ export const ReplyChat = ({ roomId, setMessages }) => {
     setShowPicker(!showPicker);
   };
 
+  const enterPressed = (event) => {
+    var code = event.keyCode || event.which;
+    if (code === 13) {
+      sendMessage(message, "TEXT");
+    }
+  };
+
   return (
     <div className="bg-[#F0F0F0]">
       <div className="flex items-center h-[10vh] rounded-3xl px-3 bg-white ">
@@ -137,6 +144,7 @@ export const ReplyChat = ({ roomId, setMessages }) => {
           onChange={(event) => {
             setMessage(event.target.value);
           }}
+          onKeyUp={enterPressed}
         />
         <div className="flex gap-5 pr-2 pb-2">
           <div

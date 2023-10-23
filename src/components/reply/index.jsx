@@ -97,6 +97,14 @@ export const Reply = ({ roomId, setMessages, rooms, setSelectedRoomId }) => {
   const handleShowEmojiPicker = () => {
     setShowPicker(!showPicker);
   };
+
+  const enterPressed = (event) => {
+    var code = event.keyCode || event.which;
+    if (code === 13) {
+      sendMessage(message, "TEXT");
+    }
+  };
+
   return (
     <div className="flex items-center border-t h-fit border-b-2 border-l-2 border-r-2">
       <textarea
@@ -107,6 +115,7 @@ export const Reply = ({ roomId, setMessages, rooms, setSelectedRoomId }) => {
         onChange={(event) => {
           setMessage(event.target.value);
         }}
+        onKeyUp={enterPressed}
       />
       <div className="flex gap-5 pr-2">
         <div

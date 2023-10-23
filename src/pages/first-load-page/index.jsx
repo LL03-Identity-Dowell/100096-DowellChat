@@ -4,7 +4,6 @@ import DataContext from "../../context/data-context";
 import { CustomerSupport } from "../customer-support";
 import { LivingLabChat } from "../living-lab-chat";
 import axios from "axios";
-import { RoomLoader } from "../../components/room-loader";
 // import SecondRoute from "../secondRoute";
 
 export const FirstLoadComponent = () => {
@@ -100,7 +99,7 @@ export const FirstLoadComponent = () => {
               dataContext.setCollectedData(collectedData);
             }
           } else {
-            window.location.href = "https://100014.pythonanywhere.com/en/";
+            window.location.href = "https://100014.pythonanywhere.com/";
           }
         });
     } else {
@@ -125,116 +124,9 @@ export const FirstLoadComponent = () => {
                 userportfolio: response.data.selected_product.userportfolio,
               };
               dataContext.setCollectedData(collectedData);
-
-              // [
-              //   {
-              //     username: ["manish_test_error_login"],
-              //     member_type: "owner",
-              //     product: "Living Lab Chat",
-              //     data_type: "Testing_Data",
-              //     operations_right: "Admin",
-              //     role: "Maanish owner",
-              //     security_layer: "None",
-              //     portfolio_name: "Manish_test_chat",
-              //     portfolio_code: "cyueryc7358475",
-              //     portfolio_specification: "",
-              //     portfolio_uni_code: "",
-              //     portfolio_details: "",
-              //     status: "enable",
-              //     org_id: "6385c0f18eca0fb652c94558", // workspace id
-              //     owner_name: "manish_test_error_login",
-              //     org_name: "manish_test_error_login",
-              //   },
-              //   {
-              //     username: [
-              //       "8nMWzB8eR5mD",
-              //       "ZiQ7qUH73Q83",
-              //       "g6tWCp5trVRO",
-              //       "LtpGqLxzy54d",
-              //       "Gr4t0YhpMfVa", // display grouped
-              //     ],
-              //     member_type: "public", // if public
-              //     product: "Living Lab Chat",
-              //     data_type: "Testing_Data",
-              //     operations_right: "Add/Edit",
-              //     role: "Programmer",
-              //     security_layer: "None",
-              //     portfolio_name: "chat_test_1_3f4534",
-              //     portfolio_code: "chat_test_1", // check
-              //     portfolio_specification: "",
-              //     portfolio_uni_code: "",
-              //     portfolio_details: "",
-              //     status: "enable",
-              //   },
-              //   {
-              //     username: ["manish_test_error_login"],
-              //     member_type: "owner",
-              //     product: "Living Lab Chat",
-              //     data_type: "Real_Data",
-              //     operations_right: "Admin",
-              //     role: "Maanish owner",
-              //     security_layer: "None",
-              //     portfolio_name: "CHATOWNER",
-              //     portfolio_code: "dasd123124",
-              //     portfolio_specification: "",
-              //     portfolio_uni_code: "",
-              //     portfolio_details: "",
-              //     status: "enable",
-              //   },
-              //   {
-              //     username: ["ZiQ7qUH73Q83"],
-              //     member_type: "public",
-              //     product: "Living Lab Chat",
-              //     data_type: "Real_Data",
-              //     operations_right: "Add/Edit",
-              //     role: "Programmer",
-              //     security_layer: "None",
-              //     portfolio_name: "TESTPUBLIC",
-              //     portfolio_code: "PUB100001",
-              //     portfolio_specification: "",
-              //     portfolio_uni_code: "",
-              //     portfolio_details: "",
-              //     status: "enable",
-              //   },
-              //   {
-              //     username: ["20lNEGhtIY0O", "rjNHeSIPl8j9"],
-              //     member_type: "public",
-              //     product: "Living Lab Chat",
-              //     data_type: "Real_Data",
-              //     operations_right: "Add/Edit",
-              //     role: "Programmer",
-              //     security_layer: "None",
-              //     portfolio_name: "NEWPUBLICLINK",
-              //     portfolio_code: "PUB101LINK",
-              //     portfolio_specification: "",
-              //     portfolio_uni_code: "",
-              //     portfolio_details: "",
-              //     status: "enable",
-              //   },
-              //   {
-              //     username: [
-              //       "E37l1lMsbsJK",
-              //       "uSGUUNoxhzEX",
-              //       "20lNEGhtIY0O",
-              //       "rjNHeSIPl8j9",
-              //     ],
-              //     member_type: "public",
-              //     product: "Living Lab Chat",
-              //     data_type: "Real_Data",
-              //     operations_right: "Admin",
-              //     role: "Programmer",
-              //     security_layer: "None",
-              //     portfolio_name: "Manish_test_chat786876",
-              //     portfolio_code: "test_chat7868868",
-              //     portfolio_specification: "",
-              //     portfolio_uni_code: "",
-              //     portfolio_details: "",
-              //     status: "enable",
-              //   },
-              // ],
             }
           } else {
-            window.location.href = "https://100014.pythonanywhere.com/en/";
+            window.location.href = "https://100014.pythonanywhere.com/";
           }
         });
     }
@@ -271,7 +163,7 @@ export const FirstLoadComponent = () => {
           getUserData(sessionId, id);
           checkstatus();
         } else {
-          window.location.href = "https://100014.pythonanywhere.com/en/";
+          window.location.href = "https://100014.pythonanywhere.com/";
         }
       } else {
         const session_id = sessionStorage.getItem("sessionId");
@@ -280,14 +172,14 @@ export const FirstLoadComponent = () => {
           getUserData(session_id, id);
           checkstatus();
         } else {
-          window.location.href = "https://100014.pythonanywhere.com/en/";
+          window.location.href = "https://100014.pythonanywhere.com/";
         }
         // session_id
         //   ? getUserData(session_id, id)
         //   : (window.location.href = "https://100014.pythonanywhere.com/en/");
       }
     } else {
-      window.location.href = "https://100014.pythonanywhere.com/en/";
+      window.location.href = "https://100014.pythonanywhere.com/";
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageName, navigate]);
