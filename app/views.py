@@ -634,3 +634,165 @@ class PublicCreateRoom(RoomService):
 
         response = json.loads(dowellconnection(*room_services, "fetch", field, update_field= None)) 
         return response["data"]
+    
+
+
+
+
+class Enquiry(APIView):
+    def get(self, request):
+        try:
+            user_id = request.query_params.get('user_id')
+            book_id = request.query_params.get('book_id')
+
+            query = ""
+
+            if user_id and book_id:
+                return Response({"message": "Please provide either 'user_id' or 'book_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
+            elif user_id:
+                field = {
+                    "user_id": user_id,
+                }
+                query="user_id"
+
+            elif book_id:
+                field = {
+                    "book_id": book_id,
+                }
+                query="book_id"
+            else:
+                return Response({"message": "Please provide either 'user_id' or 'book_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
+
+            response = json.loads(dowellconnection(*sales_agent, "fetch", field, update_field= None))
+            return Response({
+                "success": True,
+                "message": f"Enquiry details based on {query}",
+                "response": response["data"],
+            })
+            
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+        
+    def post(self, request):
+        try:
+            email = request.data.get('email')
+            contact_type = request.data.get('contact_type')
+            contact_name = request.data.get('contact_name')
+            contact_email = request.data.get('contact_email')
+            enquiry_details = request.data.get('enquiry_details')
+            rating = request.data.get('rating')
+            user_id = request.data.get('user_id')
+            field = {
+                "eventId": get_event_id()["event_id"],
+                "book_id": str(uuid.uuid4()).replace("-",''),
+                "user_id": user_id,
+                "email": email,
+                "contact_type": contact_type,
+                "contact_name": contact_name,
+                "contact_email": contact_email,
+                "enquiry_details": enquiry_details,
+                "rating": rating 
+            }
+            response =  dowellconnection(*sales_agent, "insert", field, update_field=None)
+            response = json.loads(response)
+            if response["isSuccess"]:
+                return Response(
+                    {
+                    "success": True,
+                    "message": "Enquiry Data Saved Sucessfully",
+                    "inserted_id": response["inserted_id"],
+                    "response": {**field}
+                }
+                ) 
+            else:
+                return Response({
+                    "success": False,
+                    "message": "Failed to save booking ",
+                })
+
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+
+
+# class SaleAgentRefer(APIView):
+#     def get(self, request):
+#         try:
+#             email = request.query_params.get('email')
+#             book_id = request.query_params.get('book_id')
+
+#             query = ""
+
+#             if email and book_id:
+#                 return Response({"message": "Please provide either 'email' or 'book_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
+#             elif email:
+#                 field = {
+#                     "email": email,
+#                 }
+#                 query="email"
+
+#             elif book_id:
+#                 field = {
+#                     "book_id": book_id,
+#                 }
+#                 query="book_id"
+#             else:
+#                 return Response({"message": "Please provide either 'user_id' or 'book_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
+
+#             response = json.loads(dowellconnection(*sales_agent_referal, "fetch", field, update_field= None))
+#             return Response({
+#                 "success": True,
+#                 "message": f"Enquiry details based on {query}",
+#                 "response": response["data"],
+#             })
+            
+#         except Exception as e:
+#             return Response(
+#                 {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+        
+#     def post(self, request):
+#         try:
+#             email = request.data.get('email')
+#             contact_name = request.data.get('contact_name')
+#             contact_Address = request.data.get('contact_Address')
+#             country = request.data.get('country')
+#             location = request.data.get('location')
+#             currency = request.data.get('currency')
+#             payment_reference = request.data.get('payment_reference')
+#             source_infor = request.data.get('source_infor')
+
+
+#             field = {
+#                 "eventId": get_event_id()["event_id"],
+#                 "book_id": str(uuid.uuid4()).replace("-",''),
+#                 "user_id": user_id,
+#                 "email": email,
+#                 "contact_type": contact_type,
+#                 "contact_name": contact_name,
+#                 "contact_email": contact_email,
+#                 "enquiry_details": enquiry_details,
+#                 "rating": rating 
+#             }
+#             response =  dowellconnection(*sales_agent_referal, "insert", field, update_field=None)
+#             response = json.loads(response)
+#             if response["isSuccess"]:
+#                 return Response(
+#                     {
+#                     "success": True,
+#                     "message": "Enquiry Data Saved Sucessfully",
+#                     "inserted_id": response["inserted_id"],
+#                     "response": {**field}
+#                 }
+#                 ) 
+#             else:
+#                 return Response({
+#                     "success": False,
+#                     "message": "Failed to save booking ",
+#                 })
+
+#         except Exception as e:
+#             return Response(
+#                 {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)

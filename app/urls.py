@@ -14,5 +14,9 @@ urlpatterns = [
     path('get_QR_Id/<str:org_id>/', QRServiceValidationHandler.as_view(), name='get_QR_Id'),
     path('init/<str:org_id>/<str:product_name>/<str:user_id>/', QRServiceValidationHandler.as_view(), name='validate-public-link'),
 
-    path('publicroom/', PublicCreateRoom.as_view())
+    path('publicroom/', PublicCreateRoom.as_view()),
+
+    # ""  Sales_agent code API methods""
+    path('create-enquiry', Enquiry.as_view(), name='create-enquiry')
+
 ]

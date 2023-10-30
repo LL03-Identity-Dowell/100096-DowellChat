@@ -6,6 +6,22 @@ room_services = [
     "1091",
     "ABCDE"
 ]
+sales_agent = [
+    "chat",
+    "chat",
+    "SaleAgentClient",
+    "SaleAgentClient",
+    "1250001",
+    "ABCDE",
+]
+sales_agent_referal = [
+    "chat",
+    "chat",
+    "SaleAgentRefer",
+    "SaleAgentRefer",
+    "1251001",
+    "ABCDE",
+]
 
 chat = [
     "chat",
