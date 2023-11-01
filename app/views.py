@@ -683,6 +683,7 @@ class Enquiry(APIView):
             contact_email = request.data.get('contact_email')
             enquiry_details = request.data.get('enquiry_details')
             rating = request.data.get('rating')
+            photo = request.data.get('photo')
             user_id = request.data.get('user_id')
             field = {
                 "eventId": get_event_id()["event_id"],
@@ -693,7 +694,8 @@ class Enquiry(APIView):
                 "contact_name": contact_name,
                 "contact_email": contact_email,
                 "enquiry_details": enquiry_details,
-                "rating": rating 
+                "rating": rating,
+                "photo": photo,
             }
             response =  dowellconnection(*sales_agent, "insert", field, update_field=None)
             response = json.loads(response)
@@ -717,82 +719,127 @@ class Enquiry(APIView):
                 {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
 
 
-# class SaleAgentRefer(APIView):
-#     def get(self, request):
-#         try:
-#             email = request.query_params.get('email')
-#             book_id = request.query_params.get('book_id')
+class SaleAgentRefer(APIView):
+    def get(self, request):
+        try:
+            email = request.query_params.get('email')
+            referal_id = request.query_params.get('referal_id')
+            print(email)
+            query = ""
 
-#             query = ""
-
-#             if email and book_id:
-#                 return Response({"message": "Please provide either 'email' or 'book_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
+            if email and referal_id:
+                return Response({"message": "Please provide either 'email' or 'book_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
             
-#             elif email:
-#                 field = {
-#                     "email": email,
-#                 }
-#                 query="email"
+            elif email:
+                field = {
+                    "email": email,
+                }
+                query="email"
 
-#             elif book_id:
-#                 field = {
-#                     "book_id": book_id,
-#                 }
-#                 query="book_id"
-#             else:
-#                 return Response({"message": "Please provide either 'user_id' or 'book_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
+            elif referal_id:
+                field = {
+                    "referal_id": referal_id,
+                }
+                query="referal_id"
+            else:
+                return Response({"message": "Please provide either 'user_id' or 'book_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
 
-#             response = json.loads(dowellconnection(*sales_agent_referal, "fetch", field, update_field= None))
-#             return Response({
-#                 "success": True,
-#                 "message": f"Enquiry details based on {query}",
-#                 "response": response["data"],
-#             })
+            response = json.loads(dowellconnection(*sales_agent_referal, "fetch", field, update_field= None))
+            return Response({
+                "success": True,
+                "message": f"Enquiry details based on {query}",
+                "response": response["data"],
+            })
             
-#         except Exception as e:
-#             return Response(
-#                 {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
         
-#     def post(self, request):
-#         try:
-#             email = request.data.get('email')
-#             contact_name = request.data.get('contact_name')
-#             contact_Address = request.data.get('contact_Address')
-#             country = request.data.get('country')
-#             location = request.data.get('location')
-#             currency = request.data.get('currency')
-#             payment_reference = request.data.get('payment_reference')
-#             source_infor = request.data.get('source_infor')
+    def post(self, request):
+        try:
+            email = request.data.get('email')
+            contact_name = request.data.get('contact_name')
+            contact_Address = request.data.get('contact_Address')
+            country = request.data.get('country')
+            location = request.data.get('location')
+            currency = request.data.get('currency')
+            payment_reference = request.data.get('payment_reference')
+            source_infor = request.data.get('source_infor')
+            Prospective_client_name = request.data.get('Prospective_client_name')
+            Brand_Prospective_client = request.data.get('Brand_Prospective_client')
+            name_charge = request.data.get('name_charge')
+            Designation_Prospective_client = request.data.get('name_charge')
+            Website_Prospective_client = request.data.get('Website_Prospective_client')
+            Email_Prospective_client = request.data.get('Email_Prospective_client')
+            relationship_Prospective_client = request.data.get('relationship_Prospective_client')
+            Location_Prospective_client = request.data.get('Location_Prospective_client')
+            Country_Prospective_client = request.data.get('Country_Prospective_client')
+            Address_Prospective_client = request.data.get('Address_Prospective_client')
+            Phone_Prospective_client = request.data.get('Phone_Prospective_client')
+            Products_Prospective_client = request.data.get('Products_Prospective_client')
+            Linkedin_Prospective_client = request.data.get('Linkedin_Prospective_client')
+            Twitter_Prospective_client = request.data.get('Twitter_Prospective_client')
+            Facebook_Prospective_client = request.data.get('Facebook_Prospective_client')
+            Instagram_Prospective_client = request.data.get('Instagram_Prospective_client')
+            Youtube_Prospective_client = request.data.get('Youtube_Prospective_client')
+            Tiktok_Prospective_client = request.data.get('Tiktok_Prospective_client')
+            Description_Prospective_client = request.data.get('Tiktok_Prospective_client')
+            Logo_Prospective_client = request.data.get('Tiktok_Prospective_client')
+            suggestions_Prospective_client = request.data.get('suggestions_Prospective_client')
 
 
-#             field = {
-#                 "eventId": get_event_id()["event_id"],
-#                 "book_id": str(uuid.uuid4()).replace("-",''),
-#                 "user_id": user_id,
-#                 "email": email,
-#                 "contact_type": contact_type,
-#                 "contact_name": contact_name,
-#                 "contact_email": contact_email,
-#                 "enquiry_details": enquiry_details,
-#                 "rating": rating 
-#             }
-#             response =  dowellconnection(*sales_agent_referal, "insert", field, update_field=None)
-#             response = json.loads(response)
-#             if response["isSuccess"]:
-#                 return Response(
-#                     {
-#                     "success": True,
-#                     "message": "Enquiry Data Saved Sucessfully",
-#                     "inserted_id": response["inserted_id"],
-#                     "response": {**field}
-#                 }
-#                 ) 
-#             else:
-#                 return Response({
-#                     "success": False,
-#                     "message": "Failed to save booking ",
-#                 })
 
-#         except Exception as e:
-#             return Response(
-#                 {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+
+            field = {
+                "eventId": get_event_id()["event_id"],
+                "referal_id": str(uuid.uuid4()).replace("-",''),
+                "email":email,
+                "contact_name": contact_name,
+                "contact_Address":contact_Address,
+                "country": country,
+                "location" :location,
+                "currency" :currency,
+                "payment_reference" : payment_reference,
+                "source_infor" : source_infor,
+                "Prospective_client_name": Prospective_client_name,
+                "Brand_Prospective_client": Brand_Prospective_client,
+                "name_charge" : name_charge,
+                "Designation_Prospective_client":Designation_Prospective_client,
+                "Website_Prospective_client":Website_Prospective_client, 
+                "Email_Prospective_client":Email_Prospective_client, 
+                "relationship_Prospective_client":relationship_Prospective_client,
+                "Location_Prospective_client":Location_Prospective_client,
+                "Country_Prospective_client":Country_Prospective_client,
+                "Address_Prospective_client":Address_Prospective_client,
+                "Phone_Prospective_client": Phone_Prospective_client,
+                "Products_Prospective_client":Products_Prospective_client,
+                "Linkedin_Prospective_client" : Linkedin_Prospective_client,
+                "Twitter_Prospective_client" : Twitter_Prospective_client,
+                "Facebook_Prospective_client" :Facebook_Prospective_client,
+                "Instagram_Prospective_client":Instagram_Prospective_client,
+                "Youtube_Prospective_client" :Youtube_Prospective_client,
+                "Tiktok_Prospective_client":Tiktok_Prospective_client, 
+                "Description_Prospective_client" :Description_Prospective_client,
+                "Logo_Prospective_client":Logo_Prospective_client,
+                "suggestions_Prospective_client":suggestions_Prospective_client,
+            }
+            response =  dowellconnection(*sales_agent_referal, "insert", field, update_field=None)
+            response = json.loads(response)
+            if response["isSuccess"]:
+                return Response(
+                    {
+                    "success": True,
+                    "message": "Referal Data Saved Sucessfully",
+                    "inserted_id": response["inserted_id"],
+                    "response": {**field}
+                }
+                ) 
+            else:
+                return Response({
+                    "success": False,
+                    "message": "Failed to save booking ",
+                })
+
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)

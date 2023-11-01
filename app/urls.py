@@ -17,6 +17,8 @@ urlpatterns = [
     path('publicroom/', PublicCreateRoom.as_view()),
 
     # ""  Sales_agent code API methods""
-    path('create-enquiry', Enquiry.as_view(), name='create-enquiry')
+    path('create-enquiry', Enquiry.as_view(), name='create-enquiry'),
+    path('referal', SaleAgentRefer.as_view(), name='referal')
+
 
 ]
