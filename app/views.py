@@ -843,3 +843,27 @@ class SaleAgentRefer(APIView):
         except Exception as e:
             return Response(
                 {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+
+class AdminEnquiry(APIView):
+    def get(self, request):
+        try:
+            client_admin_id = request.query_params.get('client_admin_id')
+            
+            if client_admin_id == "6390b313d77dc467630713f2":
+                field = {}
+                
+            else:
+                return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
+
+            response = json.loads(dowellconnection(*sales_agent, "fetch", field, update_field= None))
+            return Response({
+                "success": True,
+                "message": "All Enquiry details",
+                "response": response["data"],
+            })
+            
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+        
+    

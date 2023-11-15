@@ -18,7 +18,9 @@ urlpatterns = [
 
     # ""  Sales_agent code API methods""
     path('create-enquiry', Enquiry.as_view(), name='create-enquiry'),
-    path('referal', SaleAgentRefer.as_view(), name='referal')
+    path('referal', SaleAgentRefer.as_view(), name='referal'),
+
+    path('admin-enquiry', AdminEnquiry.as_view()),
 
 
 ]
