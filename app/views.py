@@ -843,3 +843,207 @@ class SaleAgentRefer(APIView):
         except Exception as e:
             return Response(
                 {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+
+class AdminEnquiry(APIView):
+    def get(self, request):
+        try:
+            client_admin_id = request.query_params.get('client_admin_id')
+            
+            if client_admin_id == "6390b313d77dc467630713f2":
+                field = {}
+            else:
+                return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
+            response = json.loads(dowellconnection(*sales_agent, "fetch", field, update_field= None))
+            return Response({
+                "success": True,
+                "message": "All Enquiry details",
+                "response": response["data"],
+            })
+            
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+        
+    def put(self, request):
+        try:
+
+            book_id = request.query_params.get('book_id')
+            client_admin_id = request.query_params.get('client_admin_id')
+
+            if not book_id and not client_admin_id:
+                return Response({"message": "Please provide both 'book_id' or 'client_admin_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
+            
+            if client_admin_id == "6390b313d77dc467630713f2":
+                field = {
+                     "book_id": str(book_id),
+                }
+            else:
+                return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
+            existing_data = json.loads(dowellconnection(*sales_agent, "fetch", field, update_field=None))
+            
+            if not existing_data.get("data"):
+                return Response({"message": "Enquiry not found", "success": False}, status=HTTP_400_BAD_REQUEST)
+                        
+            email = request.data.get('email', existing_data["data"][0]["email"])
+            contact_type = request.data.get('contact_type', existing_data["data"][0]["contact_type"])
+            contact_name = request.data.get('contact_name', existing_data["data"][0]["contact_name"])
+            contact_email = request.data.get('contact_email', existing_data["data"][0]["contact_email"])
+            enquiry_details = request.data.get('enquiry_details', existing_data["data"][0]["enquiry_details"])
+            rating = request.data.get('rating', existing_data["data"][0]["rating"])
+            photo = request.data.get('photo', existing_data["data"][0].get("photo", "null"))
+
+            update_field = {
+                "email": email,
+                "contact_type": contact_type,
+                "contact_name": contact_name,
+                "contact_email": contact_email,
+                "enquiry_details": enquiry_details,
+                "rating": rating,
+                "photo": photo,
+            }
+            response =  dowellconnection(*sales_agent, "update", field, update_field=update_field)
+            response = json.loads(response)
+            if response["isSuccess"]:
+                return Response(
+                    {
+                    "success": True,
+                    "message": "Enquiry Data Updated Sucessfully",
+                    "response": update_field,
+                }
+                ) 
+            else:
+                return Response({
+                    "success": False,
+                    "message": "Failed to update booking ",
+                })
+
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+
+class AdminSaleAgentRefer(APIView):
+    def get(self, request):
+        try:
+            client_admin_id = request.query_params.get('client_admin_id')
+            
+            if client_admin_id == "6390b313d77dc467630713f2":
+                field = {}
+            else:
+                return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
+            response = json.loads(dowellconnection(*sales_agent_referal, "fetch", field, update_field= None))
+            return Response({
+                "success": True,
+                "message": f"All Sales Agent Referrals",
+                "response": response["data"],
+            })
+            
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+        
+    def put(self, request):
+        try:
+
+            referal_id = request.query_params.get('referal_id')
+            client_admin_id = request.query_params.get('client_admin_id')
+
+            if not referal_id and not client_admin_id:
+                return Response({"message": "Please provide both 'referal_id' and 'client_admin_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
+        
+            if client_admin_id == "6390b313d77dc467630713f2":
+                field = {
+                     "referal_id": str(referal_id),
+                }
+            else:
+                return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
+            existing_data = json.loads(dowellconnection(*sales_agent_referal, "fetch", field, update_field=None))
+            
+            if not existing_data.get("data"):
+                return Response({"message": "Referral not found", "success": False}, status=HTTP_400_BAD_REQUEST)
+                        
+            email = request.data.get('email')
+            contact_name = request.data.get('contact_name', existing_data["data"][0]["contact_name"])
+            contact_Address = request.data.get('contact_Address', existing_data["data"][0]["contact_Address"])
+            country = request.data.get('country', existing_data["data"][0]["country"])
+            location = request.data.get('location', existing_data["data"][0]["location"])
+            currency = request.data.get('currency', existing_data["data"][0]["currency"])
+            payment_reference = request.data.get('payment_reference', existing_data["data"][0]["payment_reference"])
+            source_infor = request.data.get('source_infor', existing_data["data"][0]["source_infor"])
+            Prospective_client_name = request.data.get('Prospective_client_name', existing_data["data"][0]["Prospective_client_name"])
+            Brand_Prospective_client = request.data.get('Brand_Prospective_client', existing_data["data"][0]["Brand_Prospective_client"])
+            name_charge = request.data.get('name_charge', existing_data["data"][0]["name_charge"])
+            Designation_Prospective_client = request.data.get('Designation_Prospective_client', existing_data["data"][0]["Designation_Prospective_client"])
+            Website_Prospective_client = request.data.get('Website_Prospective_client', existing_data["data"][0]["Website_Prospective_client"])
+            Email_Prospective_client = request.data.get('Email_Prospective_client', existing_data["data"][0]["Email_Prospective_client"])
+            relationship_Prospective_client = request.data.get('relationship_Prospective_client', existing_data["data"][0]["relationship_Prospective_client"])
+            Location_Prospective_client = request.data.get('Location_Prospective_client', existing_data["data"][0]["Location_Prospective_client"])
+            Country_Prospective_client = request.data.get('Country_Prospective_client', existing_data["data"][0]["Country_Prospective_client"])
+            Address_Prospective_client = request.data.get('Address_Prospective_client', existing_data["data"][0]["Address_Prospective_client"])
+            Phone_Prospective_client = request.data.get('Phone_Prospective_client', existing_data["data"][0]["Phone_Prospective_client"])
+            Products_Prospective_client = request.data.get('Products_Prospective_client', existing_data["data"][0]["Products_Prospective_client"])
+            Linkedin_Prospective_client = request.data.get('Linkedin_Prospective_client', existing_data["data"][0]["Linkedin_Prospective_client"])
+            Twitter_Prospective_client = request.data.get('Twitter_Prospective_client', existing_data["data"][0]["Twitter_Prospective_client"])
+            Facebook_Prospective_client = request.data.get('Facebook_Prospective_client', existing_data["data"][0]["Facebook_Prospective_client"])
+            Instagram_Prospective_client = request.data.get('Instagram_Prospective_client', existing_data["data"][0]["Instagram_Prospective_client"])
+            Youtube_Prospective_client = request.data.get('Youtube_Prospective_client', existing_data["data"][0]["Youtube_Prospective_client"])
+            Tiktok_Prospective_client = request.data.get('Tiktok_Prospective_client', existing_data["data"][0]["Tiktok_Prospective_client"])
+            Description_Prospective_client = request.data.get('Description_Prospective_client', existing_data["data"][0]["Description_Prospective_client"])
+            Logo_Prospective_client = request.data.get('Logo_Prospective_client', existing_data["data"][0]["Logo_Prospective_client"])
+            suggestions_Prospective_client = request.data.get('suggestions_Prospective_client', existing_data["data"][0]["suggestions_Prospective_client"])
+
+
+            update_field = {
+                "email":email,
+                "contact_name": contact_name,
+                "contact_Address":contact_Address,
+                "country": country,
+                "location" :location,
+                "currency" :currency,
+                "payment_reference" : payment_reference,
+                "source_infor" : source_infor,
+                "Prospective_client_name": Prospective_client_name,
+                "Brand_Prospective_client": Brand_Prospective_client,
+                "name_charge" : name_charge,
+                "Designation_Prospective_client":Designation_Prospective_client,
+                "Website_Prospective_client":Website_Prospective_client, 
+                "Email_Prospective_client":Email_Prospective_client, 
+                "relationship_Prospective_client":relationship_Prospective_client,
+                "Location_Prospective_client":Location_Prospective_client,
+                "Country_Prospective_client":Country_Prospective_client,
+                "Address_Prospective_client":Address_Prospective_client,
+                "Phone_Prospective_client": Phone_Prospective_client,
+                "Products_Prospective_client":Products_Prospective_client,
+                "Linkedin_Prospective_client" : Linkedin_Prospective_client,
+                "Twitter_Prospective_client" : Twitter_Prospective_client,
+                "Facebook_Prospective_client" :Facebook_Prospective_client,
+                "Instagram_Prospective_client":Instagram_Prospective_client,
+                "Youtube_Prospective_client" :Youtube_Prospective_client,
+                "Tiktok_Prospective_client":Tiktok_Prospective_client, 
+                "Description_Prospective_client" :Description_Prospective_client,
+                "Logo_Prospective_client":Logo_Prospective_client,
+                "suggestions_Prospective_client":suggestions_Prospective_client,
+            }
+            response =  dowellconnection(*sales_agent_referal, "update", field, update_field=update_field)
+            response = json.loads(response)
+            if response["isSuccess"]:
+                return Response(
+                    {
+                    "success": True,
+                    "message": "Referal Data Updated Sucessfully",
+                    "response": update_field,
+                }
+                ) 
+            else:
+                return Response({
+                    "success": False,
+                    "message": "Failed to update booking ",
+                })
+
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
