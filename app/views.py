@@ -851,10 +851,9 @@ class AdminEnquiry(APIView):
             
             if client_admin_id == "6390b313d77dc467630713f2":
                 field = {}
-                
             else:
                 return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
-
+            
             response = json.loads(dowellconnection(*sales_agent, "fetch", field, update_field= None))
             return Response({
                 "success": True,
@@ -866,4 +865,62 @@ class AdminEnquiry(APIView):
             return Response(
                 {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
         
-    
+    def put(self, request):
+        try:
+
+            book_id = request.query_params.get('book_id')
+            client_admin_id = request.query_params.get('client_admin_id')
+
+            if not book_id and not client_admin_id:
+                return Response({"message": "Please provide both 'book_id' or 'client_admin_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
+            
+            if client_admin_id == "6390b313d77dc467630713f2":
+                field = {
+                     "book_id": str(book_id),
+                }
+            else:
+                return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
+            existing_data = json.loads(dowellconnection(*sales_agent, "fetch", field, update_field=None))
+            
+            if not existing_data.get("data"):
+                return Response({"message": "Enquiry not found", "success": False}, status=HTTP_400_BAD_REQUEST)
+                        
+            email = request.data.get('email', existing_data["data"][0]["email"])
+            contact_type = request.data.get('contact_type', existing_data["data"][0]["contact_type"])
+            contact_name = request.data.get('contact_name', existing_data["data"][0]["contact_name"])
+            contact_email = request.data.get('contact_email', existing_data["data"][0]["contact_email"])
+            enquiry_details = request.data.get('enquiry_details', existing_data["data"][0]["enquiry_details"])
+            rating = request.data.get('rating', existing_data["data"][0]["rating"])
+            photo = request.data.get('photo', existing_data["data"][0].get("photo", "null"))
+
+            update_field = {
+                "email": email,
+                "contact_type": contact_type,
+                "contact_name": contact_name,
+                "contact_email": contact_email,
+                "enquiry_details": enquiry_details,
+                "rating": rating,
+                "photo": photo,
+            }
+            response =  dowellconnection(*sales_agent, "update", field, update_field=update_field)
+            response = json.loads(response)
+            if response["isSuccess"]:
+                return Response(
+                    {
+                    "success": True,
+                    "message": "Enquiry Data Updated Sucessfully",
+                    "response": update_field,
+                }
+                ) 
+            else:
+                return Response({
+                    "success": False,
+                    "message": "Failed to update booking ",
+                })
+
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+
