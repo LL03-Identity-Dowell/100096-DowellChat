@@ -1047,3 +1047,48 @@ class AdminSaleAgentRefer(APIView):
         except Exception as e:
             return Response(
                 {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        try:
+
+            referal_id = request.query_params.get('referal_id')
+            client_admin_id = request.query_params.get('client_admin_id')
+
+            if not referal_id and not client_admin_id:
+                return Response({"message": "Please provide both 'referal_id' and 'client_admin_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
+        
+            if client_admin_id == "6390b313d77dc467630713f2":
+                field = {
+                     "referal_id": str(referal_id),
+                }
+            else:
+                return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
+            existing_data = json.loads(dowellconnection(*sales_agent_referal, "fetch", field, update_field=None))
+            
+            if not existing_data.get("data"):
+                return Response({"message": "Referral not found", "success": False}, status=HTTP_400_BAD_REQUEST)
+                        
+
+            update_field = {
+                "flag":"false",
+            }
+            response =  dowellconnection(*sales_agent_referal, "update", field, update_field=update_field)
+            response = json.loads(response)
+            if response["isSuccess"]:
+                return Response(
+                    {
+                    "success": True,
+                    "message": "Referal Data Deleted Sucessfully",
+                    "response": update_field,
+                }
+                ) 
+            else:
+                return Response({
+                    "success": False,
+                    "message": "Failed to update booking ",
+                })
+
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
