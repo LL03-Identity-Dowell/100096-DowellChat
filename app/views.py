@@ -745,6 +745,12 @@ class SaleAgentRefer(APIView):
                 return Response({"message": "Please provide either 'user_id' or 'book_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
 
             response = json.loads(dowellconnection(*sales_agent_referal, "fetch", field, update_field= None))
+            
+            IsFlag = any(data.get("flag", "").lower() == "false" for data in response["data"])
+
+            if IsFlag:
+                return Response({"message": "Referral Not Found", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
             return Response({
                 "success": True,
                 "message": f"Enquiry details based on {query}",
