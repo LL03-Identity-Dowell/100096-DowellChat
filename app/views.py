@@ -941,10 +941,13 @@ class AdminSaleAgentRefer(APIView):
                 return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
             
             response = json.loads(dowellconnection(*sales_agent_referal, "fetch", field, update_field= None))
+            
+            filtered_data = [data for data in response["data"] if "flag" not in data or data["flag"].lower() != "false"]
+
             return Response({
                 "success": True,
                 "message": f"All Sales Agent Referrals",
-                "response": response["data"],
+                "response": filtered_data,
             })
             
         except Exception as e:
@@ -971,7 +974,12 @@ class AdminSaleAgentRefer(APIView):
             
             if not existing_data.get("data"):
                 return Response({"message": "Referral not found", "success": False}, status=HTTP_400_BAD_REQUEST)
-                        
+            
+            IsFlag = any(data.get("flag", "").lower() == "false" for data in existing_data["data"])
+
+            if IsFlag:
+                return Response({"message": "Referral Not Found", "success": False}, status=HTTP_400_BAD_REQUEST)
+                
             email = request.data.get('email')
             contact_name = request.data.get('contact_name', existing_data["data"][0]["contact_name"])
             contact_Address = request.data.get('contact_Address', existing_data["data"][0]["contact_Address"])
