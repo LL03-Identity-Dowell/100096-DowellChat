@@ -665,6 +665,12 @@ class Enquiry(APIView):
                 return Response({"message": "Please provide either 'user_id' or 'book_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
 
             response = json.loads(dowellconnection(*sales_agent, "fetch", field, update_field= None))
+
+            IsFlag = any(data.get("flag", "").lower() == "false" for data in response["data"])
+
+            if IsFlag:
+                return Response({"message": "Booking Not Found", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
             return Response({
                 "success": True,
                 "message": f"Enquiry details based on {query}",
@@ -861,10 +867,13 @@ class AdminEnquiry(APIView):
                 return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
             
             response = json.loads(dowellconnection(*sales_agent, "fetch", field, update_field= None))
+
+            filtered_data = [data for data in response["data"] if "flag" not in data or data["flag"].lower() != "false"]
+
             return Response({
                 "success": True,
                 "message": "All Enquiry details",
-                "response": response["data"],
+                "response": filtered_data,
             })
             
         except Exception as e:
@@ -892,6 +901,11 @@ class AdminEnquiry(APIView):
             
             if not existing_data.get("data"):
                 return Response({"message": "Enquiry not found", "success": False}, status=HTTP_400_BAD_REQUEST)
+
+            IsFlag = any(data.get("flag", "").lower() == "false" for data in existing_data["data"])
+
+            if IsFlag:
+                return Response({"message": "Booking Not Found", "success": False}, status=HTTP_400_BAD_REQUEST)
                         
             email = request.data.get('email', existing_data["data"][0]["email"])
             contact_type = request.data.get('contact_type', existing_data["data"][0]["contact_type"])
