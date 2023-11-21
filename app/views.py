@@ -665,6 +665,12 @@ class Enquiry(APIView):
                 return Response({"message": "Please provide either 'user_id' or 'book_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
 
             response = json.loads(dowellconnection(*sales_agent, "fetch", field, update_field= None))
+
+            IsFlag = any(data.get("flag", "").lower() == "false" for data in response["data"])
+
+            if IsFlag:
+                return Response({"message": "Booking Not Found", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
             return Response({
                 "success": True,
                 "message": f"Enquiry details based on {query}",
@@ -745,6 +751,12 @@ class SaleAgentRefer(APIView):
                 return Response({"message": "Please provide either 'user_id' or 'book_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
 
             response = json.loads(dowellconnection(*sales_agent_referal, "fetch", field, update_field= None))
+            
+            IsFlag = any(data.get("flag", "").lower() == "false" for data in response["data"])
+
+            if IsFlag:
+                return Response({"message": "Referral Not Found", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
             return Response({
                 "success": True,
                 "message": f"Enquiry details based on {query}",
@@ -855,10 +867,13 @@ class AdminEnquiry(APIView):
                 return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
             
             response = json.loads(dowellconnection(*sales_agent, "fetch", field, update_field= None))
+
+            filtered_data = [data for data in response["data"] if "flag" not in data or data["flag"].lower() != "false"]
+
             return Response({
                 "success": True,
                 "message": "All Enquiry details",
-                "response": response["data"],
+                "response": filtered_data,
             })
             
         except Exception as e:
@@ -886,6 +901,11 @@ class AdminEnquiry(APIView):
             
             if not existing_data.get("data"):
                 return Response({"message": "Enquiry not found", "success": False}, status=HTTP_400_BAD_REQUEST)
+
+            IsFlag = any(data.get("flag", "").lower() == "false" for data in existing_data["data"])
+
+            if IsFlag:
+                return Response({"message": "Booking Not Found", "success": False}, status=HTTP_400_BAD_REQUEST)
                         
             email = request.data.get('email', existing_data["data"][0]["email"])
             contact_type = request.data.get('contact_type', existing_data["data"][0]["contact_type"])
@@ -924,6 +944,51 @@ class AdminEnquiry(APIView):
             return Response(
                 {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
 
+    def delete(self, request):
+        try:
+
+            book_id = request.query_params.get('book_id')
+            client_admin_id = request.query_params.get('client_admin_id')
+
+            if not book_id and not client_admin_id:
+                return Response({"message": "Please provide both 'book_id' or 'client_admin_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
+            
+            if client_admin_id == "6390b313d77dc467630713f2":
+                field = {
+                     "book_id": str(book_id),
+                }
+            else:
+                return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
+            existing_data = json.loads(dowellconnection(*sales_agent, "fetch", field, update_field=None))
+            
+            if not existing_data.get("data"):
+                return Response({"message": "Enquiry not found", "success": False}, status=HTTP_400_BAD_REQUEST)
+                        
+            update_field = {
+                "flag":"false",
+            }
+
+            response =  dowellconnection(*sales_agent, "update", field, update_field=update_field)
+            response = json.loads(response)
+            if response["isSuccess"]:
+                return Response(
+                    {
+                    "success": True,
+                    "message": "Enquiry Data Deleted Sucessfully",
+                    "response": update_field,
+                }
+                ) 
+            else:
+                return Response({
+                    "success": False,
+                    "message": "Failed to Delete booking ",
+                })
+
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)    
 class AdminSaleAgentRefer(APIView):
     def get(self, request):
         try:
@@ -935,10 +1000,13 @@ class AdminSaleAgentRefer(APIView):
                 return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
             
             response = json.loads(dowellconnection(*sales_agent_referal, "fetch", field, update_field= None))
+            
+            filtered_data = [data for data in response["data"] if "flag" not in data or data["flag"].lower() != "false"]
+
             return Response({
                 "success": True,
                 "message": f"All Sales Agent Referrals",
-                "response": response["data"],
+                "response": filtered_data,
             })
             
         except Exception as e:
@@ -965,7 +1033,12 @@ class AdminSaleAgentRefer(APIView):
             
             if not existing_data.get("data"):
                 return Response({"message": "Referral not found", "success": False}, status=HTTP_400_BAD_REQUEST)
-                        
+            
+            IsFlag = any(data.get("flag", "").lower() == "false" for data in existing_data["data"])
+
+            if IsFlag:
+                return Response({"message": "Referral Not Found", "success": False}, status=HTTP_400_BAD_REQUEST)
+                
             email = request.data.get('email')
             contact_name = request.data.get('contact_name', existing_data["data"][0]["contact_name"])
             contact_Address = request.data.get('contact_Address', existing_data["data"][0]["contact_Address"])
@@ -1041,7 +1114,52 @@ class AdminSaleAgentRefer(APIView):
             else:
                 return Response({
                     "success": False,
-                    "message": "Failed to update booking ",
+                    "message": "Failed to update Referral ",
+                })
+
+        except Exception as e:
+            return Response(
+                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        try:
+
+            referal_id = request.query_params.get('referal_id')
+            client_admin_id = request.query_params.get('client_admin_id')
+
+            if not referal_id and not client_admin_id:
+                return Response({"message": "Please provide both 'referal_id' and 'client_admin_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
+        
+            if client_admin_id == "6390b313d77dc467630713f2":
+                field = {
+                     "referal_id": str(referal_id),
+                }
+            else:
+                return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
+            
+            existing_data = json.loads(dowellconnection(*sales_agent_referal, "fetch", field, update_field=None))
+            
+            if not existing_data.get("data"):
+                return Response({"message": "Referral not found", "success": False}, status=HTTP_400_BAD_REQUEST)
+                        
+
+            update_field = {
+                "flag":"false",
+            }
+            response =  dowellconnection(*sales_agent_referal, "update", field, update_field=update_field)
+            response = json.loads(response)
+            if response["isSuccess"]:
+                return Response(
+                    {
+                    "success": True,
+                    "message": "Referal Data Deleted Sucessfully",
+                    "response": update_field,
+                }
+                ) 
+            else:
+                return Response({
+                    "success": False,
+                    "message": "Failed to Delete Referral ",
                 })
 
         except Exception as e:
