@@ -677,6 +677,9 @@ class Enquiry(APIView):
         
     def post(self, request):
         try:
+            user_id = request.data.get('user_id')
+            if user_id is None:
+                return Response({"message": "The 'user_id' field is required", "success": False}, status=status.HTTP_400_BAD_REQUEST)
             email = request.data.get('email')
             contact_type = request.data.get('contact_type')
             contact_name = request.data.get('contact_name')
@@ -684,7 +687,8 @@ class Enquiry(APIView):
             enquiry_details = request.data.get('enquiry_details')
             rating = request.data.get('rating')
             photo = request.data.get('photo')
-            user_id = request.data.get('user_id')
+            
+
             field = {
                 "eventId": get_event_id()["event_id"],
                 "book_id": str(uuid.uuid4()).replace("-",''),
@@ -724,7 +728,6 @@ class SaleAgentRefer(APIView):
         try:
             email = request.query_params.get('email')
             referal_id = request.query_params.get('referal_id')
-            print(email)
             query = ""
 
             if email and referal_id:
@@ -753,11 +756,13 @@ class SaleAgentRefer(APIView):
             
         except Exception as e:
             return Response(
-                {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
+                {"message": str(e), "success": False, "response":[]}, status=HTTP_200_OK)
         
     def post(self, request):
         try:
             email = request.data.get('email')
+            if email is None:
+                return Response({"message": "The 'email' field is required", "success": False}, status=status.HTTP_400_BAD_REQUEST)
             contact_name = request.data.get('contact_name')
             contact_Address = request.data.get('contact_Address')
             country = request.data.get('country')

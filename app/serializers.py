@@ -42,3 +42,10 @@ class CreateEventServiceSerializer(serializers.Serializer):
     workspace_id = serializers.CharField(allow_null=False, allow_blank=False)
     event_name = serializers.CharField(allow_null=False, allow_blank=False)
     room_count = serializers.DecimalField(max_digits=19, decimal_places=10)
+
+
+class CreateEnquiryServiceSerializer(serializers.Serializer):
+    user_id = serializers.CharField(allow_null=False, allow_blank=False)
+    
+class CreateEnquirySerializer(serializers.Serializer):
+    email = serializers.CharField(allow_null=False, allow_blank=False)
