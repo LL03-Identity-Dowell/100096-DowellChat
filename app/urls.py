@@ -20,8 +20,8 @@ urlpatterns = [
     path('create-enquiry', Enquiry.as_view(), name='create-enquiry'),
     path('referal', SaleAgentRefer.as_view(), name='referal'),
 
-    path('admin-enquiry', AdminEnquiry.as_view()),
-    path('admin-referral', AdminSaleAgentRefer.as_view()),
+    # path('admin-enquiry', AdminEnquiry.as_view()),
+    # path('admin-referral', AdminSaleAgentRefer.as_view()),
 
 
 ]
