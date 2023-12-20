@@ -884,10 +884,10 @@ class AdminEnquiry(APIView):
         try:
             book_id = request.query_params.get('book_id')
             client_admin_id = request.query_params.get('client_admin_id')
-            comment = request.query_params.get('comment')
+            update_comment = request.query_params.get('comment')
 
-            if comment:
-                if not book_id and not client_admin_id and not comment:
+            if update_comment:
+                if not book_id and not client_admin_id and not update_comment:
                     return Response({"message": "Please provide both 'book_id' or 'client_admin_id' or comment", "success": False}, status=HTTP_400_BAD_REQUEST)
                 
                 if client_admin_id == "6390b313d77dc467630713f2":
@@ -908,6 +908,7 @@ class AdminEnquiry(APIView):
                     return Response({"message": "Booking Not Found", "success": False}, status=HTTP_400_BAD_REQUEST)
                             
                 comment = request.data.get('email', existing_data["data"][0]["comment"])
+                comment = update_comment
 
                 update_field = {
                     "comment": comment
@@ -938,7 +939,6 @@ class AdminEnquiry(APIView):
                 }
             else:
                 return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
-            
             existing_data = json.loads(dowellconnection(*sales_agent, "fetch", field, update_field=None))
             
             if not existing_data.get("data"):
@@ -948,7 +948,6 @@ class AdminEnquiry(APIView):
 
             if IsFlag:
                 return Response({"message": "Booking Not Found", "success": False}, status=HTTP_400_BAD_REQUEST)
-                        
             email = request.data.get('email', existing_data["data"][0]["email"])
             contact_type = request.data.get('contact_type', existing_data["data"][0]["contact_type"])
             contact_name = request.data.get('contact_name', existing_data["data"][0]["contact_name"])
@@ -956,7 +955,8 @@ class AdminEnquiry(APIView):
             enquiry_details = request.data.get('enquiry_details', existing_data["data"][0]["enquiry_details"])
             rating = request.data.get('rating', existing_data["data"][0]["rating"])
             photo = request.data.get('photo', existing_data["data"][0].get("photo", "null"))
-
+            comment = str(existing_data["data"][0]["comment"])
+            
             update_field = {
                 "email": email,
                 "contact_type": contact_type,
@@ -965,6 +965,7 @@ class AdminEnquiry(APIView):
                 "enquiry_details": enquiry_details,
                 "rating": rating,
                 "photo": photo,
+                "comment":comment
             }
             response =  dowellconnection(*sales_agent, "update", field, update_field=update_field)
             response = json.loads(response)
@@ -1061,9 +1062,9 @@ class AdminSaleAgentRefer(APIView):
 
             referal_id = request.query_params.get('referal_id')
             client_admin_id = request.query_params.get('client_admin_id')
-            comment = request.query_params.get('comment')
-            if comment:
-                if not referal_id and not client_admin_id and not comment:
+            update_comment = request.query_params.get('comment')
+            if update_comment:
+                if not referal_id and not client_admin_id and not update_comment:
                     return Response({"message": "Please provide both 'referal_id' and 'client_admin_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
     
                 if client_admin_id == "6390b313d77dc467630713f2":
@@ -1084,7 +1085,7 @@ class AdminSaleAgentRefer(APIView):
                     return Response({"message": "Referral Not Found", "success": False}, status=HTTP_400_BAD_REQUEST)
                     
                 comment = request.data.get('email', existing_data["data"][0]["comment"])
-
+                comment=update_comment
                 update_field = {
                     "comment":comment
                 }
@@ -1154,7 +1155,7 @@ class AdminSaleAgentRefer(APIView):
             Description_Prospective_client = request.data.get('Description_Prospective_client', existing_data["data"][0]["Description_Prospective_client"])
             Logo_Prospective_client = request.data.get('Logo_Prospective_client', existing_data["data"][0]["Logo_Prospective_client"])
             suggestions_Prospective_client = request.data.get('suggestions_Prospective_client', existing_data["data"][0]["suggestions_Prospective_client"])
-
+            comment = str(existing_data["data"][0]["comment"])
 
             update_field = {
                 "email":email,
@@ -1186,6 +1187,7 @@ class AdminSaleAgentRefer(APIView):
                 "Description_Prospective_client" :Description_Prospective_client,
                 "Logo_Prospective_client":Logo_Prospective_client,
                 "suggestions_Prospective_client":suggestions_Prospective_client,
+                "comment":comment
             }
             response =  dowellconnection(*sales_agent_referal, "update", field, update_field=update_field)
             response = json.loads(response)
@@ -1251,53 +1253,5 @@ class AdminSaleAgentRefer(APIView):
         except Exception as e:
             return Response(
                 {"message": str(e), "success": False}, status=HTTP_400_BAD_REQUEST)
-        
-    
-    @action(detail=True, methods=['put'])
-    def update_comment(self, request, *args, **kwargs):
-        referal_id = request.query_params.get('referal_id')
-        client_admin_id = request.query_params.get('client_admin_id')
-
-        if not referal_id and not client_admin_id:
-            return Response({"message": "Please provide both 'referal_id' and 'client_admin_id'", "success": False}, status=HTTP_400_BAD_REQUEST)
-    
-        if client_admin_id == "6390b313d77dc467630713f2":
-            field = {
-                    "referal_id": str(referal_id),
-            }
-        else:
-            return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
-        
-        existing_data = json.loads(dowellconnection(*sales_agent_referal, "fetch", field, update_field=None))
-        
-        if not existing_data.get("data"):
-            return Response({"message": "Referral not found", "success": False}, status=HTTP_400_BAD_REQUEST)
-        
-        IsFlag = any(data.get("flag", "").lower() == "false" for data in existing_data["data"])
-
-        if IsFlag:
-            return Response({"message": "Referral Not Found", "success": False}, status=HTTP_400_BAD_REQUEST)
-            
-        comment = request.data.get('email', existing_data["data"][0]["comment"])
-
-        update_field = {
-            "comment":comment
-        }
-    
-        response =  dowellconnection(*sales_agent_referal, "update", field, update_field=update_field)
-        response = json.loads(response)
-        if response["isSuccess"]:
-            return Response(
-                {
-                "success": True,
-                "message": "Referal Data Updated Sucessfully",
-                "response": update_field,
-            }
-            ) 
-        else:
-            return Response({
-                "success": False,
-                "message": "Failed to update Referral ",
-            })
 
 
