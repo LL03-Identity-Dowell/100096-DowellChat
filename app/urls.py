@@ -22,6 +22,8 @@ urlpatterns = [
 
     path('admin-enquiry', AdminEnquiry.as_view()),
     path('admin-referral', AdminSaleAgentRefer.as_view()),
+    # Update the path in your urls.py
+    # path('update/<int:pk>/update_comment/', AdminSaleAgentRefer.as_view({'put': 'update_comment'}), name='update_comment')
 
 
 ]
