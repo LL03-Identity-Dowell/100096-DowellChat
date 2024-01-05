@@ -692,7 +692,7 @@ def pop_up_api(request, *args, **kwargs):
 
 
 
-ADMIN_PRODUCT = ["Login", "Dowell-Mail", "Extension", "Living-Lab-Admin", "Sales-Agent"]
+ADMIN_PRODUCT = ["Login", "Dowell-Mail", "Extension", "Living-Lab-Admin", "Sales-Agent",'Dowell-website']
 
 PRODUCT_LIST = ["Sales-Agent-Login","Workflow-AI", "Wifi-QR-Code", "Legalzard", "User-Experience-Live", "Social-Media-Automation", "Living-Lab-Scales", "Logo-Scan", "Team-Management", "Living-Lab-Monitoring", "Permutation-Calculator", "Secure-Repositories", "Secure-Data", "Customer-Experience", "DoWell-CSC", "Living-Lab-Chat"]
 
