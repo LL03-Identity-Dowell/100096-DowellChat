@@ -1059,7 +1059,6 @@ class AdminSaleAgentRefer(APIView):
         
     def put(self, request):
         try:
-            import pdb; pdb.set_trace()
             referal_id = request.query_params.get('referal_id')
             client_admin_id = request.query_params.get('client_admin_id')
             update_comment = request.query_params.get('comment')
