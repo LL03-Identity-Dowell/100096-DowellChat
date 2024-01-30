@@ -1059,7 +1059,7 @@ class AdminSaleAgentRefer(APIView):
         
     def put(self, request):
         try:
-
+            import pdb; pdb.set_trace()
             referal_id = request.query_params.get('referal_id')
             client_admin_id = request.query_params.get('client_admin_id')
             update_comment = request.query_params.get('comment')
@@ -1069,7 +1069,7 @@ class AdminSaleAgentRefer(APIView):
     
                 if client_admin_id == "6390b313d77dc467630713f2":
                     field = {
-                            "referal_id": str(referal_id),
+                            "referal_id": referal_id,
                     }
                 else:
                     return Response({"message": "Authentication failed", "success": False}, status=HTTP_400_BAD_REQUEST)
