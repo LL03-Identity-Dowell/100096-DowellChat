@@ -315,7 +315,6 @@ class QRServiceHandler(APIView):
         return Response({'rm_s': rooms})
 
     def save_links_2mgdb(self, company_id, links, job_name):
-        import pdb; pdb.set_trace()
         url = "https://www.qrcodereviews.uxlivinglab.online/api/v3/qr-code/"
         
         payload = {
@@ -332,7 +331,6 @@ class QRServiceHandler(APIView):
         return response
 
     def post(self, request, *args, **kwargs):
-        import pdb; pdb.set_trace()
         workspace_id = str(request.data.get('workspace_id'))
         QR_ids = list(request.data.get('qr_ids'))
         pn = request.data.get('product_name')
@@ -1125,7 +1123,7 @@ class AdminSaleAgentRefer(APIView):
             if IsFlag:
                 return Response({"message": "Referral Not Found", "success": False}, status=HTTP_400_BAD_REQUEST)
                 
-            email = request.data.get('email')
+            email = request.data.get('email', existing_data["data"][0]["email"])
             contact_name = request.data.get('contact_name', existing_data["data"][0]["contact_name"])
             contact_Address = request.data.get('contact_Address', existing_data["data"][0]["contact_Address"])
             country = request.data.get('country', existing_data["data"][0]["country"])
