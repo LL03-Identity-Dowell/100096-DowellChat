@@ -1,0 +1,59 @@
+<!-- The parent page -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <title>Public Links</title>
+
+</head>
+        <body style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <p style="font-size: 1rem;">Username : {{d_user.userinfo.Username }} </p>
+            <div>
+                <p>Event Name : {{e}}</p><br>
+                <!--p>{{public_links}}</p--><br><br>
+                
+
+                <ul>Created links are :
+                {% for l in public_links %}
+                    {% for qr_l in link_list %}
+                        {% if l.rm_link == qr_l.link%}
+                        <li>{{l.room_pk}} - {{l.rm_link}} - {{qr_l.is_opened}} - {{qr_l.is_finalized}}</li>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+
+                <p>
+                    {% if saved_response == "1 QR codes created successfully." %}
+                        QR server request successful.
+                    {% else %}
+                        QR server update failed.
+                    {% endif %}
+
+                    <ul>QR Server response links are :
+                        {% for l in public_links %}
+                            <li>{{l.room_pk}} - {{l.rm_link}}</li>
+
+                        {% endfor %}
+                </ul>
+
+                </p>
+
+            </div>            
+            
+
+        
+            
+
+
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.1.1/dist/index.min.js"></script>
+        
+</html>
